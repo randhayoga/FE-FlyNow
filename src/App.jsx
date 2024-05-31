@@ -1,18 +1,14 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "@/components/theme-provider"
+import router from "./routes"
+import { RouterProvider } from "react-router-dom"
 
-import Home from "./pages/home";
-
-import "./App.css";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-  },
-]);
-
-function App() {
-  return <RouterProvider router={router} />;
+function App({ children }) {
+  return (
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <RouterProvider router={router} />
+      {children}
+    </ThemeProvider>
+  )
 }
 
-export default App;
+export default App
