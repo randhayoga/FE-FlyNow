@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply font-sans
+  @apply font-sans;
 }
 
 @layer base {
@@ -73,6 +73,7 @@ body {
 @layer base {
   * {
     @apply border-border;
+  }
 }
 
 @layer base {
@@ -81,7 +82,8 @@ body {
   }
   body {
     @apply bg-background text-foreground;
-  body {
-    @apply bg-background text-foreground;
+    body {
+      @apply bg-background text-foreground;
+    }
   }
 }
