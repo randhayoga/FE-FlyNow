@@ -6,20 +6,20 @@ import { createBrowserRouter } from "react-router-dom";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <h1 className="text-3xl font-bold">Home Page</h1>
+    element: <h1 className="text-3xl font-bold">Home Page</h1>,
   },
   {
     path: "/login",
-    element: <LoginPage />
+    element: <LoginPage />,
   },
   {
     path: "/register",
-    element: <RegisterPage />
+    element: <RegisterPage />,
   },
   {
     path: "/otp",
-    element: <OtpPage />
-  }
-])
+    element: <OtpPage />,
+  },
+]);
 
-export default router
+export default router;

@@ -1,6 +1,6 @@
-import { ModeToggle } from "../mode-toggle"
+import { ModeToggle } from "../mode-toggle";
 
-import { Button } from "../ui/button"
+import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
@@ -8,27 +8,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 // import { useToast } from "@/components/ui/use-toast"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Link } from "react-router-dom"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import { z } from "zod";
 
-const formSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email",
-  }),
-  password: z.string().min(6, {
-    message: "Password must be 6 characters long",
-  }),
-  confirmPassword: z.string()
-}).refine((data) => data.password === data.confirmPassword, {
-  path: ["confirmPassword"],
-  message: "Passwords do not match",
-})
+const formSchema = z
+  .object({
+    email: z.string().email({
+      message: "Please enter a valid email",
+    }),
+    password: z.string().min(6, {
+      message: "Password must be 6 characters long",
+    }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match",
+  });
 
 const Register = () => {
   // const { toast } = useToast()
@@ -40,12 +42,12 @@ const Register = () => {
       password: "",
       confirmPassword: "",
     },
-  })
+  });
 
   // 2. Define a submit handler.
   function onSubmit(values) {
     // Do something with the form values.
-    console.log(values)
+    console.log(values);
   }
 
   return (
@@ -140,7 +142,7 @@ const Register = () => {
         Have an account? <Link to="/login">Login</Link>
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;
