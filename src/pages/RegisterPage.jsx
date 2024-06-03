@@ -1,5 +1,5 @@
-import Register from "@/components/Register"
-import RegisterBg from "../assets/images/register-bg.svg"
+import Register from "@/components/Register";
+import RegisterBg from "../assets/images/register-bg.svg";
 
 const RegisterPage = () => {
   return (
@@ -10,7 +10,7 @@ const RegisterPage = () => {
       </div>
       <Register />
     </div>
-  )
-}
+  );
+};
 
-export default RegisterPage
+export default RegisterPage;

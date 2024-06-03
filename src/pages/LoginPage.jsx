@@ -1,5 +1,5 @@
-import Login from "@/components/Login"
-import LoginBg from "../assets/images/login-bg.svg"
+import Login from "@/components/Login";
+import LoginBg from "../assets/images/login-bg.svg";
 
 const LoginPage = () => {
   return (
@@ -9,8 +9,8 @@ const LoginPage = () => {
         <h1>Ini adalah Login page</h1>
       </div>
       <Login />
-    </div>  
-  )
-}
+    </div>
+  );
+};
 
-export default LoginPage
+export default LoginPage;
