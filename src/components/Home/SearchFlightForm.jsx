@@ -1,11 +1,6 @@
 import { useState } from "react";
-import {
-  MdFlightTakeoff,
-  MdOutlineDateRange,
-  MdAirlineSeatReclineNormal,
-} from "react-icons/md";
-import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 
+import { cn } from "@/lib/utils";
 import {
   Form,
   FormControl,
@@ -13,18 +8,45 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+// import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { useForm } from "react-hook-form";
+
+import {
+  MdFlightTakeoff,
+  MdOutlineDateRange,
+  MdAirlineSeatReclineNormal,
+} from "react-icons/md";
+import { HiOutlineSwitchHorizontal } from "react-icons/hi";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 const SearchFlightForm = () => {
   const [isReturnEnabled, setIsReturnEnabled] = useState(false);
 
   const form = useForm({
     defaultValues: {
-      departure: "",
+      departureAirport: "",
+      arrivalAirport: "",
+      departureTime: "",
+      arrivalTime: "",
+      numOfPassengers: "",
+      seatClass: "",
     },
   });
 
@@ -35,6 +57,69 @@ const SearchFlightForm = () => {
   const handleSwitchToggle = () => {
     setIsReturnEnabled(!isReturnEnabled);
   };
+
+  const airports = [
+    {
+      code: "CGK",
+      name: "Soekarno Hatta",
+      city: "Jakarta",
+      country: "Indonesia",
+    },
+    {
+      code: "LAX",
+      name: "Los Angeles International",
+      city: "Los Angeles",
+      country: "United States",
+    },
+    {
+      code: "HND",
+      name: "Tokyo Haneda",
+      city: "Tokyo",
+      country: "Japan",
+    },
+    {
+      code: "LHR",
+      name: "Heathrow",
+      city: "London",
+      country: "United Kingdom",
+    },
+    {
+      code: "DXB",
+      name: "Dubai International",
+      city: "Dubai",
+      country: "United Arab Emirates",
+    },
+    {
+      code: "SIN",
+      name: "Changi",
+      city: "Singapore",
+      country: "Singapore",
+    },
+    {
+      code: "SYD",
+      name: "Sydney Kingsford Smith",
+      city: "Sydney",
+      country: "Australia",
+    },
+    {
+      code: "JFK",
+      name: "John F. Kennedy International",
+      city: "New York",
+      country: "United States",
+    },
+    {
+      code: "CDG",
+      name: "Charles de Gaulle",
+      city: "Paris",
+      country: "France",
+    },
+    {
+      code: "HKG",
+      name: "Hong Kong International",
+      city: "Hong Kong",
+      country: "China",
+    },
+  ];
 
   return (
     <Form {...form}>
@@ -48,9 +133,61 @@ const SearchFlightForm = () => {
                 <FormLabel className="flex gap-2 items-center text-[#8A8A8A]">
                   <MdFlightTakeoff className="w-6 h-6" /> From
                 </FormLabel>
-                <FormControl>
-                  <Input type="text" {...field} />
-                </FormControl>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? `${airports.find(
+                              (airport) => airport?.name === field.value
+                            )?.name} (${airports.find(
+                              (airport) => airport?.name === field.value
+                            )?.code})`
+                          : "Select Airport"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <Command>
+                      <CommandInput placeholder="Search Airport..." />
+                      <CommandEmpty>No Airports found.</CommandEmpty>
+                      <CommandGroup>
+                        <CommandList>
+                          {airports.map((airport) => (
+                            <CommandItem
+                              value={airport?.name}
+                              key={airport?.code}
+                              onSelect={() => {
+                                form.setValue(
+                                  "departureAirport",
+                                  airport?.name
+                                );
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  airport?.name === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {`${airport.name} (${airport.code}) - ${airport.city}, ${airport.country}`}
+                            </CommandItem>
+                          ))}
+                        </CommandList>
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </FormItem>
             )}
           />
@@ -65,9 +202,61 @@ const SearchFlightForm = () => {
                 <FormLabel className="flex gap-2 items-center text-[#8A8A8A]">
                   <MdFlightTakeoff className="w-6 h-6" /> To
                 </FormLabel>
-                <FormControl>
-                  <Input type="text" {...field} />
-                </FormControl>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full max-w-full justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? `${airports.find(
+                              (airport) => airport?.name === field.value
+                            )?.name} (${airports.find(
+                              (airport) => airport?.name === field.value
+                            )?.code})`
+                          : "Select Airport"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <Command>
+                      <CommandInput placeholder="Search Airport..." />
+                      <CommandEmpty>No Airports found.</CommandEmpty>
+                      <CommandGroup>
+                        <CommandList>
+                          {airports.map((airport) => (
+                            <CommandItem
+                              value={airport?.name}
+                              key={airport?.code}
+                              onSelect={() => {
+                                form.setValue(
+                                  "arrivalAirport",
+                                  airport?.name
+                                );
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  airport?.name === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {`${airport.name} (${airport.code}) - ${airport.city}, ${airport.country}`}
+                            </CommandItem>
+                          ))}
+                        </CommandList>
+                      </CommandGroup>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
               </FormItem>
             )}
           />
@@ -108,10 +297,11 @@ const SearchFlightForm = () => {
                     </FormItem>
                   )}
                 />
-              )
-              :
-              <p className="font-medium text-sm text-[#8A8A8A]">Round Trip?</p>
-            }
+              ) : (
+                <p className="text-right font-medium text-sm text-[#8A8A8A]">
+                  Round Trip?
+                </p>
+              )}
               <Switch
                 checked={isReturnEnabled}
                 onCheckedChange={handleSwitchToggle}
@@ -124,7 +314,7 @@ const SearchFlightForm = () => {
               <span className="font-medium text-sm">To</span>
             </div>
             <FormField
-              name="passengers"
+              name="numOfPassengers"
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex-col gap-2">

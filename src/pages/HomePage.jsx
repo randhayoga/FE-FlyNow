@@ -8,14 +8,14 @@ const HomePage = () => {
   return (
     <div className="flex flex-col h-screen w-screen items-center pt-5">
       <HomeBanner />
-      <div className="w-4/5 md:w-3/5 bg-background rounded-xl shadow-md p-6">
+      <div className="w-2/3 bg-background rounded-xl shadow-md p-6">
         <h2 className="text-xl font-semibold tracking-wide mb-3">
           Pilih Jadwal Penerbangan Spesial di{" "}
           <span className="text-ColorPrimary">FlyNow!</span>
         </h2>
         <SearchFlightForm />
       </div>
-      <Button onClick={() => toast.success("You've clicked me")}>Hello</Button>
+      <Button onClick={() => toast.error("You've clicked me")}>Nyoba Toast</Button>
     </div>
   );
 };
