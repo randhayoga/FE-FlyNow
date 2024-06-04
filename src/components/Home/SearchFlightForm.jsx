@@ -145,15 +145,11 @@ const SearchFlightForm = () => {
                         )}
                       >
                         {field.value
-                          ? `${
-                              airports.find(
-                                (airport) => airport?.name === field.value
-                              )?.name
-                            } (${
-                              airports.find(
-                                (airport) => airport?.name === field.value
-                              )?.code
-                            })`
+                          ? `${airports.find(
+                              (airport) => airport?.name === field.value
+                            )?.name} (${airports.find(
+                              (airport) => airport?.name === field.value
+                            )?.code})`
                           : "Select Airport"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                       </Button>
@@ -218,15 +214,11 @@ const SearchFlightForm = () => {
                         )}
                       >
                         {field.value
-                          ? `${
-                              airports.find(
-                                (airport) => airport?.name === field.value
-                              )?.name
-                            } (${
-                              airports.find(
-                                (airport) => airport?.name === field.value
-                              )?.code
-                            })`
+                          ? `${airports.find(
+                              (airport) => airport?.name === field.value
+                            )?.name} (${airports.find(
+                              (airport) => airport?.name === field.value
+                            )?.code})`
                           : "Select Airport"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                       </Button>
@@ -243,7 +235,10 @@ const SearchFlightForm = () => {
                               value={airport?.name}
                               key={airport?.code}
                               onSelect={() => {
-                                form.setValue("arrivalAirport", airport?.name);
+                                form.setValue(
+                                  "arrivalAirport",
+                                  airport?.name
+                                );
                               }}
                             >
                               <Check
