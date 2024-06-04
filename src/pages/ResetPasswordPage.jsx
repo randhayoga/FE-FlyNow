@@ -1,6 +1,6 @@
 import ResetPasswordComponent from "@/components/ResetPassword";
 
-const ResetPassword = () => {
+const ResetPasswordPage = () => {
   return (
     <div className="flex h-screen">
       <ResetPasswordComponent />
@@ -8,4 +8,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default ResetPasswordPage;
