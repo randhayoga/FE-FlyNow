@@ -1,6 +1,7 @@
 import LoginPage from "@/pages/LoginPage";
 import OtpPage from "@/pages/OtpPage";
 import RegisterPage from "@/pages/RegisterPage";
+import ResetPassword from "@/pages/ResetPassword";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/otp",
     element: <OtpPage />,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPassword />,
   },
 ]);
 
