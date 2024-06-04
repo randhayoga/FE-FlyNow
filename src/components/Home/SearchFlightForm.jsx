@@ -58,6 +58,13 @@ const SearchFlightForm = () => {
     setIsReturnEnabled(!isReturnEnabled);
   };
 
+  const handleSwapAirports = () => {
+    const { departureAirport, arrivalAirport } = form.getValues();
+
+    form.setValue("departureAirport", arrivalAirport);
+    form.setValue("arrivalAirport", departureAirport);
+  };
+
   const airports = [
     {
       code: "CGK",
@@ -124,7 +131,7 @@ const SearchFlightForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex gap-4 items-center w-full mb-6">
+        <div className="flex flex-col lg:flex-row gap-4 w-full mb-6">
           <FormField
             name="departureAirport"
             control={form.control}
@@ -195,7 +202,7 @@ const SearchFlightForm = () => {
               </FormItem>
             )}
           />
-          <Button className="mt-2">
+          <Button onClick={handleSwapAirports} type="button" className="lg:mt-2 w-fit self-center">
             <HiOutlineSwitchHorizontal className="w-5 h-5" />
           </Button>
           <FormField
