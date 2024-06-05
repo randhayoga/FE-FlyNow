@@ -9,19 +9,18 @@ import { createBrowserRouter } from "react-router-dom";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />
+    element: <HomePage />,
   },
   {
     path: "/login",
-    element: <LoginPage />
+    element: <LoginPage />,
   },
   {
     path: "/register",
-    element: <RegisterPage />
+    element: <RegisterPage />,
   },
   {
     path: "/otp",
-<<<<<<< fix/auth/password -- Incoming Change
     element: <OtpPage />,
   },
   {
@@ -33,10 +32,5 @@ const router = createBrowserRouter([
     element: <ResetPasswordPage />,
   },
 ]);
-=======
-    element: <OtpPage />
-  }
-])
->>>>>>> main -- Current Change
 
-export default router
+export default router;
