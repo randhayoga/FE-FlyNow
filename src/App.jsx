@@ -9,7 +9,7 @@ import router from "./routes";
 function App({ children }) {
   return (
     <Provider store={store}>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <RouterProvider router={router} />
         {children}
         <Toaster />
