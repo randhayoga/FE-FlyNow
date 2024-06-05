@@ -18,6 +18,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useParams } from "react-router-dom";
+import { resetPasswordService } from "@/services/user/auth/reset-password";
 
 const formSchema = z
   .object({
@@ -36,6 +38,8 @@ const ResetPasswordComponent = () => {
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
 
+  const { token } = useParams();
+
   // Define Form
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -49,8 +53,19 @@ const ResetPasswordComponent = () => {
   function onSubmit(values) {
     // Do something with the form values.
     console.log(values);
+    const { password, passwordConfirmation } = values;
 
-    toast.success("Reset Password Berhasil!");
+    const data = resetPasswordService({
+      token: token,
+      password: password,
+      confirmPassword: passwordConfirmation,
+    });
+
+    if (data) {
+      toast.success("Reset Password Berhasil!", {
+        description: "Silahkan Login kembali",
+      });
+    }
   }
 
   return (

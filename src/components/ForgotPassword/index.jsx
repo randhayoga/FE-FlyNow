@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { forgotPasswordService } from "@/services/user/auth/forgot-password";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email" }),
@@ -32,12 +33,13 @@ const ForgotPasswordComponent = () => {
 
   // Define submit handler.
   function onSubmit(values) {
-    // Do something with the form values.
-    console.log(values);
+    const data = forgotPasswordService({ email: values.email });
 
-    toast.success("Link Reset Password berhasil dikirim!", {
-      description: "Cek email kamu sekarang",
-    });
+    if (data) {
+      toast.success("Link Reset Password berhasil dikirim!", {
+        description: "Cek email kamu sekarang",
+      });
+    }
   }
 
   return (
