@@ -22,9 +22,6 @@ const RegisterForm = () => {
   const [password, setPassword] = useState("");
   const [isPasswordVis, setIsPasswordVis] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isConfirmPasswordVis, setIsConfirmPasswordVis] = useState(false);
-  const [isValidConfirmPassword, setIsValidConfirmPassword] = useState(false);
   const [image, setImage] = useState(null);
 
   const emailChangeHandler = (e) => {
@@ -74,27 +71,11 @@ const RegisterForm = () => {
       setIsValidPassword(true);
     } else {
       setIsValidPassword(false);
-      setConfirmPassword("");
     }
   };
 
   const toggleVisPassword = () => {
     setIsPasswordVis(!isPasswordVis);
-  };
-
-  const confirmPasswordChangeHandler = (e) => {
-    const value = e.target.value;
-    setConfirmPassword(value);
-
-    if (value === password) {
-      setIsValidConfirmPassword(true);
-    } else {
-      setIsValidConfirmPassword(false);
-    }
-  };
-
-  const toggleConfirmPasswordVis = () => {
-    setIsConfirmPasswordVis(!isConfirmPasswordVis);
   };
 
   const imageChangeHandler = (e) => {
@@ -104,7 +85,7 @@ const RegisterForm = () => {
   return (
     <div className="grid gap-4">
       <div className="grid gap-2">
-        <Label htmlFor="name" className="font-medium text-xs">
+        <Label htmlFor="name" className="text-black text-md">
           Nama
         </Label>
         <Input
@@ -117,7 +98,7 @@ const RegisterForm = () => {
         />
       </div>
       <div className="grid gap-2 email-input">
-        <Label htmlFor="email" className="font-medium text-xs">
+        <Label htmlFor="email" className="text-black text-md">
           Email
         </Label>
         <div className="input-icon-form">
@@ -128,7 +109,7 @@ const RegisterForm = () => {
             onChange={emailChangeHandler}
             placeholder="Contoh: johndoe@gmail.com"
             className={`input-field ${
-              email !== "" && !isValidEmail ? "border-red-700 border-2" : ""
+              email !== "" && !isValidEmail ? "border-red-700" : ""
             }`}
             required
           />
@@ -140,7 +121,7 @@ const RegisterForm = () => {
         </div>
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="phone" className="font-medium text-xs">
+        <Label htmlFor="phone" className="text-black text-md">
           Nomor Telepon
         </Label>
         <div className="input-icon-form">
@@ -151,7 +132,7 @@ const RegisterForm = () => {
             onChange={noTelpChangeHandler}
             placeholder="+62 ."
             className={`input-field ${
-              noTelp !== "" && !isValidNoTelp ? "border-red-700 border-2" : ""
+              noTelp !== "" && !isValidNoTelp ? "border-red-700" : ""
             }`}
             required
           />
@@ -164,8 +145,8 @@ const RegisterForm = () => {
       </div>
       <div className="grid gap-2">
         <div className="flex items-center">
-          <Label htmlFor="password" className="font-medium text-xs">
-            Buat Password (min. 6 karakter)
+          <Label htmlFor="password" className="text-black text-md">
+            Buat Password (minimal 6 karakter)
           </Label>
         </div>
         <div className="input-pass-icon-form">
@@ -176,9 +157,7 @@ const RegisterForm = () => {
             onChange={passwordChangeHandler}
             placeholder="Buat Password"
             className={`input-field ${
-              password !== "" && !isValidPassword
-                ? "border-red-700 border-2"
-                : ""
+              password !== "" && !isValidPassword ? "border-red-700" : ""
             }`}
             required
           />
@@ -201,50 +180,16 @@ const RegisterForm = () => {
         </div>
       </div>
       <div className="grid gap-2">
-        <div className="flex items-center">
-          <Label htmlFor="password" className="font-medium text-xs">
-            Konfirmasi Password
-          </Label>
-        </div>
-        <div className="input-pass-icon-form">
-          <Input
-            id="confirmPassword"
-            type={isConfirmPasswordVis ? "text" : "password"}
-            value={confirmPassword}
-            onChange={confirmPasswordChangeHandler}
-            placeholder="Pastikan Password Sama"
-            required
-            disabled={!isValidPassword}
-          />
-          <button
-            type="button"
-            onClick={toggleConfirmPasswordVis}
-            className="pass-toggle-icon"
-          >
-            {confirmPassword === "" ? null : isConfirmPasswordVis ? (
-              <MdOutlineVisibilityOff className="text-xl" />
-            ) : (
-              <MdOutlineVisibility className="text-xl" />
-            )}
-          </button>
-          {confirmPassword === "" ? null : isValidConfirmPassword ? (
-            <MdCheckCircle className="check-icon text-xl" />
-          ) : (
-            <MdCancel className="error-icon text-xl" />
-          )}
-        </div>
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="image" className="font-medium text-xs">
+        <Label htmlFor="image" className="text-black text-md">
           Foto Profil
         </Label>
-        <div className="relative border border-slate-200 rounded-md">
-          <button className="file-upload text-sm py-2.5 px-4 bg-slate-50 rounded-s-md">
+        <div className="relative border-3 border-slate-200 rounded-xl">
+          <button className="file-upload text-sm py-3.5 px-4 bg-slate-50 rounded-s-md text-uxl">
             Pilih foto
           </button>
           <span
             id="file-chosen"
-            className={`text-sm ps-3 ${image ? "" : "text-slate-300"}`}
+            className={`text-uxl ps-3 ${image ? "" : "text-slate-300"}`}
           >
             {image ? image.name : "Tidak ada file yang dipilih"}
           </span>
