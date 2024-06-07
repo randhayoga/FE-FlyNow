@@ -37,7 +37,7 @@ export const login = (navigate, email, password) => async (dispatch) => {
         // redirect to home
         navigate("/"); // it will be not consistent, so alternative we use window until we used the state management
     } catch (error) {
-        toast.error(error?.response?.data?.message);
+        toast.error("Cek kembali email dan password anda");
 
         dispatch(logout());
     }
