@@ -3,7 +3,9 @@ import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import OtpPage from "@/pages/OtpPage";
 import RegisterPage from "@/pages/RegisterPage";
-
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
+import ResetPasswordPage from "@/pages/ResetPasswordPage";
+import SearchFlightPage from "@/pages/SearchFlightPage";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -12,7 +14,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
-        <div className="mt-20">
+        <div className="mt-16">
           <HomePage />
         </div>
       </>
@@ -29,6 +31,18 @@ const router = createBrowserRouter([
   {
     path: "/otp",
     element: <OtpPage />,
+  },
+  {
+    path: "/forgot-password",
+    element: <ForgotPasswordPage />,
+  },
+  {
+    path: "/reset-password/:token",
+    element: <ResetPasswordPage />,
+  },
+  {
+    path: "/flight/search",
+    element: <SearchFlightPage />,
   },
 ]);
 
