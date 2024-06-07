@@ -6,22 +6,13 @@ const initialState = {
   user: null,
 };
 
-// [token, setToken] = useState(localStorage.getItem("token") || null)
-// [user, setUser] = useState(null)
-
-/* 
-    -- action.payload -> setToken("euyasd1309e190ds")
-                      -> setUser({id:1,"email": "a@example.com"})
-*/
-
-// Define the slice
+// Slice
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
     setToken: (state, action) => {
       if (action.payload) {
-        console.log(action.payload);
         localStorage.setItem("token", action.payload);
       } else {
         localStorage.removeItem("token");
@@ -30,13 +21,14 @@ const authSlice = createSlice({
       state.token = action.payload;
     },
     setUser: (state, action) => {
-      state.user = action.payload;
+      if (action.payload) {
+        state.user = action.payload;
+      } else {
+        state.user = null;
+      }
     },
   },
 });
 
-// export the setter funtion
 export const { setToken, setUser } = authSlice.actions;
-
-// export the reducer
 export default authSlice.reducer;

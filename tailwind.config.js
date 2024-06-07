@@ -18,7 +18,10 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ['Poppins', 'system-ui', 'sans-serif'],
+        sans: ["Poppins", "system-ui", "sans-serif"],
+      },
+      fontSize: {
+        uxl: "1rem",
       },
       colors: {
         ColorPrimary: "#30628C",
@@ -61,6 +64,9 @@ module.exports = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      borderWidth: {
+        3: "3px",
       },
       keyframes: {
         "accordion-down": {
