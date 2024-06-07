@@ -12,9 +12,7 @@ export const register =
     data.append("password", password);
     data.append("image", image);
 
-    for (let pair of data.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
+    dispatch(setToken(null));
 
     let config = {
       method: "post",
@@ -25,8 +23,8 @@ export const register =
     try {
       const response = await axios.request(config);
       const { token } = response.data.data;
-      console.log(token);
       dispatch(setToken(token));
+      navigate("/otp"); // WIP
     } catch (error) {
       console.log(error.response.data.message);
     }
