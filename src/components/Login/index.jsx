@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { login } from "../../../redux/actions/login";
+import { login } from "../../../redux/actions/auth";
 // import { login } from "@/services/user/auth/login";
 
 const formSchema = z.object({
@@ -43,12 +43,7 @@ const Login = () => {
   function onSubmit(values) {
     const email = values.email;
     const password = values.password;
-    const data = dispatch(login(navigate, email, password));
-    // const data = login({ email: values.email, password: values.password });
-
-    if (data) {
-      toast.success("Anda berhasil Login!");
-    }
+    dispatch(login(navigate, email, password));
   }
 
   return (

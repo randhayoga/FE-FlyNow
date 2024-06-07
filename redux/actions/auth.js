@@ -1,5 +1,6 @@
 import axios from "axios";
 // import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { setToken, setUser } from "../reducers/auth";
 
 export const login = (navigate, email, password) => async (dispatch) => {
@@ -13,7 +14,7 @@ export const login = (navigate, email, password) => async (dispatch) => {
 
     let config = {
         method: "post",
-        url: `http://localhost:3000/api/auth/login`,
+        url: `https://flynow-staging-dot-fsw2-binar-academy.et.r.appspot.com/api/auth/login`,
         headers: {
             "Content-Type": "application/json",
         },
@@ -31,13 +32,20 @@ export const login = (navigate, email, password) => async (dispatch) => {
         dispatch(setToken(token));
         dispatch(setUser(user));
 
+        toast.success("Anda berhasil Login!");
+
         // redirect to home
         navigate("/"); // it will be not consistent, so alternative we use window until we used the state management
     } catch (error) {
-        // toast.error(error?.response?.data?.message);
+        toast.error(error?.response?.data?.message);
 
-        // dispatch(logout());
+        dispatch(logout());
     }
 
     // setIsLoading(false);
+};
+
+export const logout = () => (dispatch) => {
+    dispatch(setToken(null));
+    dispatch(setUser(null));
 };
