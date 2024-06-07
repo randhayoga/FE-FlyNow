@@ -1,8 +1,6 @@
 import axios from "axios";
 import { setToken } from "../reducers/auth";
 
-import defaultImage from "@/assets/images/default-img.jpg";
-
 export const register =
   (navigate, name, email, phoneNumber, password, image) => async (dispatch) => {
     let data = new FormData();
