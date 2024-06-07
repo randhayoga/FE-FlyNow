@@ -1,6 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 import { setToken, setUser } from "../../reducers/auth";
+import { data } from "autoprefixer";
 
 export const profile =
   (navigate, successRedirect, errorRedirect) => async (dispatch, getState) => {
@@ -22,9 +23,7 @@ export const profile =
       method: "get",
       maxBodyLength: Infinity,
       url: "http://localhost:3000/api/auth/profile",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      data: data,
     };
 
     try {
