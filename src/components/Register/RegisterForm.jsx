@@ -1,4 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { register } from "../../../redux/actions/register";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,9 +15,11 @@ import {
 } from "react-icons/md";
 
 import "./RegisterForm.css";
-import { set } from "date-fns";
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [nama, setNama] = useState("");
   const [email, setEmail] = useState("");
   const [isValidEmail, setIsValidEmail] = useState(false);
@@ -23,6 +29,7 @@ const RegisterForm = () => {
   const [isPasswordVis, setIsPasswordVis] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
   const [image, setImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const emailChangeHandler = (e) => {
     const value = e.target.value;
@@ -82,8 +89,15 @@ const RegisterForm = () => {
     setImage(e.target.files[0]);
   };
 
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    dispatch(register(navigate, nama, email, noTelp, password, image));
+    setIsLoading(false);
+  };
+
   return (
-    <div className="grid gap-4">
+    <form onSubmit={onSubmit} className="grid gap-4">
       <div className="grid gap-2">
         <Label htmlFor="name" className="text-black text-md">
           Nama
@@ -198,15 +212,22 @@ const RegisterForm = () => {
             type="file"
             accept="image/*"
             onChange={imageChangeHandler}
-            required
             className="absolute inset-0 opacity-0 cursor-pointer"
+            required
           />
         </div>
       </div>
-      <Button type="submit" className="w-full mt-2">
+      <Button
+        type="submit"
+        className="w-full mt-2"
+        disabled={
+          !(isValidEmail && isValidNoTelp && isValidPassword && nama !== "") ||
+          isLoading
+        }
+      >
         Daftar
       </Button>
-    </div>
+    </form>
   );
 };
 
