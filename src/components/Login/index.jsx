@@ -58,18 +58,18 @@ const Login = () => {
       <div className="flex-1 flex flex-col min-h-screen">
         <div className="flex flex-col px-8 md:px-16 lg:px-32 justify-center h-full gap-10">
           <div>
-            <h1 className="text-3xl font-bold">Masuk</h1>
+            <h1 className="text-2xl font-bold font-sans">Masuk</h1>
           </div>
 
           {/* Form */}
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1">
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email/No Telepon</FormLabel>
+                    <FormLabel className="font-sans text-xs">Email/No Telepon</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Contoh: johndoe@gmail.com"
@@ -86,7 +86,7 @@ const Login = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel className="font-sans text-xs">Password</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Masukkan password"
@@ -98,14 +98,14 @@ const Login = () => {
                   </FormItem>
                 )}
               />
-              <Button className="w-full bg-primary dark:bg-primary mt-5" type="submit">
+              <Button className="w-full bg-ColorPrimary mt-5" type="submit">
                 Masuk
               </Button>
             </form>
           </Form>
 
           <p className="text-center text-sm text-muted-foreground mt-5">
-          Belum punya akun? <Link to="/register">Daftar di sini</Link>
+          Belum punya akun? <Link to="/register" className="font-sans text-sm text-ColorPrimary font-bold">Daftar di sini</Link>
           </p>
 
         </div>
