@@ -17,19 +17,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useNavigation,
+} from "react-router-dom";
 import { z } from "zod";
 import { Button } from "../components/ui/button";
 
 import { toast } from "sonner";
-
-export async function loader() {
-  // TODO: Before this page is loaded, we need to send OTP to the user's email.
-}
-
-export async function action() {
-  // TODO: After the user submits the OTP, we need to verify the OTP.
-}
+import { resendOtpService, verifyOtpService } from "../services/otp";
 
 const FormSchema = z.object({
   otp: z.string().min(6, {
@@ -47,9 +45,19 @@ const FormSchema = z.object({
  */
 const OtpPage = () => {
   // TODO: Replace with actual email from the previous page.
-  const email = "";
+  const { state } = useLocation();
+  const [email, setEmail] = useState(
+    localStorage.getItem("email") || state.email
+  );
+  const navigation = useNavigation();
+  const navigate = useNavigate();
+
   const [timer, setTimer] = useState(60);
   const [resend, setResend] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem("email", state?.email || email);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -74,19 +82,16 @@ const OtpPage = () => {
     },
   });
 
-  function onSubmit(data) {
-    // TODO: Handle OTP submission logic.
-    const descriptionElement = (
-      <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-        <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-      </pre>
-    );
-    console.log(descriptionElement);
-
-    // toast.error('Maaf, kode OTP salah!');
-    toast.message("You submitted the following values:", {
-      description: JSON.stringify(data, null, 2),
-    });
+  async function onSubmit(data) {
+    try {
+      await verifyOtpService({
+        otp: data.otp,
+        email,
+      });
+      navigate("/", { replace: true });
+    } catch (error) {
+      toast.error("Maaf, kode OTP salah!");
+    }
   }
 
   return (
@@ -97,7 +102,7 @@ const OtpPage = () => {
       <main className="max-w-screen-sm mx-auto flex items-center flex-col px-4">
         <div className="w-full flex mb-6">
           {/* TODO: Belum tahu harus balik kemana */}
-          <Link to="/login" className="text-primary">
+          <Link to="/" className="text-primary">
             <ArrowLeft size={24} />
           </Link>
           <h1 className="flex-grow text-center text-2xl font-bold">
@@ -116,8 +121,7 @@ const OtpPage = () => {
                   <FormLabel className="block font-normal text-center mb-11">
                     Ketik 6 digit kode yang dikirimkan ke{" "}
                     <span className="font-bold">
-                      {email.replace(/(?<=..).(?=.*@)/g, "*") ||
-                        "shahrizan@gmail.com".replace(/(?<=..).(?=.*@)/g, "*")}
+                      {email.replace(/(?<=..).(?=.*@)/g, "*")}
                     </span>
                   </FormLabel>
                   <FormControl>
@@ -136,10 +140,15 @@ const OtpPage = () => {
                     {resend ? (
                       <button
                         type="button"
-                        onClick={() => {
-                          // TODO: Handle resend OTP Logic.
-                          setTimer(60);
-                          setResend(false);
+                        onClick={async () => {
+                          try {
+                            await resendOtpService({ email });
+                            toast.success(`Kode OTP berhasil dikirim ulang!`);
+                            setTimer(60);
+                            setResend(false);
+                          } catch (error) {
+                            toast.error("Gagal mengirim ulang kode OTP");
+                          }
                         }}
                       >
                         Kirim ulang kode
@@ -153,8 +162,14 @@ const OtpPage = () => {
               )}
             />
 
-            <Button className="w-full" type="submit">
-              Simpan
+            <Button
+              className="w-full"
+              type="submit"
+              disabled={navigation.state === "submitting"}
+            >
+              {navigation.state === "submitting"
+                ? "Verify OTP Code..."
+                : "Simpan"}
             </Button>
           </form>
         </Form>

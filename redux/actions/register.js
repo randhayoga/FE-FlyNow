@@ -20,9 +20,16 @@ export const register =
 
     try {
       const response = await axios.request(config);
-      const { token } = response.data.data;
+      const {
+        token,
+        user: { email },
+      } = response.data.data;
       dispatch(setToken(token));
-      navigate("/otp"); // WIP
+      navigate("/otp", {
+        state: {
+          email,
+        },
+      }); // WIP
     } catch (error) {
       console.log(error.response.data.message);
     }
