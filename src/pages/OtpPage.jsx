@@ -35,16 +35,7 @@ const FormSchema = z.object({
   }),
 });
 
-/**
- // TODO: Implement the following:
- * - Implement correct OTP submission logic and Show a toast message ("Registrasi berhasil").
- * - Implement wrong OTP submission logic and show a toast message ("Maaf, kode OTP salah!").
- * - Implement the resend OTP logic and Show a toast message when the user clicks the resend OTP button.
- * - Replace the email placeholder with the actual email from the previous page.
- * - Redirect the user to the previous page if they click the back button.
- */
 const OtpPage = () => {
-  // TODO: Replace with actual email from the previous page.
   const { state } = useLocation();
   const [email, setEmail] = useState(
     localStorage.getItem("email") || state.email
