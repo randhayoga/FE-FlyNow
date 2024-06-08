@@ -5,7 +5,7 @@ const HomeBanner = () => {
     <div className="md:block hidden w-full -mb-10">
         <div className="flex items-center h-full">
           <div className="bg-ColorSecondary h-3/4 flex-grow"></div>
-          <img src={homeImgBanner} alt="Home Banner" className="w-4/5" />
+          <img src={homeImgBanner} alt="Home Banner" className="w-3/4" />
           <div className="bg-ColorSecondary h-3/4 flex-grow"></div>
         </div>
       </div>
