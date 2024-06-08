@@ -212,7 +212,7 @@ const SearchFlightForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col lg:flex-row gap-4 w-full mb-6">
+        <div className="lg:flex gap-4 w-full mb-3">
           <FormField
             name="departureAirport"
             control={form.control}
@@ -367,8 +367,8 @@ const SearchFlightForm = () => {
             )}
           />
         </div>
-        <div className="block gap-4 items-center max-w-full mb-6 lg:flex">
-          <div className="flex gap-4 items-center">
+        <div className="block gap-4 w-full mb-3 lg:flex">
+          <div className="flex gap-4 w-1/2 items-center">
             <div className="flex gap-2 items-center text-sm font-medium text-[#8A8A8A]">
               <MdOutlineDateRange className="w-6 h-6" /> <span>Date</span>
             </div>
@@ -376,10 +376,10 @@ const SearchFlightForm = () => {
               name="date"
               control={form.control}
               render={({ field, fieldState: { error } }) => (
-                <div className="flex gap-2">
-                  <div className="flex flex-col gap-2 text-sm font-medium">
+                <div className="flex gap-2 flex-grow">
+                  <div className="flex flex-col w-full gap-2 text-sm font-medium">
                     <span className="text-[#8A8A8A]">Departure</span>
-                    <div className="flex flex-col w-full">
+                    <div className="flex flex-col">
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -387,7 +387,7 @@ const SearchFlightForm = () => {
                               variant="outline"
                               role="combobox"
                               className={cn(
-                                "w-[300px] justify-start text-left",
+                                "justify-start text-left",
                                 !field.value?.from && "text-muted-foreground"
                               )}
                             >
@@ -421,7 +421,7 @@ const SearchFlightForm = () => {
                     </div>
                   </div>
                   {isReturnEnabled ? (
-                    <div className="flex flex-col gap-2 text-sm font-medium">
+                    <div className="flex flex-col w-full gap-2 text-sm font-medium">
                       <span className="text-[#8A8A8A]">Return</span>
                       <div className="flex flex-col w-full">
                         <Popover>
@@ -430,7 +430,7 @@ const SearchFlightForm = () => {
                               variant="outline"
                               role="combobox"
                               className={cn(
-                                "w-[300px] justify-start text-left",
+                                "justify-start text-left",
                                 !field.value?.to && "text-muted-foreground"
                               )}
                             >
@@ -469,7 +469,7 @@ const SearchFlightForm = () => {
               )}
             />
           </div>
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-4 w-1/2 items-center">
             <div className="flex gap-2 items-center text-sm font-medium text-[#8A8A8A]">
               <MdAirlineSeatReclineNormal className="w-6 h-6" /> <span>To</span>
             </div>
@@ -480,7 +480,7 @@ const SearchFlightForm = () => {
                 const { adult, child, baby } = field.value;
                 const totalPassengers = adult + child + baby;
                 return (
-                  <div className="flex gap-2 flex-col text-sm font-medium">
+                  <div className="flex gap-2 flex-grow flex-col text-sm font-medium">
                     <FormLabel className="flex gap-2 items-center text-[#8A8A8A]">
                       Passenger
                     </FormLabel>
@@ -491,7 +491,7 @@ const SearchFlightForm = () => {
                             variant="outline"
                             role="combobox"
                             className={cn(
-                              "w-[300px] justify-start text-left",
+                              "justify-start text-left",
                               totalPassengers === 0 && "text-muted-foreground"
                             )}
                           >
@@ -548,7 +548,7 @@ const SearchFlightForm = () => {
               name="flightClass"
               control={form.control}
               render={({ field }) => (
-                <FormItem className="flex-col gap-2 text-sm font-medium">
+                <FormItem className="flex-col flex-grow gap-2 text-sm font-medium">
                   <FormLabel className="flex gap-2 items-center text-[#8A8A8A]">
                     Seat Class
                   </FormLabel>
@@ -560,7 +560,7 @@ const SearchFlightForm = () => {
                             variant="outline"
                             role="combobox"
                             className={cn(
-                              "w-[200px] justify-between",
+                              "justify-between",
                               !field.value && "text-muted-foreground"
                             )}
                           >
