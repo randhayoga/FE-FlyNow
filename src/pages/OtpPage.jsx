@@ -27,7 +27,8 @@ import { z } from "zod";
 import { Button } from "../components/ui/button";
 
 import { toast } from "sonner";
-import { resendOtpService, verifyOtpService } from "../services/otp";
+import Timer from "../components/Otp/Timer";
+import { verifyOtpService } from "../services/otp";
 
 const FormSchema = z.object({
   otp: z.string().min(6, {
@@ -37,34 +38,22 @@ const FormSchema = z.object({
 
 const OtpPage = () => {
   const { state } = useLocation();
-  const [email, setEmail] = useState(
-    localStorage.getItem("email") || state.email
-  );
+  if (state?.email) {
+    localStorage.setItem("email", state.email);
+  }
+  const [email, setEmail] = useState(localStorage.getItem("email") || "");
+
   const navigation = useNavigation();
   const navigate = useNavigate();
 
-  const [timer, setTimer] = useState(60);
   const [resend, setResend] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("email", state?.email || email);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimer((prevTimer) => prevTimer - 1);
-    }, 1000);
-
     return () => {
-      clearInterval(interval);
+      localStorage.removeItem("email");
     };
   }, []);
-
-  useEffect(() => {
-    if (timer === 0) {
-      setResend(true);
-    }
-  }, [timer]);
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -128,25 +117,11 @@ const OtpPage = () => {
                     </InputOTP>
                   </FormControl>
                   <FormDescription className="block text-center font-semibold">
-                    {resend ? (
-                      <button
-                        type="button"
-                        onClick={async () => {
-                          try {
-                            await resendOtpService({ email });
-                            toast.success(`Kode OTP berhasil dikirim ulang!`);
-                            setTimer(60);
-                            setResend(false);
-                          } catch (error) {
-                            toast.error("Gagal mengirim ulang kode OTP");
-                          }
-                        }}
-                      >
-                        Kirim ulang kode
-                      </button>
-                    ) : (
-                      `Kirim ulang kode dalam ${timer} detik`
-                    )}
+                    <Timer
+                      setResend={setResend}
+                      resend={resend}
+                      email={email}
+                    />
                   </FormDescription>
                   <FormMessage className="block text-center" />
                 </FormItem>
