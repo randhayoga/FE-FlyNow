@@ -11,7 +11,7 @@ import bgAuth from "@/assets/images/bgauth.png";
 import { Eye, EyeOff } from "lucide-react";
 //  COMPONENTS
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -25,8 +25,8 @@ import { login } from "../../../redux/actions/auth";
 // import { login } from "@/services/user/auth/login";
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email" }),
-  password: z.string().nonempty({ message: "Password is required" }),
+  email: z.string().email({ message: "Format email tidak valid" }),
+  password: z.string().nonempty({ message: "Password harus diisi" }),
 });
 
 const Login = () => {
@@ -72,7 +72,9 @@ const Login = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-sans">Email/No Telepon</FormLabel>
+                    <FormLabel className="font-sans text-black">
+                      Email/No Telepon
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Contoh: johndoe@gmail.com"
@@ -80,7 +82,7 @@ const Login = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="italic" />
                   </FormItem>
                 )}
               />
@@ -90,11 +92,18 @@ const Login = () => {
                 render={({ field }) => (
                   <FormItem>
                     <div className="flex justify-between font-sans font-medium text-sm">
-                      <FormLabel>Password</FormLabel>
-                      <FormLabel><Link to="/forgot-password" className="text-ColorPrimary">Lupa kata sandi</Link></FormLabel>
+                      <FormLabel className="text-black">Password</FormLabel>
+                      <FormLabel>
+                        <Link
+                          to="/forgot-password"
+                          className="text-ColorPrimary"
+                        >
+                          Lupa kata sandi
+                        </Link>
+                      </FormLabel>
                     </div>
                     <FormControl>
-                    <div className="relative flex flex-col">
+                      <div className="relative flex flex-col">
                         <Input
                           placeholder="Masukkan password"
                           type={showPassword ? "text" : "password"}
@@ -115,7 +124,7 @@ const Login = () => {
                         )}
                       </div>
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="italic" />
                   </FormItem>
                 )}
               />
@@ -126,9 +135,14 @@ const Login = () => {
           </Form>
 
           <p className="text-center text-sm text-muted-foreground mt-5">
-          Belum punya akun? <Link to="/register" className="font-sans text-ColorPrimary font-bold">Daftar di sini</Link>
+            Belum punya akun?{" "}
+            <Link
+              to="/register"
+              className="font-sans text-ColorPrimary font-bold"
+            >
+              Daftar di sini
+            </Link>
           </p>
-
         </div>
       </div>
     </>
