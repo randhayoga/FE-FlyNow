@@ -16,7 +16,7 @@ export const register =
 
     let config = {
       method: "post",
-      url: "http://localhost:3000/api/auth/register",
+      url: `${import.meta.env.VITE_BACKEND_API}/api/auth/register`,
       data: data,
     };
 
