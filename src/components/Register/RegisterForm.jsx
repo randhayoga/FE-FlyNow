@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { MdCheckCircle, MdCancel } from "react-icons/md";
+
 import {
-  MdCheckCircle,
-  MdCancel,
-  MdOutlineVisibility,
-  MdOutlineVisibilityOff,
-} from "react-icons/md";
+  Eye as MdOutlineVisibility,
+  EyeOff as MdOutlineVisibilityOff,
+} from "lucide-react";
 
 import "./RegisterForm.css";
 
@@ -94,10 +94,6 @@ const RegisterForm = () => {
     setIsLoading(true);
     dispatch(register(navigate, nama, email, noTelp, password, image));
     setIsLoading(false);
-
-    if (!localStorage.getItem("token")) {
-      setIsValidEmail(false);
-    }
   };
 
   return (
@@ -202,7 +198,7 @@ const RegisterForm = () => {
           Foto Profil
         </Label>
         <div className="relative border-3 border-slate-200 rounded-xl">
-          <button className="file-upload text-sm py-3.5 px-4 bg-slate-50 rounded-s-md text-uxl">
+          <button className="file-upload text-sm py-3.5 px-4 bg-slate-50 rounded-l-lg text-uxl">
             Pilih foto
           </button>
           <span
@@ -223,7 +219,7 @@ const RegisterForm = () => {
       </div>
       <Button
         type="submit"
-        className="w-full mt-2"
+        className="w-full bg-ColorPrimary mt-2"
         disabled={
           !(
             isValidEmail &&
