@@ -7,6 +7,7 @@ import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
 import { createBrowserRouter } from "react-router-dom";
+import Protected from "@/components/Protected";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/flight/search",
-    element: <SearchFlightPage />,
+
+    element: (
+      <Protected>
+        <SearchFlightPage />,
+      </Protected>
+    ),
   },
 ]);
 
