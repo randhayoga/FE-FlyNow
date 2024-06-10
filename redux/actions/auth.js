@@ -1,7 +1,6 @@
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { setToken, setUser } from "../reducers/auth";
-import { data } from "autoprefixer";
 
 export const profile =
   (navigate, successRedirect, errorRedirect) => async (dispatch, getState) => {
@@ -22,7 +21,7 @@ export const profile =
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: `${import.meta.env.VITE_BACKEND_API}auth/profile`,
+      url: `${import.meta.env.VITE_BACKEND_API}/auth/profile`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -67,7 +66,7 @@ export const login = (navigate, email, password) => async (dispatch) => {
 
   let config = {
     method: "post",
-    url: `${import.meta.env.VITE_BACKEND_API}auth/login`,
+    url: `${import.meta.env.VITE_BACKEND_API}/auth/login`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -90,7 +89,7 @@ export const login = (navigate, email, password) => async (dispatch) => {
     // redirect to home
     navigate("/"); // it will be not consistent, so alternative we use window until we used the state management
   } catch (error) {
-    toast.error("Cek kembali email dan password anda");
+    toast.error(error?.response?.data?.message);
 
     dispatch(logout());
   }
