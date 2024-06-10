@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { register } from "../../../redux/actions/auth";
+import { register } from "../../../redux/actions/register";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

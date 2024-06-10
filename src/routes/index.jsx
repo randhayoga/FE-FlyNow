@@ -8,6 +8,7 @@ import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
 import { createBrowserRouter } from "react-router-dom";
 import Protected from "@/components/Protected";
+import NonProtected from "@/components/Nonprotected";
 
 const router = createBrowserRouter([
   {
@@ -23,11 +24,20 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element: (
+      <NonProtected>
+        <LoginPage />,
+      </NonProtected>
+    ),
   },
   {
     path: "/register",
-    element: <RegisterPage />,
+
+    element: (
+      <NonProtected>
+        <RegisterPage />,
+      </NonProtected>
+    ),
   },
   {
     path: "/otp",
