@@ -94,6 +94,10 @@ const RegisterForm = () => {
     setIsLoading(true);
     dispatch(register(navigate, nama, email, noTelp, password, image));
     setIsLoading(false);
+
+    if (!localStorage.getItem("token")) {
+      setIsValidEmail(false);
+    }
   };
 
   return (
@@ -221,8 +225,13 @@ const RegisterForm = () => {
         type="submit"
         className="w-full mt-2"
         disabled={
-          !(isValidEmail && isValidNoTelp && isValidPassword && nama !== "") ||
-          isLoading
+          !(
+            isValidEmail &&
+            isValidNoTelp &&
+            isValidPassword &&
+            nama !== "" &&
+            image != null
+          ) || isLoading
         }
       >
         Daftar
