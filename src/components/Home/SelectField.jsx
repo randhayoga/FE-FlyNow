@@ -23,8 +23,8 @@ import { cn } from "@/lib/utils";
 
 const SelectField = ({ label, field, datas, value, form, btnLabel }) => {
   return (
-    <FormItem className="flex-col flex-grow gap-2 text-sm font-medium">
-      <FormLabel className="flex gap-2 items-center text-[#8A8A8A]">
+    <FormItem className="flex-col flex-grow gap-2 text-sm">
+      <FormLabel className="flex gap-2 items-center font-normal text-[#8A8A8A]">
         {label}
       </FormLabel>
       <div className="flex flex-col w-full">
@@ -55,6 +55,7 @@ const SelectField = ({ label, field, datas, value, form, btnLabel }) => {
                       key={index}
                       onSelect={() => {
                         form.setValue(value, data);
+                        form.trigger(value);
                       }}
                     >
                       <Check

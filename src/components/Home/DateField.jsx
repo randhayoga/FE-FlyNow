@@ -16,7 +16,7 @@ const DateField = ({ label, field, value, error, form, isReturnEnabled }) => {
   };
 
   return (
-    <div className="flex flex-col w-full gap-2 text-sm font-medium">
+    <div className="flex flex-col w-full gap-2 text-sm font-normal">
       <span className="text-[#8A8A8A]">{label}</span>
       <div className="flex flex-col">
         <Popover>
@@ -46,8 +46,10 @@ const DateField = ({ label, field, value, error, form, isReturnEnabled }) => {
               onSelect={(selected) => {
                 if (isReturnEnabled) {
                   form.setValue("date", selected);
+                  form.trigger("date");
                 } else {
                   form.setValue("date", { from: selected });
+                  form.trigger("date");
                 }
               }}
               numberOfMonths={isReturnEnabled ? 2 : 1}

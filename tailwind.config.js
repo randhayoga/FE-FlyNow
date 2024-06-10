@@ -26,6 +26,7 @@ module.exports = {
       colors: {
         ColorPrimary: "#30628C",
         ColorSecondary: "#CEE5FF",
+        HoverPrimary: "#012383",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

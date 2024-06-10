@@ -32,7 +32,7 @@ const AirportField = ({ name, label, form, airports }) => {
       control={form.control}
       render={({ field }) => (
         <FormItem className="flex gap-4 flex-grow">
-          <FormLabel className="flex gap-2 pt-4 text-sm font-medium text-[#8A8A8A]">
+          <FormLabel className="flex gap-2 pt-4 text-sm font-normal text-[#8A8A8A]">
             <MdFlightTakeoff className="w-6 h-6" /> {label}
           </FormLabel>
           <div className="flex flex-col w-full">
@@ -74,6 +74,7 @@ const AirportField = ({ name, label, form, airports }) => {
                           key={airport?.code}
                           onSelect={() => {
                             form.setValue(`${name}`, airport?.code);
+                            form.trigger(`${name}`);
                           }}
                         >
                           <Check

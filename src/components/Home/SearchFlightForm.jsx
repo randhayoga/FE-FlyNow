@@ -1,16 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormField, FormLabel, FormMessage } from "@/components/ui/form";
 import {
   Popover,
   PopoverContent,
@@ -18,7 +11,6 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-// import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { MdOutlineDateRange, MdAirlineSeatReclineNormal } from "react-icons/md";
 import { HiOutlineSwitchHorizontal } from "react-icons/hi";
@@ -30,13 +22,14 @@ import AirportField from "./AirportField";
 import DateField from "./DateField";
 import SelectField from "./SelectField";
 import PassengerInput from "./PassengerInput";
+import axios from "axios";
 
 const formSchema = z.object({
   departureAirport: z.string().min(1, { message: "Please select an airport" }),
   arrivalAirport: z.string().min(1, { message: "Please select an airport" }),
   date: z.object({
-    from: z.date({message: "Please select a valid date"}),
-    to: z.date({message: "Please select a valid date"}).optional(),
+    from: z.date({ message: "Please select a valid date" }),
+    to: z.date({ message: "Please select a valid date" }).optional(),
   }),
   passengers: z.object({
     adult: z.number().min(1, { message: "Please select at least 1 adult" }),
@@ -47,6 +40,15 @@ const formSchema = z.object({
 });
 
 const SearchFlightForm = () => {
+  // const getAirportsData = () => {
+  //   const airports = axios.get("http://localhost:3000/api/airports");
+  //   return airports;
+  // }
+
+  // useEffect(() => {
+  //   console.log(getAirportsData());
+  // }, [])
+
   const [isReturnEnabled, setIsReturnEnabled] = useState(false);
   const navigate = useNavigate();
 
@@ -181,7 +183,7 @@ const SearchFlightForm = () => {
           <Button
             onClick={handleSwapAirports}
             type="button"
-            className="lg:-mt-4 w-fit self-center"
+            className="lg:-mt-4 w-fit self-center rounded-full"
           >
             <HiOutlineSwitchHorizontal className="w-5 h-5" />
           </Button>
@@ -194,7 +196,7 @@ const SearchFlightForm = () => {
         </div>
         <div className="block gap-4 w-full mb-3 lg:flex">
           <div className="flex gap-4 w-1/2 items-center">
-            <div className="flex gap-2 items-center text-sm font-medium text-[#8A8A8A]">
+            <div className="flex gap-2 items-center text-sm font-normal text-[#8A8A8A]">
               <MdOutlineDateRange className="w-6 h-6" /> <span>Date</span>
             </div>
             <Controller
@@ -220,7 +222,7 @@ const SearchFlightForm = () => {
                       isReturnEnabled={isReturnEnabled}
                     />
                   ) : (
-                    <p className="text-right font-medium text-sm text-[#8A8A8A]">
+                    <p className="text-right font-normal text-sm text-[#8A8A8A]">
                       Round Trip?
                     </p>
                   )}
@@ -233,7 +235,7 @@ const SearchFlightForm = () => {
             />
           </div>
           <div className="flex gap-4 w-1/2 items-center">
-            <div className="flex gap-2 items-center text-sm font-medium text-[#8A8A8A]">
+            <div className="flex gap-2 items-center text-sm font-normal text-[#8A8A8A]">
               <MdAirlineSeatReclineNormal className="w-6 h-6" />{" "}
               <span>Passengers</span>
             </div>
@@ -244,8 +246,8 @@ const SearchFlightForm = () => {
                 const { adult, child, baby } = field.value;
                 const totalPassengers = adult + child + baby;
                 return (
-                  <div className="flex gap-2 flex-grow flex-col text-sm font-medium">
-                    <FormLabel className="flex gap-2 items-center text-[#8A8A8A]">
+                  <div className="flex gap-2 flex-grow flex-col text-sm">
+                    <FormLabel className="flex gap-2 items-center font-normal text-[#8A8A8A]">
                       Passenger
                     </FormLabel>
                     <div className="flex flex-col w-full">
@@ -262,9 +264,7 @@ const SearchFlightForm = () => {
                             {`${totalPassengers} Passengers`}
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent
-                          className="w-auto p-4 flex flex-col gap-2"
-                        >
+                        <PopoverContent className="w-auto p-4 flex flex-col gap-2">
                           <PassengerInput
                             min={1}
                             label="Adult"
@@ -324,8 +324,8 @@ const SearchFlightForm = () => {
             />
           </div>
         </div>
-        <Button className="w-full" type="submit">
-          Search Flights
+        <Button className="w-full absolute -ms-6 -mt-3 rounded-b-xl rounded-t-none bg-ColorPrimary hover:bg-HoverPrimary text-white" type="submit">
+          Cari Penerbangan
         </Button>
       </form>
     </Form>
