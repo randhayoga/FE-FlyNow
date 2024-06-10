@@ -1,5 +1,7 @@
 import axios from "axios";
-import { setToken } from "../reducers/auth";
+import { setToken, setUser } from "../reducers/auth";
+
+import { toast } from "sonner";
 
 export const register =
   (navigate, name, email, phoneNumber, password, image) => async (dispatch) => {
@@ -25,12 +27,17 @@ export const register =
         user: { email },
       } = response.data.data;
       dispatch(setToken(token));
+      dispatch(setUser(data?.user));
       navigate("/otp", {
         state: {
           email,
         },
       }); // WIP
     } catch (error) {
-      console.log(error.response.data.message);
+      if (error.response?.data?.message === "Email already exists") {
+        toast.error("Email telah terdaftar", {
+          position: "top-right",
+        });
+      }
     }
   };
