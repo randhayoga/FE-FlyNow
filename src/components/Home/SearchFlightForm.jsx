@@ -2,13 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-import { cn } from "@/lib/utils";
-import { Form, FormField, FormLabel, FormMessage } from "@/components/ui/form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Form, FormField } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 
@@ -21,8 +15,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AirportField from "./AirportField";
 import DateField from "./DateField";
 import SelectField from "./SelectField";
-import PassengerInput from "./PassengerInput";
 import axios from "axios";
+import PassengerField from "./PassengersField";
 
 const formSchema = z.object({
   departureAirport: z.string().min(1, { message: "Please select an airport" }),
@@ -195,20 +189,21 @@ const SearchFlightForm = () => {
           />
         </div>
         <div className="block gap-4 w-full mb-3 lg:flex">
-          <div className="flex gap-4 w-1/2 items-center">
-            <div className="flex gap-2 items-center text-sm font-normal text-[#8A8A8A]">
+          <div className="flex gap-8 w-1/2 items-start">
+            <div className="flex gap-2 mt-3 items-center text-sm font-normal text-[#8A8A8A]">
               <MdOutlineDateRange className="w-6 h-6" /> <span>Date</span>
             </div>
             <Controller
               name="date"
               control={form.control}
               render={({ field, fieldState: { error } }) => (
-                <div className="flex gap-2 flex-grow">
+                <div className="flex gap-5 flex-grow">
                   <DateField
                     label={"Departure"}
                     field={field}
                     value={field.value.from}
-                    error={error?.from?.message}
+                    error={error}
+                    errMessage={error?.from?.message}
                     form={form}
                     isReturnEnabled={isReturnEnabled}
                   />
@@ -217,7 +212,8 @@ const SearchFlightForm = () => {
                       label={"Return"}
                       field={field}
                       value={field.value.to}
-                      error={error?.to?.message}
+                      error={error}
+                      errMessage={error?.to?.message}
                       form={form}
                       isReturnEnabled={isReturnEnabled}
                     />
@@ -234,97 +230,26 @@ const SearchFlightForm = () => {
               )}
             />
           </div>
-          <div className="flex gap-4 w-1/2 items-center">
-            <div className="flex gap-2 items-center text-sm font-normal text-[#8A8A8A]">
-              <MdAirlineSeatReclineNormal className="w-6 h-6" />{" "}
-              <span>Passengers</span>
+          <div className="flex gap-8 w-1/2 items-start">
+            <div className="flex gap-2 mt-3 items-center text-sm font-normal text-[#8A8A8A]">
+              <MdAirlineSeatReclineNormal className="w-6 h-6" /> <span>To</span>
             </div>
-            <Controller
-              name="passengers"
-              control={form.control}
-              render={({ field, fieldState: { error } }) => {
-                const { adult, child, baby } = field.value;
-                const totalPassengers = adult + child + baby;
-                return (
-                  <div className="flex gap-2 flex-grow flex-col text-sm">
-                    <FormLabel className="flex gap-2 items-center font-normal text-[#8A8A8A]">
-                      Passenger
-                    </FormLabel>
-                    <div className="flex flex-col w-full">
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            role="combobox"
-                            className={cn(
-                              "justify-start text-left",
-                              totalPassengers === 0 && "text-muted-foreground"
-                            )}
-                          >
-                            {`${totalPassengers} Passengers`}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-4 flex flex-col gap-2">
-                          <PassengerInput
-                            min={1}
-                            label="Adult"
-                            value={adult}
-                            onChange={(newValue) => {
-                              form.setValue("passengers", {
-                                ...field.value,
-                                adult: newValue,
-                              });
-                            }}
-                          />
-                          <PassengerInput
-                            min={0}
-                            label="Child"
-                            value={child}
-                            onChange={(newValue) => {
-                              form.setValue("passengers", {
-                                ...field.value,
-                                child: newValue,
-                              });
-                            }}
-                          />
-                          <PassengerInput
-                            min={0}
-                            label="Baby"
-                            value={baby}
-                            onChange={(newValue) => {
-                              form.setValue("passengers", {
-                                ...field.value,
-                                baby: newValue,
-                              });
-                            }}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage className="italic mt-1">
-                        {error?.adult?.message}
-                      </FormMessage>
-                    </div>
-                  </div>
-                );
-              }}
-            />
-            <FormField
-              name="flightClass"
-              control={form.control}
-              render={({ field }) => (
-                <SelectField
-                  datas={flightClasses}
-                  form={form}
-                  field={field}
-                  value={"flightClass"}
-                  label={"Seat Class"}
-                  btnLabel={"Select Class"}
-                />
-              )}
-            />
+            <div className="flex w-full gap-5">
+              <PassengerField form={form} name="passengers" />
+              <SelectField
+                form={form}
+                datas={flightClasses}
+                name={"flightClass"}
+                label={"Seat Class"}
+                btnLabel={"Pilih Kelas"}
+              />
+            </div>
           </div>
         </div>
-        <Button className="w-full absolute -ms-6 -mt-3 rounded-b-xl rounded-t-none bg-ColorPrimary hover:bg-HoverPrimary text-white" type="submit">
+        <Button
+          className="w-full absolute -ms-6 rounded-b-xl rounded-t-none bg-ColorPrimary hover:bg-HoverPrimary text-white"
+          type="submit"
+        >
           Cari Penerbangan
         </Button>
       </form>

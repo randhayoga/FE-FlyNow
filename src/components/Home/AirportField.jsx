@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 
 import { cn } from "@/lib/utils";
 
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check } from "lucide-react";
 import { MdFlightTakeoff } from "react-icons/md";
 
 const AirportField = ({ name, label, form, airports }) => {
@@ -30,8 +30,8 @@ const AirportField = ({ name, label, form, airports }) => {
     <FormField
       name={name}
       control={form.control}
-      render={({ field }) => (
-        <FormItem className="flex gap-4 flex-grow">
+      render={({ field, fieldState: { error } }) => (
+        <FormItem className="flex gap-8 w-1/2 overflow-x-hidden">
           <FormLabel className="flex gap-2 pt-4 text-sm font-normal text-[#8A8A8A]">
             <MdFlightTakeoff className="w-6 h-6" /> {label}
           </FormLabel>
@@ -43,8 +43,9 @@ const AirportField = ({ name, label, form, airports }) => {
                     variant="outline"
                     role="combobox"
                     className={cn(
-                      "w-full justify-between",
-                      !field.value && "text-muted-foreground"
+                      "w-full justify-between rounded-none p-0 border-b-2 border-t-0 border-l-0 border-r-0 text-base",
+                      !field.value && "text-muted-foreground",
+                      error && "border-red-500"
                     )}
                   >
                     {field.value
@@ -58,7 +59,6 @@ const AirportField = ({ name, label, form, airports }) => {
                           )?.code
                         })`
                       : "Pilih Bandara"}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
                   </Button>
                 </FormControl>
               </PopoverTrigger>

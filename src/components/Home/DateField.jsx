@@ -3,21 +3,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { FormControl, FormMessage } from "@/components/ui/form";
+import { FormControl, FormLabel, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 
-const DateField = ({ label, field, value, error, form, isReturnEnabled }) => {
+const DateField = ({ label, field, value, error, errMessage, form, isReturnEnabled }) => {
   const formatDate = (date) => {
     return date ? format(new Date(date), "LLL dd, y") : "Pilih Tanggal";
   };
 
   return (
-    <div className="flex flex-col w-full gap-2 text-sm font-normal">
-      <span className="text-[#8A8A8A]">{label}</span>
+    <div className="flex flex-col w-full gap-2">
+      <FormLabel className="font-normal text-[#8A8A8A]">{label}</FormLabel>
       <div className="flex flex-col">
         <Popover>
           <PopoverTrigger asChild>
@@ -26,8 +26,9 @@ const DateField = ({ label, field, value, error, form, isReturnEnabled }) => {
                 variant="outline"
                 role="combobox"
                 className={cn(
-                  "justify-start text-left",
-                  !value && "text-muted-foreground"
+                  "w-full justify-between rounded-none p-0 border-b-2 border-t-0 border-l-0 border-r-0",
+                  !value && "text-muted-foreground",
+                  error && "border-red-500"
                 )}
               >
                 {isReturnEnabled
@@ -56,7 +57,7 @@ const DateField = ({ label, field, value, error, form, isReturnEnabled }) => {
             />
           </PopoverContent>
         </Popover>
-        <FormMessage className="italic mt-1">{error}</FormMessage>
+        <FormMessage className="italic mt-1">{errMessage}</FormMessage>
       </div>
     </div>
   );
