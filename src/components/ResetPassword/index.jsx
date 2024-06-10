@@ -140,7 +140,7 @@ const ResetPasswordComponent = () => {
                             className="text-slate-300 cursor-pointer absolute right-3 top-1/2 -translate-y-1/2"
                             onClick={() =>
                               setShowPasswordConfirmation(
-                                !showPasswordConfirmation,
+                                !showPasswordConfirmation
                               )
                             }
                             size={28}
@@ -150,7 +150,7 @@ const ResetPasswordComponent = () => {
                             className="text-slate-300 cursor-pointer absolute right-3 top-1/2 -translate-y-1/2"
                             onClick={() =>
                               setShowPasswordConfirmation(
-                                !showPasswordConfirmation,
+                                !showPasswordConfirmation
                               )
                             }
                             size={28}
@@ -163,7 +163,7 @@ const ResetPasswordComponent = () => {
                 )}
               />
               <Button
-                className="w-full bg-primary dark:bg-primary"
+                className="w-full bg-ColorPrimary dark:bg-primary"
                 type="submit"
               >
                 Simpan

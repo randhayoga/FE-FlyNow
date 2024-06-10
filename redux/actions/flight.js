@@ -7,7 +7,9 @@ export const searchFlight = () => async (dispatch, getState) => {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: "http://localhost:3000/api/flight/search?da=JFK&aa=LAX&dd=2024-06-01&rd=2024-06-02&class=economy&sort=departure-asc",
+    url: `${
+      import.meta.env.VITE_BACKEND_API
+    }flight/search?da=JFK&aa=LAX&dd=2024-06-01&rd=2024-06-02&class=economy&sort=departure-asc`,
   };
 
   try {

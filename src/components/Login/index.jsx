@@ -7,9 +7,11 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 // ASSETS
 import bgAuth from "@/assets/images/bgauth.png";
+// ICONS
+import { Eye, EyeOff } from "lucide-react";
 //  COMPONENTS
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 import {
   Form,
   FormControl,
@@ -23,11 +25,12 @@ import { login } from "../../../redux/actions/auth";
 // import { login } from "@/services/user/auth/login";
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
+  email: z.string().email({ message: "Format email tidak valid" }),
+  password: z.string().nonempty({ message: "Password harus diisi" }),
 });
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // 1. Define your form.
@@ -58,18 +61,20 @@ const Login = () => {
       <div className="flex-1 flex flex-col min-h-screen">
         <div className="flex flex-col px-8 md:px-16 lg:px-32 justify-center h-full gap-10">
           <div>
-            <h1 className="text-2xl font-bold font-sans">Masuk</h1>
+            <h1 className="text-3xl font-bold font-sans">Masuk</h1>
           </div>
 
           {/* Form */}
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-sans text-xs">Email/No Telepon</FormLabel>
+                    <FormLabel className="font-sans text-black">
+                      Email/No Telepon
+                    </FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Contoh: johndoe@gmail.com"
@@ -77,7 +82,7 @@ const Login = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="italic" />
                   </FormItem>
                 )}
               />
@@ -86,15 +91,40 @@ const Login = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-sans text-xs">Password</FormLabel>
+                    <div className="flex justify-between font-sans font-medium text-sm">
+                      <FormLabel className="text-black">Password</FormLabel>
+                      <FormLabel>
+                        <Link
+                          to="/forgot-password"
+                          className="text-ColorPrimary"
+                        >
+                          Lupa kata sandi
+                        </Link>
+                      </FormLabel>
+                    </div>
                     <FormControl>
-                      <Input
-                        placeholder="Masukkan password"
-                        type="password"
-                        {...field}
-                      />
+                      <div className="relative flex flex-col">
+                        <Input
+                          placeholder="Masukkan password"
+                          type={showPassword ? "text" : "password"}
+                          {...field}
+                        />
+                        {!showPassword ? (
+                          <Eye
+                            className="text-slate-300 cursor-pointer absolute right-3 top-1/2 -translate-y-1/2"
+                            onClick={() => setShowPassword(!showPassword)}
+                            size={28}
+                          />
+                        ) : (
+                          <EyeOff
+                            className="text-slate-300 cursor-pointer absolute right-3 top-1/2 -translate-y-1/2"
+                            onClick={() => setShowPassword(!showPassword)}
+                            size={28}
+                          />
+                        )}
+                      </div>
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="italic" />
                   </FormItem>
                 )}
               />
@@ -105,9 +135,14 @@ const Login = () => {
           </Form>
 
           <p className="text-center text-sm text-muted-foreground mt-5">
-          Belum punya akun? <Link to="/register" className="font-sans text-sm text-ColorPrimary font-bold">Daftar di sini</Link>
+            Belum punya akun?{" "}
+            <Link
+              to="/register"
+              className="font-sans text-ColorPrimary font-bold"
+            >
+              Daftar di sini
+            </Link>
           </p>
-
         </div>
       </div>
     </>

@@ -1,5 +1,7 @@
 import HomeBanner from "@/components/Home/HomeBanner";
 import SearchFlightForm from "@/components/Home/SearchFlightForm";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const HomePage = () => {
   return (
@@ -12,6 +14,9 @@ const HomePage = () => {
         </h2>
         <SearchFlightForm />
       </div>
+      <Button onClick={() => toast.error("You've clicked me")}>
+        Nyoba Toast
+      </Button>
     </div>
   );
 };

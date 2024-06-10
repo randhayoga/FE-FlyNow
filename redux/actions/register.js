@@ -1,5 +1,7 @@
 import axios from "axios";
-import { setToken } from "../reducers/auth";
+import { setToken, setUser } from "../reducers/auth";
+
+import { toast } from "sonner";
 
 export const register =
   (navigate, name, email, phoneNumber, password, image) => async (dispatch) => {
@@ -14,16 +16,28 @@ export const register =
 
     let config = {
       method: "post",
-      url: "http://localhost:3000/api/auth/register",
+      url: `${import.meta.env.VITE_BACKEND_API}/auth/register`,
       data: data,
     };
 
     try {
       const response = await axios.request(config);
-      const { token } = response.data.data;
+      const {
+        token,
+        user: { email },
+      } = response.data.data;
       dispatch(setToken(token));
-      navigate("/otp"); // WIP
+      dispatch(setUser(data?.user));
+      navigate("/otp", {
+        state: {
+          email,
+        },
+      }); // WIP
     } catch (error) {
-      console.log(error.response.data.message);
+      if (error.response?.data?.message === "Email already exists") {
+        toast.error("Email telah terdaftar", {
+          position: "top-right",
+        });
+      }
     }
   };
