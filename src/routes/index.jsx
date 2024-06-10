@@ -1,9 +1,9 @@
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import Navbar from "@/components/Navbar";
 import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import OtpPage from "@/pages/OtpPage";
 import RegisterPage from "@/pages/RegisterPage";
-import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
 import { createBrowserRouter } from "react-router-dom";

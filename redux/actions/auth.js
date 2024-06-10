@@ -22,7 +22,7 @@ export const profile =
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: "http://localhost:3000/api/auth/profile",
+      url: `${import.meta.env.VITE_BACKEND_API}auth/profile`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -67,7 +67,7 @@ export const login = (navigate, email, password) => async (dispatch) => {
 
   let config = {
     method: "post",
-    url: `http://localhost:3000/api/auth/login`,
+    url: `${import.meta.env.VITE_BACKEND_API}auth/login`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -97,33 +97,6 @@ export const login = (navigate, email, password) => async (dispatch) => {
 
   // setIsLoading(false);
 };
-
-export const register =
-  (navigate, name, email, phoneNumber, password, image) => async (dispatch) => {
-    let data = new FormData();
-    data.append("name", name);
-    data.append("email", email);
-    data.append("phoneNumber", phoneNumber.replace("+62 ", "0"));
-    data.append("password", password);
-    data.append("image", image);
-
-    dispatch(setToken(null));
-
-    let config = {
-      method: "post",
-      url: "http://localhost:3000/api/auth/register",
-      data: data,
-    };
-
-    try {
-      const response = await axios.request(config);
-      const { token } = response.data.data;
-      dispatch(setToken(token));
-      navigate("/otp"); // WIP
-    } catch (error) {
-      console.log(error.response.data.message);
-    }
-  };
 
 export const logout = () => (dispatch) => {
   dispatch(setToken(null));
