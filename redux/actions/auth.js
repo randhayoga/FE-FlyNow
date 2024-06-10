@@ -14,7 +14,7 @@ export const login = (navigate, email, password) => async (dispatch) => {
 
     let config = {
         method: "post",
-        url: `https://flynow-staging-dot-fsw2-binar-academy.et.r.appspot.com/api/auth/login`,
+        url: `${import.meta.env.VITE_BACKEND_API}/auth/login`,
         headers: {
             "Content-Type": "application/json",
         },
