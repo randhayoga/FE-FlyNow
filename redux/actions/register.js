@@ -22,13 +22,17 @@ export const register =
 
     try {
       const response = await axios.request(config);
-      const { data } = response.data;
-      const { token } = data;
-
+      const {
+        token,
+        user: { email },
+      } = response.data.data;
       dispatch(setToken(token));
       dispatch(setUser(data?.user));
-
-      navigate("/otp");
+      navigate("/otp", {
+        state: {
+          email,
+        },
+      }); // WIP
     } catch (error) {
       if (error.response?.data?.message === "Email already exists") {
         toast.error("Email telah terdaftar", {
