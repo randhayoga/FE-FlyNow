@@ -110,7 +110,7 @@ const SearchFlightForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="lg:flex gap-4 w-full mb-3">
+        <div className="flex flex-col lg:flex-row gap-4 w-full mb-3">
           <AirportField
             name="departureAirport"
             label="From"
@@ -131,8 +131,8 @@ const SearchFlightForm = () => {
             airports={airports}
           />
         </div>
-        <div className="block gap-4 w-full mb-3 lg:flex">
-          <div className="flex gap-8 w-1/2 items-start">
+        <div className="flex flex-col lg:flex-row gap-4 w-full mb-3 lg:flex">
+          <div className="flex gap-8 w-full lg:w-1/2 items-start">
             <div className="flex gap-2 mt-3 items-center text-sm font-normal text-[#8A8A8A]">
               <MdOutlineDateRange className="w-6 h-6" /> <span>Date</span>
             </div>
@@ -173,7 +173,7 @@ const SearchFlightForm = () => {
               )}
             />
           </div>
-          <div className="flex gap-8 w-1/2 items-start">
+          <div className="flex gap-8 w-full lg:w-1/2 items-start">
             <div className="flex gap-2 mt-3 items-center text-sm font-normal text-[#8A8A8A]">
               <MdAirlineSeatReclineNormal className="w-6 h-6" /> <span>To</span>
             </div>

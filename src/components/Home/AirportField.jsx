@@ -31,7 +31,7 @@ const AirportField = ({ name, label, form, airports }) => {
       name={name}
       control={form.control}
       render={({ field, fieldState: { error } }) => (
-        <FormItem className="flex gap-8 w-1/2 overflow-x-hidden">
+        <FormItem className="flex gap-8 w-full lg:w-1/2 overflow-x-hidden">
           <FormLabel className="flex gap-2 pt-4 text-sm font-normal text-[#8A8A8A]">
             <MdFlightTakeoff className="w-6 h-6" /> {label}
           </FormLabel>
