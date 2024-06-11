@@ -85,7 +85,7 @@ const NavbarComponent = () => {
           <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
             <button
               type="button"
-              className="flex items-center text-white bg-[#30628C] hover:bg-[#20496C] focus:ring-4 focus:outline-none focus:ring-[#20496C] font-medium rounded-lg text-sm px-3 py-2 text-center shadow-md"
+              className="flex items-center text-white bg-color-primary hover:bg-hover-primary focus:ring-4 focus:outline-none focus:ring-[#20496C] font-medium rounded-lg text-sm px-3 py-2 text-center shadow-md"
               onClick={handleLogin}
             >
               <img src={logoIn} alt="FlyNow Logo" className="w-5" />

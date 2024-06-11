@@ -29,7 +29,7 @@ const SearchFlightPage = () => {
       <div className="shadow-md py-4">
         <div className="container">
           <h1 className="text-xl font-bold">Pilih Penerbangan</h1>
-          <div className="flex items-center w-90 p-4 bg-ColorPrimary rounded-lg text-white">
+          <div className="flex items-center w-90 p-4 bg-color-primary rounded-lg text-white">
             <Link to="/" className="mr-3">
               <ArrowLeft />
             </Link>
@@ -97,10 +97,10 @@ const SearchFlightPage = () => {
                     <p>{flight.arrivalAirport.airportCode}</p>
                   </div>
                   <div className="flex flex-col items-center">
-                    <p className="text-xl font-bold text-ColorPrimary">
+                    <p className="text-xl font-bold text-color-primary">
                       IDR {flight.price.toLocaleString()}
                     </p>
-                    <Button className="bg-ColorPrimary rounded-lg w-full">
+                    <Button className="bg-color-primary rounded-lg w-full">
                       Pilih
                     </Button>
                   </div>
@@ -108,7 +108,7 @@ const SearchFlightPage = () => {
                 {expandedCard === flight.id && (
                   <div className="transition-all duration-500 delay-1000 ease-in-out">
                     <div className="border-t-2 py-3"></div>
-                    <p className="font-bold text-lg text-ColorPrimary">
+                    <p className="font-bold text-lg text-color-primary">
                       Detail Penerbangan
                     </p>
                     <div className="flex items-center justify-between">

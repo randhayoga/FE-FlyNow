@@ -1,5 +1,6 @@
 import axios from "axios";
-import { setFlights } from "../reducers/flight";
+import { setFlights, setAirports } from "../reducers/flight";
+import { toast } from "sonner";
 
 export const searchFlight = () => async (dispatch, getState) => {
   const state = getState();
@@ -19,5 +20,21 @@ export const searchFlight = () => async (dispatch, getState) => {
     dispatch(setFlights(data));
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getAirports = () => async (dispatch) => {
+  let config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${import.meta.env.VITE_BACKEND_API}/airports`,
+  };
+
+  try {
+    const response = await axios.request(config);
+    const { data } = response.data;
+    dispatch(setAirports(data));
+  } catch (error) {
+    toast.error(error?.response?.data?.message);
   }
 };
