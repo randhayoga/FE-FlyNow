@@ -23,15 +23,11 @@ export const searchFlight = () => async (dispatch, getState) => {
   }
 };
 
-export const getAirports = () => async (dispatch, getState) => {
-  const { token } = getState().auth;
+export const getAirports = () => async (dispatch) => {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
     url: `${import.meta.env.VITE_BACKEND_API}/airports`,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   };
 
   try {
