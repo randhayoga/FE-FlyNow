@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Form, FormField } from "@/components/ui/form";
+import { getAirports } from "../../../redux/actions/flight";
+
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+
+import AirportField from "./AirportField";
+import DateField from "./DateField";
+import SelectField from "./SelectField";
+import PassengerField from "./PassengersField";
 
 import { MdOutlineDateRange, MdAirlineSeatReclineNormal } from "react-icons/md";
 import { HiOutlineSwitchHorizontal } from "react-icons/hi";
 
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import AirportField from "./AirportField";
-import DateField from "./DateField";
-import SelectField from "./SelectField";
-import axios from "axios";
-import PassengerField from "./PassengersField";
 
 const formSchema = z.object({
   departureAirport: z.string().min(1, { message: "Please select an airport" }),
@@ -34,17 +36,15 @@ const formSchema = z.object({
 });
 
 const SearchFlightForm = () => {
-  // const getAirportsData = () => {
-  //   const airports = axios.get("http://localhost:3000/api/airports");
-  //   return airports;
-  // }
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { airports } = useSelector((state) => state.flights);
 
-  // useEffect(() => {
-  //   console.log(getAirportsData());
-  // }, [])
+  useEffect(() => {
+    dispatch(getAirports());
+  }, [dispatch]);
 
   const [isReturnEnabled, setIsReturnEnabled] = useState(false);
-  const navigate = useNavigate();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -67,16 +67,22 @@ const SearchFlightForm = () => {
   const onSubmit = (values) => {
     console.log(values);
     // Create query string from form values
-    const query = new URLSearchParams({
+
+    const queryObj = {
       da: values.departureAirport,
       aa: values.arrivalAirport,
       dd: formatDate(values.date.from),
-      rd: values.date.to ? formatDate(values.date.to) : "", // Because return date is optional
       adult: values.passengers.adult.toString(),
       child: values.passengers.child.toString(),
       baby: values.passengers.baby.toString(),
       class: values.flightClass,
-    }).toString();
+    };
+
+    if (values.date.to) {
+      queryObj.rd = formatDate(values.date.to);
+    }
+
+    const query = new URLSearchParams(queryObj).toString();
 
     // Redirect to search results page with query string
     navigate(`/flight/search?${query}`);
@@ -98,69 +104,6 @@ const SearchFlightForm = () => {
     form.setValue("departureAirport", arrivalAirport);
     form.setValue("arrivalAirport", departureAirport);
   };
-
-  const airports = [
-    {
-      code: "CGK",
-      name: "Soekarno Hatta",
-      city: "Jakarta",
-      country: "Indonesia",
-    },
-    {
-      code: "LAX",
-      name: "Los Angeles International",
-      city: "Los Angeles",
-      country: "United States",
-    },
-    {
-      code: "HND",
-      name: "Tokyo Haneda",
-      city: "Tokyo",
-      country: "Japan",
-    },
-    {
-      code: "LHR",
-      name: "Heathrow",
-      city: "London",
-      country: "United Kingdom",
-    },
-    {
-      code: "DXB",
-      name: "Dubai International",
-      city: "Dubai",
-      country: "United Arab Emirates",
-    },
-    {
-      code: "SIN",
-      name: "Changi",
-      city: "Singapore",
-      country: "Singapore",
-    },
-    {
-      code: "SYD",
-      name: "Sydney Kingsford Smith",
-      city: "Sydney",
-      country: "Australia",
-    },
-    {
-      code: "JFK",
-      name: "John F. Kennedy International",
-      city: "New York",
-      country: "United States",
-    },
-    {
-      code: "CDG",
-      name: "Charles de Gaulle",
-      city: "Paris",
-      country: "France",
-    },
-    {
-      code: "HKG",
-      name: "Hong Kong International",
-      city: "Hong Kong",
-      country: "China",
-    },
-  ];
 
   const flightClasses = ["economy", "business", "first_class"];
 
@@ -247,7 +190,7 @@ const SearchFlightForm = () => {
           </div>
         </div>
         <Button
-          className="w-full absolute -ms-6 rounded-b-xl rounded-t-none bg-ColorPrimary hover:bg-HoverPrimary text-white"
+          className="w-full absolute -ms-6 rounded-b-xl rounded-t-none bg-color-primary hover:bg-hover-primary text-white"
           type="submit"
         >
           Cari Penerbangan

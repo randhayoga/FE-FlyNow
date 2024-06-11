@@ -96,7 +96,7 @@ const Login = () => {
                       <FormLabel>
                         <Link
                           to="/forgot-password"
-                          className="text-ColorPrimary"
+                          className="text-color-primary"
                         >
                           Lupa kata sandi
                         </Link>
@@ -128,7 +128,7 @@ const Login = () => {
                   </FormItem>
                 )}
               />
-              <Button className="w-full bg-ColorPrimary mt-5" type="submit">
+              <Button className="w-full bg-color-primary mt-5" type="submit">
                 Masuk
               </Button>
             </form>
@@ -138,7 +138,7 @@ const Login = () => {
             Belum punya akun?{" "}
             <Link
               to="/register"
-              className="font-sans text-ColorPrimary font-bold"
+              className="font-sans text-color-primary font-bold"
             >
               Daftar di sini
             </Link>

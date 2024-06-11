@@ -22,7 +22,10 @@ const RegisterPage = () => {
           <RegisterForm />
           <div className="mt-4 text-center text-md">
             Sudah punya akun?{" "}
-            <Link to="/login" className="font-sans text-ColorPrimary font-bold">
+            <Link
+              to="/login"
+              className="font-sans text-color-primary font-bold"
+            >
               Masuk di sini
             </Link>
           </div>

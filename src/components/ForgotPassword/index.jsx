@@ -80,7 +80,7 @@ const ForgotPasswordComponent = () => {
                 )}
               />
               <Button
-                className="w-full bg-ColorPrimary dark:bg-primary"
+                className="w-full bg-color-primary dark:bg-primary"
                 type="submit"
               >
                 Kirim
