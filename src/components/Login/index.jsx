@@ -128,7 +128,7 @@ const Login = () => {
                   </FormItem>
                 )}
               />
-              <Button className="w-full bg-color-primary mt-5" type="submit">
+              <Button className="w-full bg-color-primary hover:bg-hover-primary mt-5" type="submit">
                 Masuk
               </Button>
             </form>
@@ -138,7 +138,7 @@ const Login = () => {
             Belum punya akun?{" "}
             <Link
               to="/register"
-              className="font-sans text-color-primary font-bold"
+              className="font-sans text-color-primary hover:text-hover-primary font-bold"
             >
               Daftar di sini
             </Link>

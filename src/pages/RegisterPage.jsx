@@ -24,7 +24,7 @@ const RegisterPage = () => {
             Sudah punya akun?{" "}
             <Link
               to="/login"
-              className="font-sans text-color-primary font-bold"
+              className="font-sans text-color-primary hover:text-hover-primary font-bold"
             >
               Masuk di sini
             </Link>

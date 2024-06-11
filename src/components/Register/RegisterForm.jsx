@@ -219,7 +219,7 @@ const RegisterForm = () => {
       </div>
       <Button
         type="submit"
-        className="w-full bg-color-primary mt-2"
+        className="w-full bg-color-primary hover:bg-hover-primary mt-2"
         disabled={
           !(
             isValidEmail &&
