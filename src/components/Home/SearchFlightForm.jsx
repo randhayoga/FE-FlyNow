@@ -174,7 +174,7 @@ const SearchFlightForm = () => {
             />
           </div>
           <div className="flex gap-8 w-full lg:w-1/2 items-start">
-            <div className="flex gap-2 mt-3 items-center text-sm font-normal text-[#8A8A8A]">
+            <div className="flex gap-2 mt-3 lg:ps-9 items-center text-sm font-normal text-[#8A8A8A]">
               <MdAirlineSeatReclineNormal className="w-6 h-6" /> <span>To</span>
             </div>
             <div className="flex w-full gap-5">
