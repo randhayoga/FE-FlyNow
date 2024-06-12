@@ -10,7 +10,15 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 
-const DateField = ({ label, field, value, error, errMessage, form, isReturnEnabled }) => {
+const DateField = ({
+  label,
+  field,
+  value,
+  error,
+  errMessage,
+  form,
+  isReturnEnabled,
+}) => {
   const formatDate = (date) => {
     return date ? format(new Date(date), "LLL dd, y") : "Pilih Tanggal";
   };
@@ -49,9 +57,9 @@ const DateField = ({ label, field, value, error, errMessage, form, isReturnEnabl
                   form.setValue("date", selected);
                   form.trigger("date");
                 } else {
-                  form.setValue("date", { from: selected });
-                  form.trigger("date");
+                  form.setValue("date", { from: selected, to: undefined });
                 }
+                form.trigger("date");
               }}
               numberOfMonths={isReturnEnabled ? 2 : 1}
             />

@@ -5,7 +5,7 @@ const HomePage = () => {
   return (
     <div className="flex flex-col w-full items-center pt-20">
       <HomeBanner />
-      <div className="w-3/5 bg-background rounded-xl shadow-md p-6 relative">
+      <div className="lg:w-3/5 w-10/12 bg-background rounded-xl shadow-md p-6 relative">
         <h2 className="text-xl font-semibold tracking-wide mb-3">
           Pilih Jadwal Penerbangan Spesial di{" "}
           <span className="text-color-primary">FlyNow!</span>
