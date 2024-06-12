@@ -17,6 +17,8 @@ import {
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { ArrowLeft, ArrowUpDown } from "lucide-react";
 
+import notFound from "@/assets/searchFlight/notFound.png";
+
 const SearchFlightPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -515,8 +517,8 @@ const SearchFlightPage = () => {
                 ) : (
                   <div className="font-semibold flex flex-col items-center justify-center text-center">
                     <img
-                      src="/src/assets/searchFlight/notFound.png"
-                      alt=""
+                      src={notFound}
+                      alt="not found"
                       className=" w-72 py-4"
                     />
                     <p>Maaf, pencarian Anda tidak ditemukan</p>
@@ -710,8 +712,8 @@ const SearchFlightPage = () => {
                 ) : (
                   <div className="font-semibold flex flex-col items-center justify-center text-center">
                     <img
-                      src="/src/assets/searchFlight/notFound.png"
-                      alt=""
+                      src={notFound}
+                      alt="not found"
                       className=" w-72 py-4"
                     />
                     <p>Maaf, pencarian Anda tidak ditemukan</p>
@@ -903,11 +905,7 @@ const SearchFlightPage = () => {
               ))
             ) : (
               <div className="font-semibold flex flex-col items-center justify-center text-center">
-                <img
-                  src="/src/assets/searchFlight/notFound.png"
-                  alt=""
-                  className=" w-72 py-4"
-                />
+                <img src={notFound} alt="not found" className=" w-72 py-4" />
                 <p>Maaf, pencarian Anda tidak ditemukan</p>
                 <Link to="/" className="text-color-primary">
                   Coba cari perjalanan lainnya!
