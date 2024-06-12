@@ -77,19 +77,19 @@ const SearchFlightPage = () => {
     navigate(`/flight/search?${newSearchParams.toString()}`);
   };
 
-  const queryParams = new URLSearchParams({
-    da: searchParams.get("da") || "JFK",
-    aa: searchParams.get("aa") || "LAX",
-    dd: searchParams.get("dd") || "2024-06-01",
-    class: searchParams.get("class") || "economy",
-    adult: searchParams.get("adult") || "1",
-    children: searchParams.get("children") || "0",
-    baby: searchParams.get("baby") || "1",
-  });
+  // const queryParams = new URLSearchParams({
+  //   da: searchParams.get("da") || "JFK",
+  //   aa: searchParams.get("aa") || "LAX",
+  //   dd: searchParams.get("dd") || "2024-06-01",
+  //   class: searchParams.get("class") || "economy",
+  //   adult: searchParams.get("adult") || "1",
+  //   children: searchParams.get("children") || "0",
+  //   baby: searchParams.get("baby") || "1",
+  // });
 
-  if (searchParams.get("rd")) {
-    queryParams.set("rd", searchParams.get("rd"));
-  }
+  // if (searchParams.get("rd")) {
+  //   queryParams.set("rd", searchParams.get("rd"));
+  // }
 
   return (
     <div>
@@ -105,7 +105,7 @@ const SearchFlightPage = () => {
               {totalPassengers} Penumpang - {searchParams.get("class")}
             </div>
             <div className="w-full sm:w-auto mt-4 sm:mt-0 sm:ml-4">
-              <Link to={`/?${queryParams.toString()}`}>
+              <Link to="/">
                 <Button className="bg-[#43b027] hover:bg-[#338021] w-full sm:w-56 h-12 rounded-lg text-md">
                   Ubah Pencarian
                 </Button>
@@ -126,6 +126,10 @@ const SearchFlightPage = () => {
               <SelectGroup>
                 <SelectItem value="price-asc">Harga - Termurah</SelectItem>
                 <SelectItem value="price-desc">Harga - Termahal</SelectItem>
+                <SelectItem value="duration-asc">Durasi - Terpendek</SelectItem>
+                <SelectItem value="duration-desc">
+                  Durasi - Terpanjang
+                </SelectItem>
                 <SelectItem value="departure-asc">
                   Keberangkatan - Paling Awal
                 </SelectItem>
