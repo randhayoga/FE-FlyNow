@@ -38,51 +38,64 @@ const formSchema = z.object({
 const SearchFlightForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { airports } = useSelector((state) => state.flights);
+  const { airports } = useSelector((state) => state.flights) || [];
+  const [isReturnEnabled, setIsReturnEnabled] = useState(false);
 
   useEffect(() => {
     dispatch(getAirports());
   }, [dispatch]);
 
-  const [isReturnEnabled, setIsReturnEnabled] = useState(false);
+  // Load default values from localStorage if available
+  const savedFormValues = JSON.parse(localStorage.getItem("formValues")) || {
+    departureAirport: "",
+    arrivalAirport: "",
+    date: {
+      from: "",
+      to: "",
+    },
+    passengers: {
+      adult: 1,
+      child: 0,
+      baby: 0,
+    },
+    flightClass: "",
+  };
+
+  // Convert stored date strings back to Date objects
+  if (savedFormValues.date.from) {
+    savedFormValues.date.from = new Date(savedFormValues.date.from);
+  }
+  if (savedFormValues.date.to) {
+    savedFormValues.date.to = new Date(savedFormValues.date.to);
+  }
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      departureAirport: "",
-      arrivalAirport: "",
-      date: {
-        from: "",
-        to: "",
-      },
-      passengers: {
-        adult: 1,
-        child: 0,
-        baby: 0,
-      },
-      flightClass: "",
-    },
+    defaultValues: savedFormValues,
   });
 
   const onSubmit = (values) => {
-    console.log(values);
-    // Create query string from form values
-
     const queryObj = {
       da: values.departureAirport,
       aa: values.arrivalAirport,
       dd: formatDate(values.date.from),
+      rd: formatDate(values.date.to),
       adult: values.passengers.adult.toString(),
       child: values.passengers.child.toString(),
       baby: values.passengers.baby.toString(),
       class: values.flightClass,
     };
 
+    // Set if return date is empty, then don't show in query params
     if (values.date.to) {
       queryObj.rd = formatDate(values.date.to);
     }
 
+    // Set query params
     const query = new URLSearchParams(queryObj).toString();
+
+    // Save old values to local storage
+    localStorage.setItem("formValues", JSON.stringify(values));
 
     // Redirect to search results page with query string
     navigate(`/flight/search?${query}`);

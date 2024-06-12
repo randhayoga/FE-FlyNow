@@ -68,26 +68,27 @@ const AirportField = ({ name, label, form, airports }) => {
                   <CommandEmpty>No Airports found.</CommandEmpty>
                   <CommandGroup>
                     <CommandList>
-                      {airports.map((airport) => (
-                        <CommandItem
-                          value={airport?.airportCode}
-                          key={airport?.airportCode}
-                          onSelect={() => {
-                            form.setValue(`${name}`, airport?.airportCode);
-                            form.trigger(`${name}`);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              airport?.airportCode === field.value
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {`${airport.airportName} (${airport.airportCode}) - ${airport.city}, ${airport.country}`}
-                        </CommandItem>
-                      ))}
+                      {airports &&
+                        airports.map((airport) => (
+                          <CommandItem
+                            value={airport?.airportCode}
+                            key={airport?.airportCode}
+                            onSelect={() => {
+                              form.setValue(`${name}`, airport?.airportCode);
+                              form.trigger(`${name}`);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                airport?.airportCode === field.value
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {`${airport.airportName} (${airport.airportCode}) - ${airport.city}, ${airport.country}`}
+                          </CommandItem>
+                        ))}
                     </CommandList>
                   </CommandGroup>
                 </Command>
