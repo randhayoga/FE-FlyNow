@@ -1,6 +1,5 @@
 import { Provider } from "react-redux";
 import store from "../redux/store";
-
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { RouterProvider } from "react-router-dom";
