@@ -7,7 +7,7 @@ export const searchHistories = () => async (dispatch, getState) => {
   let config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: "http://localhost:3000/api/history",
+    url: `${import.meta.env.VITE_BACKEND_API}/history`,
   };
 
   try {
