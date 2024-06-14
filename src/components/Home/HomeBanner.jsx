@@ -1,15 +1,15 @@
 import homeImgBanner from "@/assets/images/home-img-banner.png";
+import { useDispatch } from "react-redux";
 
 const HomeBanner = () => {
+  const dispatch = useDispatch();
   return (
-    <div className="md:block hidden w-full -mb-10">
-        <div className="flex items-center h-full">
-          <div className="bg-ColorSecondary h-3/4 flex-grow"></div>
-          <img src={homeImgBanner} alt="Home Banner" className="w-4/5" />
-          <div className="bg-ColorSecondary h-3/4 flex-grow"></div>
-        </div>
-      </div>
-  )
-}
+    <div className="lg:flex items-center hidden w-full h-full -mb-10">
+      <div className="bg-color-secondary h-36 flex-grow"></div>
+      <img src={homeImgBanner} alt="Home Banner" className="w-3/4" />
+      <div className="bg-color-secondary h-36 flex-grow"></div>
+    </div>
+  );
+};
 
-export default HomeBanner
+export default HomeBanner;

@@ -1,26 +1,40 @@
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
+import Navbar from "@/components/Navbar";
 import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import OtpPage from "@/pages/OtpPage";
 import RegisterPage from "@/pages/RegisterPage";
-import HistoryPage from "@/pages/HistoryPage";
-import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
-
 import { createBrowserRouter } from "react-router-dom";
+import Protected from "@/components/Protected";
+import NonProtected from "@/components/Nonprotected";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: (
+      <>
+        <Navbar />
+        <HomePage />
+      </>
+    ),
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element: (
+      <NonProtected>
+        <LoginPage />,
+      </NonProtected>
+    ),
   },
   {
     path: "/register",
-    element: <RegisterPage />,
+    element: (
+      <NonProtected>
+        <RegisterPage />,
+      </NonProtected>
+    ),
   },
   {
     path: "/otp",
@@ -36,11 +50,21 @@ const router = createBrowserRouter([
   },
   {
     path: "/flight/search",
-    element: <SearchFlightPage />,
+    element: (
+      <>
+        <Navbar />
+        <SearchFlightPage />,
+      </>
+    ),
   },
   {
     path: "/history",
-    element: <HistoryPage />,
+    element: (
+      <>
+        <Navbar />
+        <HistoryPage />
+      </>
+    ),
   },
 ]);
 
