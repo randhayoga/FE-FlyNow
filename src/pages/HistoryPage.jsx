@@ -93,7 +93,7 @@ function HistoryPage() {
       <h1 className="font-semibold text-xl mt-10">Riwayat Pemesanan</h1>
       <div className="content mt-5 sm:mx-3 md:mx-3">
         <div className="head flex items-center gap-3">
-          <div className="page-text bg-primary rounded-lg p-3 grow">
+          <div className="page-text bg-color-primary rounded-lg p-3 grow">
             <div className="page-text-content flex items-center gap-4">
               <a href="/">
                 <GoArrowLeft className="text-white text-xl" />
@@ -164,10 +164,10 @@ function HistoryPage() {
         ) : histories.length === 0 ? (
           <div className="w-full flex items-center flex-col h-full mt-20 justify-center">
             <img src={gambar_history_kosong} alt="history not found" />
-            <div className="mt-4 text-primary text-lg">
+            <div className="mt-4 text-color-primary text-lg">
               Oops! Riwayat pesanan kosong!
             </div>
-            <div className="text-primary text-opacity-50">
+            <div className="text-color-primary text-opacity-50">
               Anda belum melakukan pemesanan penerbangan
             </div>
             <Button
@@ -221,9 +221,9 @@ function HistoryPage() {
 
                   return (
                     <div
-                      className={`card p-4 border-2 rounded-md hover:border-primary cursor-pointer ${
+                      className={`card p-4 border-2 rounded-md hover:border-color-primary cursor-pointer ${
                         currentHistory?.id === history.id
-                          ? "lg:border-primary"
+                          ? "lg:border-color-primary"
                           : ""
                       }`}
                       key={index}
@@ -255,8 +255,8 @@ function HistoryPage() {
                           </div>
                           <div className="departure-text flex flex-col text-xs">
                             <div className="city mt-0 font-bold lg:text-base">
-                              {history.flight.departureAirport.city[0].toUpperCase() +
-                                history.flight.departureAirport.city.slice(1)}
+                              {history.departureAirport.city[0].toUpperCase() +
+                                history.departureAirport.city.slice(1)}
                             </div>
                             <div className="date">{departureDate}</div>
                             {<div className="time">{departureTime}</div>}
@@ -276,8 +276,8 @@ function HistoryPage() {
                           </div>
                           <div className="arrival-text flex text-xs flex-col">
                             <div className="city mt-0 font-bold lg:text-base">
-                              {history.flight.arrivalAirport.city[0].toUpperCase() +
-                                history.flight.arrivalAirport.city.slice(1)}
+                              {history.arrivalAirport.city[0].toUpperCase() +
+                                history.arrivalAirport.city.slice(1)}
                             </div>
                             <div className="date">{arrivalDate}</div>
                             {<div className="time">{arrivalTime}</div>}
@@ -297,7 +297,7 @@ function HistoryPage() {
                           </p>
                         </div>
                         <div className="price">
-                          <p className="font-bold text-primary lg:text-lg">
+                          <p className="font-bold text-color-primary lg:text-lg">
                             IDR {history.payment.paymentAmount}
                           </p>
                         </div>
@@ -339,7 +339,7 @@ function HistoryPage() {
                   <div className="booking-code text-xl flex">
                     <div className="label">
                       Booking Code:{" "}
-                      <span className="code font-semibold text-primary">
+                      <span className="code font-semibold text-color-primary">
                         {currentHistory.bookingCode}
                       </span>
                     </div>
@@ -354,7 +354,7 @@ function HistoryPage() {
                           minute: "2-digit",
                         })}
                       </div>
-                      <div className="text-xs font-semibold text-primary">
+                      <div className="text-xs font-semibold text-color-primary">
                         Keberangkatan
                       </div>
                     </div>
@@ -368,8 +368,8 @@ function HistoryPage() {
                       })}
                     </div>
                     <div className="">
-                      {currentHistory.flight.departureAirport.airportName} -
-                      Terminal {currentHistory.flight.terminal}
+                      {currentHistory.departureAirport.airportName} - Terminal{" "}
+                      {currentHistory.flight.terminal}
                     </div>
                   </div>
                   <div className="py-2 flex items-center gap-4 border-t-2">
@@ -379,10 +379,10 @@ function HistoryPage() {
                     <div className="flex flex-col">
                       <div className="flight font-semibold pb-4">
                         <div className="">
-                          {currentHistory.flight.airline.airlineName}
+                          {currentHistory.airline.airlineName}
                         </div>
                         <div className="">
-                          {currentHistory.flight.airline.airlineCode}
+                          {currentHistory.airline.airlineCode}
                         </div>
                       </div>
                       <div className="passengers">
@@ -390,7 +390,7 @@ function HistoryPage() {
                         {currentHistory.details.map((detail, index) => {
                           return (
                             <div key={index}>
-                              <div className="text-primary">
+                              <div className="text-color-primary">
                                 Penumpang {index + 1}: {detail.passenger.name}
                               </div>
                               <div className="">ID: {detail.passenger.id}</div>
@@ -410,7 +410,7 @@ function HistoryPage() {
                           minute: "2-digit",
                         })}
                       </div>
-                      <div className="text-xs font-semibold text-primary">
+                      <div className="text-xs font-semibold text-color-primary">
                         Kedatangan
                       </div>
                     </div>
@@ -424,7 +424,7 @@ function HistoryPage() {
                       })}
                     </div>
                     <div className="">
-                      {currentHistory.flight.arrivalAirport.airportName}
+                      {currentHistory.arrivalAirport.airportName}
                     </div>
                   </div>
                   <div className="border-t-2 py-2">
@@ -470,7 +470,7 @@ function HistoryPage() {
                     )}
                     <div className="flex justify-between font-bold w-full my-3 items-center">
                       <div className="">Total</div>
-                      <div className="text-primary text-lg">
+                      <div className="text-color-primary text-lg">
                         IDR{" "}
                         {currentHistory.payment.paymentAmount.toLocaleString(
                           "id-ID"
