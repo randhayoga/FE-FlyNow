@@ -1,7 +1,6 @@
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { setToken, setUser } from "../reducers/auth";
-import { data } from "autoprefixer";
 
 export const profile =
   (navigate, successRedirect, errorRedirect) => async (dispatch, getState) => {
@@ -90,7 +89,7 @@ export const login = (navigate, email, password) => async (dispatch) => {
     // redirect to home
     navigate("/"); // it will be not consistent, so alternative we use window until we used the state management
   } catch (error) {
-    toast.error("Cek kembali email dan password anda");
+    toast.error(error?.response?.data?.message);
 
     dispatch(logout());
   }

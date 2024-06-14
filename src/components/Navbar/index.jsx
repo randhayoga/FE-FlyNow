@@ -13,6 +13,7 @@ import { logout, profile } from "../../../redux/actions/auth";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import UserIcon from "@/assets/images/fi_user.svg";
 
 const NavbarComponent = () => {
   const navigate = useNavigate();
@@ -51,14 +52,23 @@ const NavbarComponent = () => {
               />
             </svg>
 
-            <img src={bellRing} alt="bellRing" className="w-5 mr-3" />
+            <img src={bellRing} alt="bellRing" className="w-5 mt-1" />
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <img
-                  className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
-                  src={user?.image}
-                  alt="profile"
-                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6 mt-1"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                  />
+                </svg>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
