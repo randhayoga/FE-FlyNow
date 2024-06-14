@@ -23,6 +23,13 @@ import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const SelectField = ({ name, label, datas, form, btnLabel }) => {
+  const formatString = (string) => {
+    return string
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   return (
     <FormField
       name={name}
@@ -45,9 +52,7 @@ const SelectField = ({ name, label, datas, form, btnLabel }) => {
                     )}
                   >
                     {field.value
-                      ? datas
-                          .find((data) => data === field.value)
-                          .replace("_", " ")
+                      ? formatString(datas.find((data) => data === field.value))
                       : `${btnLabel}`}
                   </Button>
                 </FormControl>
@@ -71,7 +76,7 @@ const SelectField = ({ name, label, datas, form, btnLabel }) => {
                               field.value === data ? "opacity-100" : "opacity-0"
                             )}
                           />
-                          {data.replace("_", " ")}
+                          {formatString(data)}
                         </CommandItem>
                       ))}
                     </CommandGroup>

@@ -3,20 +3,32 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { FormControl, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { id } from "date-fns/locale";
 
-const DateField = ({ label, field, value, error, errMessage, form, isReturnEnabled }) => {
+const DateField = ({
+  label,
+  field,
+  value,
+  error,
+  errMessage,
+  form,
+  isReturnEnabled,
+}) => {
+
   const formatDate = (date) => {
-    return date ? format(new Date(date), "LLL dd, y") : "Pilih Tanggal";
+    return date
+      ? format(new Date(date), "d LLL yyyy", { locale: id })
+      : "Pilih Tanggal";
   };
 
   return (
-    <div className="flex flex-col w-full gap-2">
+    <FormItem className="flex flex-col w-full overflow-x-hidden">
       <FormLabel className="font-normal text-[#8A8A8A]">{label}</FormLabel>
       <div className="flex flex-col">
         <Popover>
@@ -49,17 +61,18 @@ const DateField = ({ label, field, value, error, errMessage, form, isReturnEnabl
                   form.setValue("date", selected);
                   form.trigger("date");
                 } else {
-                  form.setValue("date", { from: selected });
-                  form.trigger("date");
+                  form.setValue("date", { from: selected, to: undefined });
                 }
+                form.trigger("date");
               }}
               numberOfMonths={isReturnEnabled ? 2 : 1}
+              locale={id}
             />
           </PopoverContent>
         </Popover>
         <FormMessage className="italic mt-1">{errMessage}</FormMessage>
       </div>
-    </div>
+    </FormItem>
   );
 };
 
