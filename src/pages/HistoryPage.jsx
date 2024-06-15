@@ -1,48 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { FaRegCircleCheck, FaLocationDot } from "react-icons/fa6";
 import { GoArrowLeft } from "react-icons/go";
-import { FaRegClock } from "react-icons/fa6";
-import { IoIosArrowForward } from "react-icons/io";
 import { TbPlaneDeparture, TbPlaneArrival } from "react-icons/tb";
-import { MdOutlineCancel } from "react-icons/md";
-import { GiCancel } from "react-icons/gi";
-import { PiCityBold } from "react-icons/pi";
-import { CiFilter } from "react-icons/ci";
-import { FilterButton } from "@/components/ui/filterButton";
+import { ArrowLeft } from "lucide-react";
 import { GiCommercialAirplane } from "react-icons/gi";
-import { PrintTicketButton } from "@/components/ui/printTicketButton";
 import { Button } from "@/components/ui/button";
+import Filter from "@/components/History/Filter";
 import { PaymentBadge } from "@/components/ui/paymentBadge";
 import moment from "moment";
 import "moment/locale/id";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import gambar_history_kosong from "@/assets/images/gambar_history_kosong.png";
-moment.locale("id");
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
-} from "@/components/ui/dropdown-menu";
 import { useDispatch, useSelector } from "react-redux";
 import { searchHistories } from "../../redux/actions/history";
 import { useNavigate } from "react-router-dom";
+
+moment.locale("id");
 
 function HistoryPage() {
   const dispatch = useDispatch();
@@ -90,72 +61,18 @@ function HistoryPage() {
 
   return (
     <div className="container overflow-x-hidden">
-      <h1 className="font-semibold text-xl mt-10">Riwayat Pemesanan</h1>
+      <h1 className="font-semibold text-xl mt-28">Riwayat Pemesanan</h1>
       <div className="content mt-5 sm:mx-3 md:mx-3">
         <div className="head flex items-center gap-3">
           <div className="page-text bg-color-primary rounded-lg p-3 grow">
             <div className="page-text-content flex items-center gap-4">
               <a href="/">
-                <GoArrowLeft className="text-white text-xl" />
+                <ArrowLeft className="text-white text-xl" />
               </a>
               <div className="text-white text-lg">Beranda</div>
             </div>
           </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <FilterButton variant="outline" className="flex gap-2">
-                <CiFilter className="text-lg" />
-                <div>Filter</div>
-              </FilterButton>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel className="font-semibold">
-                Penerbangan
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>
-                  <PiCityBold className="me-2" />
-                  <span>Kota</span>
-                </DropdownMenuSubTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuItem>
-                      <span>Jakarta</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <span>Melbourne</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <span>Shanghai</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuSubContent>
-                </DropdownMenuPortal>
-              </DropdownMenuSub>
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>
-                  <FaRegCircleCheck className="me-2" />
-                  <span>Status</span>
-                </DropdownMenuSubTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuItem>
-                      <FaRegCircleCheck className="me-2" />
-                      <span>Selesai</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <FaRegClock className="me-2" />
-                      <span>Menunggu pembayaran</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <GiCancel className="me-2" />
-                      <span>Dibatalkan</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuSubContent>
-                </DropdownMenuPortal>
-              </DropdownMenuSub>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Filter histories={histories} />
         </div>
         {loading === true ? (
           <div className="loading w-full flex items-center flex-col h-full mt-20 justify-center">
@@ -167,12 +84,12 @@ function HistoryPage() {
             <div className="mt-4 text-color-primary text-lg">
               Oops! Riwayat pesanan kosong!
             </div>
-            <div className="text-color-primary text-opacity-50">
+            <div className="text-black">
               Anda belum melakukan pemesanan penerbangan
             </div>
             <Button
               size="lg"
-              variant="success"
+              variant="primary"
               className="mt-4"
               onClick={() => navigate("/")}
             >
@@ -185,39 +102,49 @@ function HistoryPage() {
               <div className="card-container flex flex-col gap-2">
                 {histories.map((history, index) => {
                   const departureDate = new Date(
-                    history.flight.departureTime
+                    history.flight.departure.departureTime
                   ).toLocaleDateString("id-ID", {
                     day: "numeric",
                     month: "long",
                     year: "numeric",
                   });
                   const departureTime = new Date(
-                    history.flight.departureTime
+                    history.flight.departure.departureTime
                   ).toLocaleTimeString("id-ID", {
                     hour: "2-digit",
                     minute: "2-digit",
                   });
 
                   const arrivalDate = new Date(
-                    history.flight.arrivalTime
+                    history.flight.departure.arrivalTime
                   ).toLocaleDateString("id-ID", {
                     day: "numeric",
                     month: "long",
                     year: "numeric",
                   });
                   const arrivalTime = new Date(
-                    history.flight.arrivalTime
+                    history.flight.departure.arrivalTime
                   ).toLocaleTimeString("id-ID", {
                     hour: "2-digit",
                     minute: "2-digit",
                   });
 
-                  const departureMoment = moment(history.flight.departureTime);
-                  const arrivalMoment = moment(history.flight.arrivalTime);
-                  const duration = moment.duration(
-                    arrivalMoment.diff(departureMoment)
+                  const departureTimeInt = new Date(
+                    history.flight.departure.departureTime
                   );
-                  const durationInHours = duration.asHours();
+                  const arrivalTimeInt = new Date(
+                    history.flight.departure.arrivalTime
+                  );
+                  const durationInMiliseconds =
+                    departureTimeInt - arrivalTimeInt;
+                  const durationInHours = Math.floor(
+                    durationInMiliseconds / (1000 * 60 * 60)
+                  );
+                  const durationInMinutes = Math.floor(
+                    (durationInMiliseconds % (1000 * 60 * 60)) / (1000 * 60)
+                  );
+
+                  const durationText = `${durationInHours} Jam ${durationInMinutes} Menit`;
 
                   return (
                     <div
@@ -237,15 +164,16 @@ function HistoryPage() {
                       <div className="payment-status">
                         <PaymentBadge
                           variant={
-                            history.payment.status == "paid"
+                            history.payment?.paymentStatus == "paid"
                               ? "success"
-                              : history.payment.status == "unpaid"
+                              : history.payment?.paymentStatus == "unpaid"
                               ? "destructive"
                               : "secondary"
                           }
                         >
-                          {history.payment.paymentStatus[0].toUpperCase() +
-                            history.payment.paymentStatus.slice(1)}
+                          {console.log(history.payment?.paymentStatus)}
+                          {history.payment?.paymentStatus[0].toUpperCase() +
+                            history.payment?.paymentStatus.slice(1)}
                         </PaymentBadge>
                       </div>
                       <div className="timeline py-4 flex gap-4 lg:gap-14">
@@ -255,8 +183,10 @@ function HistoryPage() {
                           </div>
                           <div className="departure-text flex flex-col text-xs">
                             <div className="city mt-0 font-bold lg:text-base">
-                              {history.departureAirport.city[0].toUpperCase() +
-                                history.departureAirport.city.slice(1)}
+                              {history.flight.departure?.departureAirport?.city[0].toUpperCase() +
+                                history.flight.departure?.departureAirport?.city.slice(
+                                  1
+                                )}
                             </div>
                             <div className="date">{departureDate}</div>
                             {<div className="time">{departureTime}</div>}
@@ -264,8 +194,7 @@ function HistoryPage() {
                         </div>
                         <div className="flex-grow flex flex-col justify-center items-center">
                           <div className="duration text-xs lg:text-base text-gray-500">
-                            {durationInHours}{" "}
-                            {durationInHours > 1 ? "hours" : "hour"}
+                            {durationText}
                           </div>
                           <div className="arrow flex w-full items-center border border-gray-400"></div>
                         </div>
@@ -276,8 +205,10 @@ function HistoryPage() {
                           </div>
                           <div className="arrival-text flex text-xs flex-col">
                             <div className="city mt-0 font-bold lg:text-base">
-                              {history.arrivalAirport.city[0].toUpperCase() +
-                                history.arrivalAirport.city.slice(1)}
+                              {history.flight.departure.arrivalAirport.city[0].toUpperCase() +
+                                history.flight.departure.arrivalAirport.city.slice(
+                                  1
+                                )}
                             </div>
                             <div className="date">{arrivalDate}</div>
                             {<div className="time">{arrivalTime}</div>}
@@ -292,13 +223,13 @@ function HistoryPage() {
                         <div className="filght-class">
                           <p className="font-semibold">Class:</p>
                           <p>
-                            {history.flight.flightClass[0].toUpperCase() +
-                              history.flight.flightClass.slice(1)}
+                            {history.flight.departure.flightClass[0].toUpperCase() +
+                              history.flight.departure.flightClass.slice(1)}
                           </p>
                         </div>
                         <div className="price">
                           <p className="font-bold text-color-primary lg:text-lg">
-                            IDR {history.payment.paymentAmount}
+                            IDR {history.payment?.paymentAmount}
                           </p>
                         </div>
                       </div>
@@ -325,15 +256,15 @@ function HistoryPage() {
                     <div className="font-bold text-2xl">Details</div>
                     <PaymentBadge
                       variant={
-                        currentHistory.payment.paymentStatus == "paid"
+                        currentHistory.payment?.paymentStatus == "paid"
                           ? "success"
-                          : currentHistory.payment.paymentStatus == "unpaid"
+                          : currentHistory.payment?.paymentStatus == "unpaid"
                           ? "destructive"
                           : "secondary"
                       }
                     >
-                      {currentHistory.payment.paymentStatus[0].toUpperCase() +
-                        currentHistory.payment.paymentStatus.slice(1)}
+                      {currentHistory.payment?.paymentStatus[0].toUpperCase() +
+                        currentHistory.payment?.paymentStatus.slice(1)}
                     </PaymentBadge>
                   </div>
                   <div className="booking-code text-xl flex">
@@ -348,7 +279,7 @@ function HistoryPage() {
                     <div className="flex items-center justify-between mt-4">
                       <div className="font-semibold">
                         {new Date(
-                          currentHistory.flight.departureTime
+                          currentHistory.flight.departure.departureTime
                         ).toLocaleTimeString("id-ID", {
                           hour: "2-digit",
                           minute: "2-digit",
@@ -360,7 +291,7 @@ function HistoryPage() {
                     </div>
                     <div className="departure-time">
                       {new Date(
-                        currentHistory.flight.departureTime
+                        currentHistory.flight.departure.departureTime
                       ).toLocaleDateString("id-ID", {
                         day: "numeric",
                         month: "long",
@@ -368,8 +299,11 @@ function HistoryPage() {
                       })}
                     </div>
                     <div className="">
-                      {currentHistory.departureAirport.airportName} - Terminal{" "}
-                      {currentHistory.flight.terminal}
+                      {
+                        currentHistory.flight.departure?.departureAirport
+                          ?.airportName
+                      }{" "}
+                      - Terminal {currentHistory.flight.departure.terminal}
                     </div>
                   </div>
                   <div className="py-2 flex items-center gap-4 border-t-2">
@@ -379,24 +313,28 @@ function HistoryPage() {
                     <div className="flex flex-col">
                       <div className="flight font-semibold pb-4">
                         <div className="">
-                          {currentHistory.airline.airlineName}
+                          {currentHistory.flight.departure.airline.airlineName}
                         </div>
                         <div className="">
-                          {currentHistory.airline.airlineCode}
+                          {currentHistory.flight.departure.airline.airlineCode}
                         </div>
                       </div>
                       <div className="passengers">
                         <div className="text-semibold">Informasi:</div>
-                        {currentHistory.details.map((detail, index) => {
-                          return (
-                            <div key={index}>
-                              <div className="text-color-primary">
-                                Penumpang {index + 1}: {detail.passenger.name}
+                        {currentHistory.details.departure.map(
+                          (detail, index) => {
+                            return (
+                              <div key={index}>
+                                <div className="text-color-primary">
+                                  Penumpang {index + 1}: {detail.passenger.name}
+                                </div>
+                                <div className="">
+                                  ID: {detail.passenger.id}
+                                </div>
                               </div>
-                              <div className="">ID: {detail.passenger.id}</div>
-                            </div>
-                          );
-                        })}
+                            );
+                          }
+                        )}
                       </div>
                     </div>
                   </div>
@@ -404,7 +342,7 @@ function HistoryPage() {
                     <div className="flex items-center justify-between">
                       <div className="font-semibold">
                         {new Date(
-                          currentHistory.flight.arrivalTime
+                          currentHistory.flight.departure.arrivalTime
                         ).toLocaleTimeString("id-ID", {
                           hour: "2-digit",
                           minute: "2-digit",
@@ -416,7 +354,7 @@ function HistoryPage() {
                     </div>
                     <div className="arrival-time">
                       {new Date(
-                        currentHistory.flight.arrivalTime
+                        currentHistory.flight.departure.arrivalTime
                       ).toLocaleDateString("id-ID", {
                         day: "numeric",
                         month: "long",
@@ -424,7 +362,10 @@ function HistoryPage() {
                       })}
                     </div>
                     <div className="">
-                      {currentHistory.arrivalAirport.airportName}
+                      {
+                        currentHistory.flight.departure.arrivalAirport
+                          .airportName
+                      }
                     </div>
                   </div>
                   <div className="border-t-2 py-2">
@@ -434,9 +375,11 @@ function HistoryPage() {
                         {currentHistory.numAdults} Adult(s)
                       </div>
                       <div className="">
-                        IDR
+                        IDR{" "}
                         {(
-                          currentHistory.flight.price * currentHistory.numAdults
+                          (currentHistory.flight.departure?.price +
+                            (currentHistory.flight.arrival?.price || 0)) *
+                          currentHistory.numAdults
                         ).toLocaleString("id-ID")}
                       </div>
                     </div>
@@ -448,7 +391,8 @@ function HistoryPage() {
                         <div className="">
                           IDR{" "}
                           {(
-                            currentHistory.flight.price *
+                            (currentHistory.flight.departure?.price +
+                              (currentHistory.flight.arrival?.price || 0)) *
                             currentHistory.numChildren
                           ).toLocaleString("id-ID")}
                         </div>
@@ -462,7 +406,8 @@ function HistoryPage() {
                         <div className="">
                           IDR{" "}
                           {(
-                            currentHistory.flight.price *
+                            (currentHistory.flight.departure?.price +
+                              (currentHistory.flight.arrival?.price || 0)) *
                             currentHistory.numBabies
                           ).toLocaleString("id-ID")}
                         </div>
@@ -472,27 +417,27 @@ function HistoryPage() {
                       <div className="">Total</div>
                       <div className="text-color-primary text-lg">
                         IDR{" "}
-                        {currentHistory.payment.paymentAmount.toLocaleString(
+                        {currentHistory.payment?.paymentAmount.toLocaleString(
                           "id-ID"
                         )}
                       </div>
                     </div>
 
-                    {currentHistory.payment.paymentStatus === "paid" ? (
-                      <Button size="lg" variant="success" className="w-full">
+                    {currentHistory.payment?.paymentStatus === "paid" ? (
+                      <Button size="lg" variant="primary" className="w-full">
                         Cetak Tiket
                       </Button>
-                    ) : currentHistory.payment.paymentStatus === "unpaid" ? (
+                    ) : currentHistory.payment?.paymentStatus === "unpaid" ? (
                       <Button
                         disabled
                         size="lg"
-                        variant="success"
+                        variant="secondary"
                         className="w-full"
                       >
                         Cetak Tiket
                       </Button>
                     ) : (
-                      <Button size="lg" variant="success" className="w-full">
+                      <Button size="lg" variant="primary" className="w-full">
                         Lanjutkan pembayaran
                       </Button>
                     )}

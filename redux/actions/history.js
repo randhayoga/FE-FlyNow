@@ -3,11 +3,15 @@ import { setHistories } from "../reducers/history";
 
 export const searchHistories = () => async (dispatch, getState) => {
   const state = getState();
+  const { token } = getState().auth;
 
   let config = {
     method: "get",
     maxBodyLength: Infinity,
     url: `${import.meta.env.VITE_BACKEND_API}/history`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   };
 
   try {
