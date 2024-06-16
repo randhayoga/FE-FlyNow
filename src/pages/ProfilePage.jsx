@@ -4,10 +4,10 @@ import UbahProfile from "@/components/Profile/UbahProfile";
 
 const ProfilePage = () => {
   return (
-    <div className="sm:container sm:mx-auto ">
-      <div className="flex flex-col h-screen w-screen items-center pt-2">
+    <div className="sm:container sm:mx-auto">
+      <div className=" flex flex-col h-screen w-screen items-center pt-2 ml-10 ">
         <HeaderProfile />
-        <div className="grid grid-cols-3 ml-auto gap-12">
+        <div className="grid grid-cols-3 ml-auto gap-9">
           <div className="">
             <ListProfile />
           </div>

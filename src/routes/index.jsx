@@ -10,6 +10,8 @@ import { createBrowserRouter } from "react-router-dom";
 import Protected from "@/components/Protected";
 import NonProtected from "@/components/Nonprotected";
 import ProfilePage from "@/pages/ProfilePage";
+import HistoryPage from "@/pages/HistoryPage";
+import NavbarComponent from "@/components/Navbar";
 
 const router = createBrowserRouter([
   {
@@ -51,7 +53,6 @@ const router = createBrowserRouter([
   },
   {
     path: "/flight/search",
-
     element: (
       <Protected>
         <Navbar />
@@ -63,9 +64,18 @@ const router = createBrowserRouter([
     path: "/profile",
     element: (
       <Protected>
-        <Navbar />
+        <NavbarComponent />
         <ProfilePage />
       </Protected>
+    ),
+  },
+  {
+    path: "/history",
+    element: (
+      <>
+        <Navbar />
+        <HistoryPage />
+      </>
     ),
   },
 ]);

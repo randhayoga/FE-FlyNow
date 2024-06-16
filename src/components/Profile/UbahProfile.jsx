@@ -1,6 +1,6 @@
 const UbahProfile = () => {
   return (
-    <div className="w-4/5 max-w-lg p-4 mt-8 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 ">
+    <div className="w-3/5 max-w-lg p-4 mt-8 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 ">
       <form className="space-y-2" action="#">
         <h1 className="text-2xl font-bold text-gray-900">Ubah Data Profil</h1>
 
