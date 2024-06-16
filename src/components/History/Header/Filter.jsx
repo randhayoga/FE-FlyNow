@@ -17,9 +17,39 @@ import { GiCancel } from "react-icons/gi";
 import { PiCityBold } from "react-icons/pi";
 import { CiFilter } from "react-icons/ci";
 import { FilterButton } from "@/components/ui/filterButton";
+import { useDispatch } from "react-redux";
+import {
+  searchHistoriesByCity,
+  searchHistoriesByPaymentStatus,
+} from "../../../../redux/actions/history";
 
-function Filter({ histories }) {
+function Filter({ histories, setLoading, setFilter }) {
+  const dispatch = useDispatch();
   const [cities, setCities] = useState([]);
+
+  const cityFiltering = async (city) => {
+    setFilter(
+      city
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+    );
+    setLoading(true);
+    await dispatch(searchHistoriesByCity(city));
+    setLoading(false);
+  };
+
+  const paymentStatusFiltering = async (paymentStatus) => {
+    setFilter(
+      paymentStatus
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+    );
+    setLoading(true);
+    await dispatch(searchHistoriesByPaymentStatus(paymentStatus));
+    setLoading(false);
+  };
 
   useEffect(() => {
     histories.map((history) => {
@@ -61,8 +91,19 @@ function Filter({ histories }) {
               {cities.length > 0 &&
                 [...new Set(cities)].map((city) => {
                   return (
-                    <DropdownMenuItem key={city}>
-                      <span>{city}</span>
+                    <DropdownMenuItem
+                      key={city}
+                      onClick={() => cityFiltering(city.toLowerCase())}
+                    >
+                      <span>
+                        {city
+                          .split(" ")
+                          .map(
+                            (word) =>
+                              word.charAt(0).toUpperCase() + word.slice(1)
+                          )
+                          .join(" ")}
+                      </span>
                     </DropdownMenuItem>
                   );
                 })}
@@ -76,15 +117,19 @@ function Filter({ histories }) {
           </DropdownMenuSubTrigger>
           <DropdownMenuPortal>
             <DropdownMenuSubContent>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => paymentStatusFiltering("paid")}>
                 <FaRegCircleCheck className="me-2" />
                 <span>Selesai</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => paymentStatusFiltering("pending")}
+              >
                 <FaRegClock className="me-2" />
                 <span>Menunggu pembayaran</span>
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => paymentStatusFiltering("unpaid")}
+              >
                 <GiCancel className="me-2" />
                 <span>Dibatalkan</span>
               </DropdownMenuItem>
