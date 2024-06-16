@@ -12,7 +12,6 @@ const Protected = ({ children }) => {
     // get user profile if we have token
     dispatch(profile(navigate, null, "/"));
   }, [dispatch, navigate]);
-  toast.success("Anda Harus Login Terlebih Dahulu");
 
   return children;
 };

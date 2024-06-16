@@ -30,8 +30,8 @@ const NavbarComponent = () => {
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-800 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 shadow-lg rounded-lg">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-1">
+    <nav className=" md:container md:max-md: bg-white dark:bg-gray-800 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 shadow-lg rounded-lg">
+      <div className="max-w-screen-lg flex flex-wrap items-center justify-between mx-auto p-1">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <img src={logoImg} alt="FlyNow Logo" className="w-14 py-1" />
         </a>

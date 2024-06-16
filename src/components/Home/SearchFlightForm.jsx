@@ -1,354 +1,236 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
-import { cn } from "@/lib/utils";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { getAirports } from "../../../redux/actions/flight";
+
+import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-// import { ScrollArea } from "@/components/ui/scroll-area";
 
-import { useForm } from "react-hook-form";
+import AirportField from "./AirportField";
+import DateField from "./DateField";
+import SelectField from "./SelectField";
+import PassengerField from "./PassengersField";
+import formSchema from "./FormSchema";
 
+import { MdOutlineDateRange, MdAirlineSeatReclineNormal } from "react-icons/md";
 import {
-  MdFlightTakeoff,
-  MdOutlineDateRange,
-  MdAirlineSeatReclineNormal,
-} from "react-icons/md";
-import { HiOutlineSwitchHorizontal } from "react-icons/hi";
-import { Check, ChevronsUpDown } from "lucide-react";
+  HiOutlineSwitchHorizontal,
+  HiOutlineSwitchVertical,
+} from "react-icons/hi";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const SearchFlightForm = () => {
-  const [isReturnEnabled, setIsReturnEnabled] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { airports } = useSelector((state) => state.flights) || [];
+  const [isVertical, setIsVertical] = useState(false);
+
+  useEffect(() => {
+    dispatch(getAirports());
+  }, [dispatch]);
+
+  // Load default values from localStorage if available
+  const savedFormValues = JSON.parse(localStorage.getItem("formValues")) || {
+    departureAirport: "",
+    arrivalAirport: "",
+    date: {
+      from: "",
+      to: "",
+    },
+    passengers: {
+      adult: 1,
+      child: 0,
+      baby: 0,
+    },
+    flightClass: "",
+  };
+
+  // Convert stored date strings back to Date objects
+  if (savedFormValues.date.from) {
+    savedFormValues.date.from = new Date(savedFormValues.date.from);
+  }
+  if (savedFormValues.date.to) {
+    savedFormValues.date.to = new Date(savedFormValues.date.to);
+  }
+
+  // Set initial state for isReturnEnabled based on the presence of saved return date
+  const [isReturnEnabled, setIsReturnEnabled] = useState(
+    !!savedFormValues.date.to
+  );
 
   const form = useForm({
-    defaultValues: {
-      departureAirport: "",
-      arrivalAirport: "",
-      departureTime: "",
-      arrivalTime: "",
-      numOfPassengers: "",
-      seatClass: "",
-    },
+    resolver: zodResolver(formSchema),
+    defaultValues: savedFormValues,
   });
 
   const onSubmit = (values) => {
-    console.log(values);
+    // Remove date.to from form values if return trip is disabled
+    if (!isReturnEnabled) {
+      values.date.to = undefined;
+    }
+
+    const queryObj = {
+      da: values.departureAirport,
+      aa: values.arrivalAirport,
+      dd: formatDate(values.date.from),
+      adult: values.passengers.adult.toString(),
+      child: values.passengers.child.toString(),
+      baby: values.passengers.baby.toString(),
+      class: values.flightClass,
+    };
+
+    // Add rd to queryObj only if return date is provided and isReturnEnabled
+    if (values.date.to && isReturnEnabled) {
+      queryObj.rd = formatDate(values.date.to);
+    }
+
+    // Set query params
+    const query = new URLSearchParams(queryObj).toString();
+
+    // Save old values to local storage
+    localStorage.setItem("formValues", JSON.stringify(values));
+
+    // Redirect to search results page with query string
+    navigate(`/flight/search?${query}`);
   };
 
-  const handleSwitchToggle = () => {
+  const formatDate = (date) => {
+    if (!date) return null;
+
+    // Fix Timezone Issues
+    const localDate = new Date(
+      date.getTime() - date.getTimezoneOffset() * 60000
+    );
+    return localDate.toISOString().split("T")[0]; // Format date to YYYY-MM-DD
+  };
+
+  const handleSwitchRoundTripToggle = () => {
+    // Clear return date value when disabling return trip
+    if (!isReturnEnabled) {
+      form.setValue("date.to", undefined);
+    }
     setIsReturnEnabled(!isReturnEnabled);
   };
 
-  const airports = [
-    {
-      code: "CGK",
-      name: "Soekarno Hatta",
-      city: "Jakarta",
-      country: "Indonesia",
-    },
-    {
-      code: "LAX",
-      name: "Los Angeles International",
-      city: "Los Angeles",
-      country: "United States",
-    },
-    {
-      code: "HND",
-      name: "Tokyo Haneda",
-      city: "Tokyo",
-      country: "Japan",
-    },
-    {
-      code: "LHR",
-      name: "Heathrow",
-      city: "London",
-      country: "United Kingdom",
-    },
-    {
-      code: "DXB",
-      name: "Dubai International",
-      city: "Dubai",
-      country: "United Arab Emirates",
-    },
-    {
-      code: "SIN",
-      name: "Changi",
-      city: "Singapore",
-      country: "Singapore",
-    },
-    {
-      code: "SYD",
-      name: "Sydney Kingsford Smith",
-      city: "Sydney",
-      country: "Australia",
-    },
-    {
-      code: "JFK",
-      name: "John F. Kennedy International",
-      city: "New York",
-      country: "United States",
-    },
-    {
-      code: "CDG",
-      name: "Charles de Gaulle",
-      city: "Paris",
-      country: "France",
-    },
-    {
-      code: "HKG",
-      name: "Hong Kong International",
-      city: "Hong Kong",
-      country: "China",
-    },
-  ];
+  const handleSwapAirports = () => {
+    const { departureAirport, arrivalAirport } = form.getValues();
+
+    form.setValue("departureAirport", arrivalAirport);
+    form.setValue("arrivalAirport", departureAirport);
+  };
+
+  const flightClasses = ["economy", "business", "first_class"];
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsVertical(window.innerWidth <= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex gap-4 items-center w-full mb-6">
-          <FormField
+        <div className="flex flex-col lg:flex-row gap-4 w-full mb-3">
+          <AirportField
             name="departureAirport"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="flex gap-4 flex-grow">
-                <FormLabel className="flex gap-2 items-center text-[#8A8A8A]">
-                  <MdFlightTakeoff className="w-6 h-6" /> From
-                </FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "w-full justify-between",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value
-                          ? `${
-                              airports.find(
-                                (airport) => airport?.name === field.value
-                              )?.name
-                            } (${
-                              airports.find(
-                                (airport) => airport?.name === field.value
-                              )?.code
-                            })`
-                          : "Select Airport"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <Command>
-                      <CommandInput placeholder="Search Airport..." />
-                      <CommandEmpty>No Airports found.</CommandEmpty>
-                      <CommandGroup>
-                        <CommandList>
-                          {airports.map((airport) => (
-                            <CommandItem
-                              value={airport?.name}
-                              key={airport?.code}
-                              onSelect={() => {
-                                form.setValue(
-                                  "departureAirport",
-                                  airport?.name
-                                );
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  airport?.name === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {`${airport.name} (${airport.code}) - ${airport.city}, ${airport.country}`}
-                            </CommandItem>
-                          ))}
-                        </CommandList>
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-              </FormItem>
-            )}
+            label="From"
+            form={form}
+            airports={airports}
           />
-          <Button className="mt-2">
-            <HiOutlineSwitchHorizontal className="w-5 h-5" />
-          </Button>
-          <FormField
-            name="arrivalAirport"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="flex gap-4 flex-grow">
-                <FormLabel className="flex gap-2 items-center text-[#8A8A8A]">
-                  <MdFlightTakeoff className="w-6 h-6" /> To
-                </FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "w-full max-w-full justify-between",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value
-                          ? `${
-                              airports.find(
-                                (airport) => airport?.name === field.value
-                              )?.name
-                            } (${
-                              airports.find(
-                                (airport) => airport?.name === field.value
-                              )?.code
-                            })`
-                          : "Select Airport"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <Command>
-                      <CommandInput placeholder="Search Airport..." />
-                      <CommandEmpty>No Airports found.</CommandEmpty>
-                      <CommandGroup>
-                        <CommandList>
-                          {airports.map((airport) => (
-                            <CommandItem
-                              value={airport?.name}
-                              key={airport?.code}
-                              onSelect={() => {
-                                form.setValue("arrivalAirport", airport?.name);
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  airport?.name === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {`${airport.name} (${airport.code}) - ${airport.city}, ${airport.country}`}
-                            </CommandItem>
-                          ))}
-                        </CommandList>
-                      </CommandGroup>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-              </FormItem>
+          <Button
+            onClick={handleSwapAirports}
+            type="button"
+            className="lg:-mt-4 w-full lg:w-fit self-center rounded-full"
+          >
+            {isVertical ? (
+              <div className="flex items-center gap-2">
+                <span>Tukar Bandara</span>
+                <HiOutlineSwitchVertical className="w-5 h-5" />
+              </div>
+            ) : (
+              <HiOutlineSwitchHorizontal className="w-5 h-5" />
             )}
+          </Button>
+          <AirportField
+            name="arrivalAirport"
+            label="To"
+            form={form}
+            airports={airports}
           />
         </div>
-        <div className="block gap-4 items-center w-full mb-6 lg:flex">
-          <div className="flex gap-4 items-center">
-            <div className="flex gap-2 items-center text-[#8A8A8A]">
-              <MdOutlineDateRange className="w-6 h-6" />{" "}
-              <span className="font-medium text-sm">Date</span>
+        <div className="flex flex-col lg:flex-row gap-4 w-full mb-3 lg:flex">
+          <div className="flex gap-8 w-full lg:w-1/2 items-start">
+            <div className="flex gap-2 mt-3 items-center text-sm font-normal text-[#8A8A8A]">
+              <MdOutlineDateRange className="w-6 h-6" /> <span>Date</span>
             </div>
-            <FormField
-              name="departureTime"
+            <Controller
+              name="date"
               control={form.control}
-              render={({ field }) => (
-                <FormItem className="flex-col gap-2">
-                  <FormLabel className="flex gap-2 items-center text-[#8A8A8A]">
-                    Departure
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                </FormItem>
+              render={({ field, fieldState: { error } }) => (
+                <div className="flex gap-5 flex-grow">
+                  <DateField
+                    label={"Departure"}
+                    field={field}
+                    value={field.value.from}
+                    error={error}
+                    errMessage={error?.from?.message}
+                    form={form}
+                    isReturnEnabled={isReturnEnabled}
+                  />
+                  {isReturnEnabled ? (
+                    <DateField
+                      label={"Return"}
+                      field={field}
+                      value={field.value.to}
+                      error={error}
+                      errMessage={error?.to?.message}
+                      form={form}
+                      isReturnEnabled={isReturnEnabled}
+                    />
+                  ) : (
+                    <p className="text-right font-normal text-sm text-[#8A8A8A]">
+                      Round Trip?
+                    </p>
+                  )}
+                  <Switch
+                    checked={isReturnEnabled}
+                    onCheckedChange={handleSwitchRoundTripToggle}
+                  />
+                </div>
               )}
             />
-            <div className="flex gap-2 items-center">
-              {isReturnEnabled ? (
-                <FormField
-                  name="arrivalTime"
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem className="flex-col gap-2">
-                      <FormLabel className="flex gap-2 items-center text-[#8A8A8A]">
-                        Return
-                      </FormLabel>
-                      <FormControl>
-                        <Input type="text" {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                />
-              ) : (
-                <p className="text-right font-medium text-sm text-[#8A8A8A]">
-                  Round Trip?
-                </p>
-              )}
-              <Switch
-                checked={isReturnEnabled}
-                onCheckedChange={handleSwitchToggle}
+          </div>
+          <div className="flex gap-8 w-full lg:w-1/2 items-start">
+            <div className="flex gap-2 mt-3 lg:ps-9 items-center text-sm font-normal text-[#8A8A8A]">
+              <MdAirlineSeatReclineNormal className="w-6 h-6" /> <span>To</span>
+            </div>
+            <div className="flex w-full gap-5">
+              <PassengerField form={form} name="passengers" />
+              <SelectField
+                form={form}
+                datas={flightClasses}
+                name={"flightClass"}
+                label={"Seat Class"}
+                btnLabel={"Pilih Kelas"}
               />
             </div>
           </div>
-          <div className="flex gap-4 items-center">
-            <div className="flex gap-2 items-center text-[#8A8A8A]">
-              <MdAirlineSeatReclineNormal className="w-6 h-6" />{" "}
-              <span className="font-medium text-sm">To</span>
-            </div>
-            <FormField
-              name="numOfPassengers"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className="flex-col gap-2">
-                  <FormLabel className="flex gap-2 items-center text-[#8A8A8A]">
-                    Passengers
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="seatClass"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem className="flex-col gap-2">
-                  <FormLabel className="flex gap-2 items-center text-[#8A8A8A]">
-                    Seat Class
-                  </FormLabel>
-                  <FormControl>
-                    <Input type="text" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          </div>
         </div>
-        <Button className="w-full" type="submit">
+        <Button
+          className="w-full absolute -ms-6 rounded-b-xl rounded-t-none bg-color-primary hover:bg-hover-primary text-white"
+          type="submit"
+        >
           Cari Penerbangan
         </Button>
       </form>

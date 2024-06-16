@@ -1,14 +1,26 @@
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../redux/actions/auth";
+
 const ListProfile = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+  };
+
   return (
-    <div className="bg-white p-6 w-96 ">
-      <div className="menu-item flex items-center py-2 border-b border-gray-200">
+    <div className="bg-white p-6 w-full max-w-md md:w-96 mx-auto">
+      <button className="border-b w-full flex items-center mb-4 p-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="size-6 mr-2 to-ColorPrimary"
+          className="w-6 h-6 mr-2 text-primary"
         >
           <path
             strokeLinecap="round"
@@ -16,17 +28,16 @@ const ListProfile = () => {
             d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
           />
         </svg>
-
-        <span className="text-xl font-bold">Ubah Profil</span>
-      </div>
-      <div className="menu-item flex items-center py-2 border-b border-gray-200">
+        <span className="md:text-xl ml font-bold">Ubah Profil</span>
+      </button>
+      <button className="border-b w-full flex items-center mb-4 p-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="size-6 mr-2 to-ColorPrimary"
+          className="w-6 h-6 mr-2 text-primary"
         >
           <path
             strokeLinecap="round"
@@ -39,17 +50,20 @@ const ListProfile = () => {
             d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
           />
         </svg>
-
-        <span className="text-xl font-bold">Pengaturan Akun</span>
-      </div>
-      <div className="menu-item flex items-center py-2 border-b">
+        <span className="md:text-xl font-bold">Pengaturan Akun</span>
+      </button>
+      <button
+        type="button"
+        className="border-b w-full flex items-center mb-4 p-2"
+        onClick={handleLogout}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="size-6 mr-2 "
+          className="w-6 h-6 mr-2"
         >
           <path
             strokeLinecap="round"
@@ -57,9 +71,16 @@ const ListProfile = () => {
             d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15"
           />
         </svg>
-
-        <span className="text-xl font-bold">Keluar</span>
-      </div>
+        <span className="md:text-xl font-bold">Keluar</span>
+      </button>
+      <div className="text-center text-gray-500 mt-4">Version 1.1.0</div>
+      <style>
+        {`@media (max-width: 414px) {
+          .max-w-md {
+            max-width: 100%;
+          }
+        }`}
+      </style>
     </div>
   );
 };

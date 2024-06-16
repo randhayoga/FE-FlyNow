@@ -17,9 +17,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
-        <div className="mt-16">
-          <HomePage />
-        </div>
+        <HomePage />
       </>
     ),
   },
@@ -33,7 +31,6 @@ const router = createBrowserRouter([
   },
   {
     path: "/register",
-
     element: (
       <NonProtected>
         <RegisterPage />,
@@ -57,6 +54,7 @@ const router = createBrowserRouter([
 
     element: (
       <Protected>
+        <Navbar />
         <SearchFlightPage />,
       </Protected>
     ),

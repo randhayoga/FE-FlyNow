@@ -21,7 +21,7 @@ export const profile =
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: `${import.meta.env.VITE_BACKEND_API}auth/profile`,
+      url: `${import.meta.env.VITE_BACKEND_API}/auth/profile`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -66,7 +66,7 @@ export const login = (navigate, email, password) => async (dispatch) => {
 
   let config = {
     method: "post",
-    url: `${import.meta.env.VITE_BACKEND_API}auth/login`,
+    url: `${import.meta.env.VITE_BACKEND_API}/auth/login`,
     headers: {
       "Content-Type": "application/json",
     },

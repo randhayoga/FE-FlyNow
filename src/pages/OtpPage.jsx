@@ -129,7 +129,7 @@ const OtpPage = () => {
             />
 
             <Button
-              className="w-full"
+              className="w-full bg-color-primary hover:bg-hover-primary"
               type="submit"
               disabled={navigation.state === "submitting"}
             >

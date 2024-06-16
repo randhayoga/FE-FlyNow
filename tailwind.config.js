@@ -24,8 +24,13 @@ module.exports = {
         uxl: "1rem",
       },
       colors: {
-        ColorPrimary: "#30628C",
-        ColorSecondary: "#CEE5FF",
+        color: {
+          primary: "#30628C",
+          secondary: "#CEE5FF"
+        },
+        hover: {
+          primary: "#20496C",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
