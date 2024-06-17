@@ -9,6 +9,7 @@ import SearchFlightPage from "@/pages/SearchFlightPage";
 import { createBrowserRouter } from "react-router-dom";
 import Protected from "@/components/Protected";
 import NonProtected from "@/components/Nonprotected";
+import HistoryPage from "@/pages/HistoryPage";
 
 const router = createBrowserRouter([
   {
@@ -51,8 +52,18 @@ const router = createBrowserRouter([
   {
     path: "/flight/search",
     element: (
-      <Protected>
+      <>
+        <Navbar />
         <SearchFlightPage />,
+      </>
+    ),
+  },
+  {
+    path: "/history",
+    element: (
+      <Protected>
+        <Navbar />
+        <HistoryPage />
       </Protected>
     ),
   },

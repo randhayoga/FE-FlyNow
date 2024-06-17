@@ -13,60 +13,65 @@ import AirportField from "./AirportField";
 import DateField from "./DateField";
 import SelectField from "./SelectField";
 import PassengerField from "./PassengersField";
+import formSchema from "./FormSchema";
 
 import { MdOutlineDateRange, MdAirlineSeatReclineNormal } from "react-icons/md";
-import { HiOutlineSwitchHorizontal } from "react-icons/hi";
+import {
+  HiOutlineSwitchHorizontal,
+  HiOutlineSwitchVertical,
+} from "react-icons/hi";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-const formSchema = z.object({
-  departureAirport: z.string().min(1, { message: "Please select an airport" }),
-  arrivalAirport: z.string().min(1, { message: "Please select an airport" }),
-  date: z.object({
-    from: z.date({ message: "Please select a valid date" }),
-    to: z.date({ message: "Please select a valid date" }).optional(),
-  }),
-  passengers: z.object({
-    adult: z.number().min(1, { message: "Please select at least 1 adult" }),
-    child: z.number().min(0, { message: "Please select at least 0 child" }),
-    baby: z.number().min(0, { message: "Please select at least 0 baby" }),
-  }),
-  flightClass: z.string().min(1, { message: "Please select a class" }),
-});
 
 const SearchFlightForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { airports } = useSelector((state) => state.flights);
+  const { airports } = useSelector((state) => state.flights) || [];
+  const [isVertical, setIsVertical] = useState(false);
 
   useEffect(() => {
     dispatch(getAirports());
   }, [dispatch]);
 
-  const [isReturnEnabled, setIsReturnEnabled] = useState(false);
+  // Load default values from localStorage if available
+  const savedFormValues = JSON.parse(localStorage.getItem("formValues")) || {
+    departureAirport: "",
+    arrivalAirport: "",
+    date: {
+      from: "",
+      to: "",
+    },
+    passengers: {
+      adult: 1,
+      child: 0,
+      baby: 0,
+    },
+    flightClass: "",
+  };
+
+  // Convert stored date strings back to Date objects
+  if (savedFormValues.date.from) {
+    savedFormValues.date.from = new Date(savedFormValues.date.from);
+  }
+  if (savedFormValues.date.to) {
+    savedFormValues.date.to = new Date(savedFormValues.date.to);
+  }
+
+  // Set initial state for isReturnEnabled based on the presence of saved return date
+  const [isReturnEnabled, setIsReturnEnabled] = useState(
+    !!savedFormValues.date.to
+  );
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      departureAirport: "",
-      arrivalAirport: "",
-      date: {
-        from: "",
-        to: "",
-      },
-      passengers: {
-        adult: 1,
-        child: 0,
-        baby: 0,
-      },
-      flightClass: "",
-    },
+    defaultValues: savedFormValues,
   });
 
   const onSubmit = (values) => {
-    console.log(values);
-    // Create query string from form values
+    // Remove date.to from form values if return trip is disabled
+    if (!isReturnEnabled) {
+      values.date.to = undefined;
+    }
 
     const queryObj = {
       da: values.departureAirport,
@@ -78,11 +83,16 @@ const SearchFlightForm = () => {
       class: values.flightClass,
     };
 
-    if (values.date.to) {
+    // Add rd to queryObj only if return date is provided and isReturnEnabled
+    if (values.date.to && isReturnEnabled) {
       queryObj.rd = formatDate(values.date.to);
     }
 
+    // Set query params
     const query = new URLSearchParams(queryObj).toString();
+
+    // Save old values to local storage
+    localStorage.setItem("formValues", JSON.stringify(values));
 
     // Redirect to search results page with query string
     navigate(`/flight/search?${query}`);
@@ -90,11 +100,19 @@ const SearchFlightForm = () => {
 
   const formatDate = (date) => {
     if (!date) return null;
-    const d = new Date(date);
-    return d.toISOString().split("T")[0]; // Format date to YYYY-MM-DD
+
+    // Fix Timezone Issues
+    const localDate = new Date(
+      date.getTime() - date.getTimezoneOffset() * 60000
+    );
+    return localDate.toISOString().split("T")[0]; // Format date to YYYY-MM-DD
   };
 
   const handleSwitchRoundTripToggle = () => {
+    // Clear return date value when disabling return trip
+    if (!isReturnEnabled) {
+      form.setValue("date.to", undefined);
+    }
     setIsReturnEnabled(!isReturnEnabled);
   };
 
@@ -106,6 +124,19 @@ const SearchFlightForm = () => {
   };
 
   const flightClasses = ["economy", "business", "first_class"];
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsVertical(window.innerWidth <= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <Form {...form}>
@@ -120,9 +151,16 @@ const SearchFlightForm = () => {
           <Button
             onClick={handleSwapAirports}
             type="button"
-            className="lg:-mt-4 w-fit self-center rounded-full"
+            className="lg:-mt-4 w-full lg:w-fit self-center rounded-full"
           >
-            <HiOutlineSwitchHorizontal className="w-5 h-5" />
+            {isVertical ? (
+              <div className="flex items-center gap-2">
+                <span>Tukar Bandara</span>
+                <HiOutlineSwitchVertical className="w-5 h-5" />
+              </div>
+            ) : (
+              <HiOutlineSwitchHorizontal className="w-5 h-5" />
+            )}
           </Button>
           <AirportField
             name="arrivalAirport"
