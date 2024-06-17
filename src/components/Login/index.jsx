@@ -134,8 +134,12 @@ const Login = () => {
                 Masuk
               </Button>
             </form>
-              <div className="mb-5"></div>
-              <GoogleLoginComponent text={"Login with google"} />
+            <div className="flex items-center my-4">
+          <div className="flex-grow h-px bg-gray-300"></div>
+          <span className="px-4 text-gray-500">or</span>
+          <div className="flex-grow h-px bg-gray-300"></div>
+        </div>
+              <GoogleLoginComponent text={"Masuk dengan Google"} />
           </Form>
           </div>
 

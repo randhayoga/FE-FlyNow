@@ -233,8 +233,12 @@ const RegisterForm = () => {
       >
         Daftar
       </Button>
-      <div className="mb-3"></div>
-      <GoogleLoginComponent text={"Register with google"} />
+      <div className="flex items-center my-4">
+          <div className="flex-grow h-px bg-gray-300"></div>
+          <span className="px-4 text-gray-500">or</span>
+          <div className="flex-grow h-px bg-gray-300"></div>
+        </div>
+      <GoogleLoginComponent text={"Daftar dengan Google"} />
     </form>
   );
 };
