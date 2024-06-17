@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import { MdCheckCircle, MdCancel } from "react-icons/md";
+import GoogleLoginComponent from "../GoogleLogin";
 
 import {
   Eye as MdOutlineVisibility,
@@ -232,6 +233,8 @@ const RegisterForm = () => {
       >
         Daftar
       </Button>
+      <div className="mb-3"></div>
+      <GoogleLoginComponent text={"Register with google"} />
     </form>
   );
 };

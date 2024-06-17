@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { login } from "../../../redux/actions/auth";
+import GoogleLoginComponent from "../GoogleLogin";
 // import { login } from "@/services/user/auth/login";
 
 const formSchema = z.object({
@@ -65,6 +66,7 @@ const Login = () => {
           </div>
 
           {/* Form */}
+          <div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
               <FormField
@@ -132,7 +134,10 @@ const Login = () => {
                 Masuk
               </Button>
             </form>
+              <div className="mb-5"></div>
+              <GoogleLoginComponent text={"Login with google"} />
           </Form>
+          </div>
 
           <p className="text-center text-sm text-muted-foreground mt-5">
             Belum punya akun?{" "}
