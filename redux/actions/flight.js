@@ -11,6 +11,8 @@ export const searchFlight = (queryParams) => async (dispatch) => {
   // Add optional parameters if they exist
   if (queryParams.rd) apiUrl += `&rd=${queryParams.rd}`;
   if (queryParams.sort) apiUrl += `&sort=${queryParams.sort}`;
+  if (queryParams.page) apiUrl += `&page=${queryParams.page}`;
+  if (queryParams.pageSize) apiUrl += `&pageSize=${queryParams.pageSize}`;
 
   let config = {
     method: "get",
