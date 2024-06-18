@@ -12,6 +12,7 @@ import BookingPage from "@/pages/BookingPage";
 
 import Protected from "@/components/Protected";
 import NonProtected from "@/components/Nonprotected";
+import HistoryPage from "@/pages/HistoryPage";
 
 const router = createBrowserRouter([
   {
@@ -58,6 +59,15 @@ const router = createBrowserRouter([
         <Navbar />
         <SearchFlightPage />,
       </>
+    ),
+  },
+  {
+    path: "/history",
+    element: (
+      <Protected>
+        <Navbar />
+        <HistoryPage />
+      </Protected>
     ),
   },
   {
