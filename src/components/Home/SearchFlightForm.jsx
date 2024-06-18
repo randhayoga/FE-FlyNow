@@ -78,7 +78,7 @@ const SearchFlightForm = () => {
       aa: values.arrivalAirport,
       dd: formatDate(values.date.from),
       adult: values.passengers.adult.toString(),
-      child: values.passengers.child.toString(),
+      children: values.passengers.child.toString(),
       baby: values.passengers.baby.toString(),
       class: values.flightClass,
     };
