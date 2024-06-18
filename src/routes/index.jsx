@@ -1,3 +1,5 @@
+import { createBrowserRouter } from "react-router-dom";
+
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import Navbar from "@/components/Navbar";
 import HomePage from "@/pages/HomePage";
@@ -6,7 +8,8 @@ import OtpPage from "@/pages/OtpPage";
 import RegisterPage from "@/pages/RegisterPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
-import { createBrowserRouter } from "react-router-dom";
+import BookingPage from "@/pages/BookingPage";
+
 import Protected from "@/components/Protected";
 import NonProtected from "@/components/Nonprotected";
 import HistoryPage from "@/pages/HistoryPage";
@@ -64,6 +67,15 @@ const router = createBrowserRouter([
       <Protected>
         <Navbar />
         <HistoryPage />
+      </Protected>
+    ),
+  },
+  {
+    path: "/flight/booking/",
+    element: (
+      <Protected>
+        <Navbar />
+        <BookingPage />
       </Protected>
     ),
   },

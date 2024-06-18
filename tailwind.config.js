@@ -31,6 +31,11 @@ module.exports = {
         hover: {
           primary: "#20496C",
         },
+        alert: {
+          danger: "#BA1A1A",
+          warning: "#DF9947",
+          success: "#43B027"
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
