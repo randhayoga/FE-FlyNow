@@ -72,10 +72,10 @@ const router = createBrowserRouter([
   {
     path: "/history",
     element: (
-      <>
+      <Protected>
         <Navbar />
         <HistoryPage />
-      </>
+      </Protected>
     ),
   },
 ]);
