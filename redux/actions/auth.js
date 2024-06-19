@@ -137,7 +137,7 @@ export const logout = () => (dispatch) => {
 };
 
 export const editProfile =
-  (id, name, phoneNumber, image) => async (dispatch, getState) => {
+  (name, phoneNumber, image) => async (dispatch, getState) => {
     const { token } = getState().auth;
 
     let data = new FormData();
@@ -150,7 +150,7 @@ export const editProfile =
     let config = {
       method: "patch",
       maxBodyLength: Infinity,
-      url: `${import.meta.env.VITE_BACKEND_API}auth/edit-profile${id}`,
+      url: `${import.meta.env.VITE_BACKEND_API}auth/edit-profile`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
