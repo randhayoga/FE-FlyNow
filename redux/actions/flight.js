@@ -61,7 +61,6 @@ export const getFlightDetail = (flightId) => async (dispatch) => {
   try {
     const response = await axios.request(config);
     const { data } = response.data;
-    console.log(data);
     dispatch(setFlightDetail(data));
   } catch (error) {
     console.log(error);
@@ -77,7 +76,6 @@ export const getSeatsByFlightId = (flightId) => async (dispatch) => {
   try {
     const response = await axios.request(config);
     const { data } = response.data;
-    console.log(data);
     dispatch(setSeatsByFlightId(data));
   } catch (error) {
     console.log(error);

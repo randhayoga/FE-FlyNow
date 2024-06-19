@@ -38,9 +38,9 @@ const SeatPicker = ({ flight, maxSeats }) => {
   const rightLetters = ["D", "E", "F"];
 
   return (
-    <div className="w-full">
-      <h1 className="text-xl font-semibold tracking-wide mb-3">Pilih Kursi</h1>
-      <div className="w-full bg-alert-success text-white text-center p-2 mb-3">
+    <div className="w-full font-semibold">
+      <h1 className="text-xl font-bold tracking-wide mb-3">Pilih Kursi</h1>
+      <div className="w-full bg-alert-success tracking-wide text-white text-center p-2 mb-3">
         {flight.flightClass &&
           flight.flightClass
             .split("_")
