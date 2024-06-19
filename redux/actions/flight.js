@@ -3,6 +3,7 @@ import {
   setFlights,
   setAirports,
   setFlightDetail,
+  setReturnFlightDetail,
   setSeatsByFlightId,
 } from "../reducers/flight";
 import { toast } from "sonner";
@@ -61,7 +62,25 @@ export const getFlightDetail = (flightId) => async (dispatch) => {
   try {
     const response = await axios.request(config);
     const { data } = response.data;
+    console.log(data);
     dispatch(setFlightDetail(data));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getReturnFlightDetail = (returnFlightId) => async (dispatch) => {
+  let config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${import.meta.env.VITE_BACKEND_API}/flight/${returnFlightId}`,
+  };
+
+  try {
+    const response = await axios.request(config);
+    const { data } = response.data;
+    console.log(data);
+    dispatch(setReturnFlightDetail(data));
   } catch (error) {
     console.log(error);
   }

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/breadcrumb";
 
 const BreadcrumbWithTimer = () => {
-  const timeLeft = useTimer(15 * 60);
+  const timeLeft = useTimer(15 * 60, "Waktu pemesanan habis");
 
   const formatTime = (time) => {
     const hours = Math.floor(time / 3600);

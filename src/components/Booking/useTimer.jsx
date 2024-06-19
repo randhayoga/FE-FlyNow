@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
-const useTimer = (initialTime) => {
+const useTimer = (initialTime, toastMessage) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
   const navigate = useNavigate();
 
@@ -12,7 +12,7 @@ const useTimer = (initialTime) => {
         if (prev <= 1) {
           clearInterval(interval);
           navigate("/");
-          toast.error("Waktu pemesanan habis");
+          toast.error(toastMessage);
           return 0;
         }
         return prev - 1;

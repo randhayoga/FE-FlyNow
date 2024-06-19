@@ -3,7 +3,10 @@ import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { profile } from "../../redux/actions/auth";
-import { getFlightDetail } from "../../redux/actions/flight";
+import {
+  getFlightDetail,
+  getReturnFlightDetail,
+} from "../../redux/actions/flight";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
@@ -13,6 +16,11 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   Select,
   SelectContent,
@@ -56,19 +64,22 @@ import {
   FormSchema,
   SeatPicker,
 } from "@/components/Booking";
+import { CgArrowsV } from "react-icons/cg";
 
 const BookingPage = () => {
   const dispatch = useDispatch();
 
   const { user, token } = useSelector((state) => state.auth);
-  const { flight } = useSelector((state) => state.flights);
+  const { flight, returnFlight } = useSelector((state) => state.flights);
 
   const [searchParams] = useSearchParams();
 
   const [passengers, setPassengers] = useState([]);
+  const [isOpen, setIsOpen] = useState(true);
 
   const flightId = parseInt(searchParams.get("df"));
-  
+  const returnFlightId = parseInt(searchParams.get("rf"));
+
   const adult = parseInt(searchParams.get("adult")) || 0;
   const children = parseInt(searchParams.get("children")) || 0;
   const baby = parseInt(searchParams.get("baby")) || 0;
@@ -82,6 +93,12 @@ const BookingPage = () => {
       dispatch(getFlightDetail(flightId));
     }
   }, [dispatch, flightId]);
+
+  useEffect(() => {
+    if (returnFlightId) {
+      dispatch(getReturnFlightDetail(returnFlightId));
+    }
+  }, [dispatch, returnFlightId]);
 
   useEffect(() => {
     const params = {
@@ -132,7 +149,6 @@ const BookingPage = () => {
       })),
     });
   }, [passengers, form]);
-  
 
   const { fields } = useFieldArray({
     control: form.control,
@@ -598,12 +614,54 @@ const BookingPage = () => {
           </Form>
         </div>
         <div className="lg:w-2/5 p-3">
-          <FlightDetail
-            flight={flight}
-            adult={adult}
-            children={children}
-            baby={baby}
-          />
+          <h1 className="font-bold tracking-wide text-lg mb-2">
+            Detail Penerbangan
+          </h1>
+          <Collapsible
+            open={isOpen}
+            onOpenChange={setIsOpen}
+            className="flex flex-col gap-5 mt-4 border-2 px-4 py-2 rounded-md"
+          >
+            <CollapsibleTrigger>
+              <div className="flex justify-between items-center">
+                <h1 className="font-semibold tracking-wide text-base text-color-primary">
+                  Penerbangan Pergi
+                </h1>
+                <CgArrowsV className="text-lg text-gray-400" />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <FlightDetail
+                flight={flight}
+                adult={adult}
+                children={children}
+                baby={baby}
+              />
+            </CollapsibleContent>
+          </Collapsible>
+
+          {returnFlightId ? (
+            <Collapsible className="flex flex-col gap-5 mt-4 border-2 px-4 py-2 rounded-md">
+              <CollapsibleTrigger>
+                <div className="flex justify-between items-center">
+                  <h1 className="font-semibold tracking-wide text-base text-color-primary">
+                    Penerbangan Pulang
+                  </h1>
+                  <CgArrowsV className="text-lg text-gray-400" />
+                </div>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <FlightDetail
+                  flight={returnFlight}
+                  adult={adult}
+                  children={children}
+                  baby={baby}
+                />
+              </CollapsibleContent>
+            </Collapsible>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>
