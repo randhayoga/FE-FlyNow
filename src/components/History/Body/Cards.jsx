@@ -39,7 +39,7 @@ function Cards({ histories, currentHistory, setCurrentHistory, setModal }) {
             history.flight.departure.departureTime
           );
           const arrivalTimeInt = new Date(history.flight.departure.arrivalTime);
-          const durationInMiliseconds = departureTimeInt - arrivalTimeInt;
+          const durationInMiliseconds = arrivalTimeInt - departureTimeInt;
           const durationInHours = Math.floor(
             durationInMiliseconds / (1000 * 60 * 60)
           );
@@ -59,9 +59,7 @@ function Cards({ histories, currentHistory, setCurrentHistory, setModal }) {
               key={index}
               onClick={() => {
                 setCurrentHistory(histories[index]);
-                if (window.innerWidth < 1024) {
-                  setModal(true);
-                }
+                setModal(true);
               }}
             >
               <div className="payment-status">
@@ -79,7 +77,7 @@ function Cards({ histories, currentHistory, setCurrentHistory, setModal }) {
                 </PaymentBadge>
               </div>
               <div className="timeline py-4 flex gap-4 lg:gap-14">
-                <div className="departure flex gap-2">
+                <div className="departure flex lg:flex-row flex-col gap-2">
                   <div className="pointer-icon text-gray-500 text-2xl">
                     <TbPlaneDeparture />
                   </div>
@@ -100,8 +98,7 @@ function Cards({ histories, currentHistory, setCurrentHistory, setModal }) {
                   </div>
                   <div className="arrow flex w-full items-center border border-gray-400"></div>
                 </div>
-                <div className="arrival flex gap-2">
-                  {" "}
+                <div className="arrival flex lg:flex-row flex-col gap-2">
                   <div className="pointer-icon text-gray-500 text-2xl">
                     <TbPlaneArrival />
                   </div>

@@ -11,6 +11,15 @@ import { Button } from "@/components/ui/button";
 import { PaymentBadge } from "@/components/ui/paymentBadge";
 
 function Detail({ currentHistory, modal, setModal }) {
+  const adultsTotalPrice =
+    (currentHistory.flight.departure?.price +
+      (currentHistory.flight.arrival?.price || 0)) *
+    currentHistory.numAdults;
+  const childrenTotalPrice =
+    (currentHistory.flight.departure?.price +
+      (currentHistory.flight.arrival?.price || 0)) *
+    currentHistory.numChildren;
+
   return (
     <div
       className={`${
@@ -247,41 +256,26 @@ function Detail({ currentHistory, modal, setModal }) {
         <div className="font-semibold">Rincian Harga</div>
         <div className="flex justify-between w-full">
           <div className="">{currentHistory.numAdults} Dewasa</div>
-          <div className="">
-            IDR{" "}
-            {(
-              (currentHistory.flight.departure?.price +
-                (currentHistory.flight.arrival?.price || 0)) *
-              currentHistory.numAdults
-            ).toLocaleString("id-ID")}
-          </div>
+          <div className="">IDR {adultsTotalPrice}</div>
         </div>
         {currentHistory.numChildren > 0 && (
           <div className="flex justify-between w-full">
             <div className="">{currentHistory.numChildren} Anak-anak</div>
-            <div className="">
-              IDR{" "}
-              {(
-                (currentHistory.flight.departure?.price +
-                  (currentHistory.flight.arrival?.price || 0)) *
-                currentHistory.numChildren
-              ).toLocaleString("id-ID")}
-            </div>
+            <div className="">IDR {childrenTotalPrice}</div>
           </div>
         )}
         {currentHistory.numBabies > 0 && (
           <div className="flex justify-between w-full">
             <div className="">{currentHistory.numBabies} Bayi</div>
-            <div className="">
-              IDR{" "}
-              {(
-                (currentHistory.flight.departure?.price +
-                  (currentHistory.flight.arrival?.price || 0)) *
-                currentHistory.numBabies
-              ).toLocaleString("id-ID")}
-            </div>
+            <div className="">IDR 0</div>
           </div>
         )}
+        <div className="flex justify-between w-full">
+          <div className="">Pajak (11%)</div>
+          <div className="">
+            IDR {(11 / 100) * (adultsTotalPrice + childrenTotalPrice)}
+          </div>
+        </div>
         <div className="flex justify-between font-bold w-full my-3 items-center">
           <div className="">Total</div>
           <div className="text-color-primary text-lg">
