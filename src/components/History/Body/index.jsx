@@ -17,8 +17,6 @@ function Body({ histories }) {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
         setModal(true);
-      } else {
-        setModal(false);
       }
     };
 
