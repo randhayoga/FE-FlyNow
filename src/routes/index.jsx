@@ -9,6 +9,7 @@ import RegisterPage from "@/pages/RegisterPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
 import BookingPage from "@/pages/BookingPage";
+import PaymentPage from "@/pages/PaymentPage";
 
 import Protected from "@/components/Protected";
 import NonProtected from "@/components/Nonprotected";
@@ -87,6 +88,15 @@ const router = createBrowserRouter([
       <Protected>
         <Navbar />
         <BookingPage />
+      </Protected>
+    ),
+  },
+  {
+    path: "/flight/payment/",
+    element: (
+      <Protected>
+        <Navbar />
+        <PaymentPage />
       </Protected>
     ),
   },
