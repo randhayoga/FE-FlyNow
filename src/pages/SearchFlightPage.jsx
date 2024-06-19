@@ -1,42 +1,25 @@
 import { React, useState, useEffect } from "react";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { searchFlight } from "../../redux/actions/flight";
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { ArrowLeft, ArrowUpDown } from "lucide-react";
-
-import notFound from "@/assets/searchFlight/notFound.png";
-import loading from "@/assets/searchFlight/loading.png";
+// Import Search Flight Component
+import Header from "@/components/SearchFlight/Header";
+import SelectSort from "@/components/SearchFlight/SelectSort";
+import SelectedFlightCard from "@/components/SearchFlight/SelectedFlightCard";
+import FlightCard from "@/components/SearchFlight/FlightCard";
+import PaginationComponent from "@/components/SearchFlight/PaginationComponent";
+import Loading from "@/components/SearchFlight/Loading";
+import NotFound from "@/components/SearchFlight/NotFound";
 
 const SearchFlightPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { flights } = useSelector((state) => state.flights);
 
-  const [expandedCard, setExpandedCard] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [expandedCard, setExpandedCard] = useState(null);
   const [selectedDepartureFlight, setSelectedDepartureFlight] = useState(null);
   const [selectedDepartureFlightOneWay, setSelectedDepartureFlightOneWay] =
     useState(null);
@@ -112,245 +95,28 @@ const SearchFlightPage = () => {
     <div>
       <div className="shadow-md py-4">
         <div className="container">
-          <h1 className="text-xl font-bold mt-20 mb-5">Pilih Penerbangan</h1>
-          <div className="flex flex-col sm:flex-row items-center">
-            <div className="flex items-center w-full h-12 px-4 bg-color-primary rounded-lg text-white capitalize text-md">
-              <Link to="/" className="mr-3">
-                <ArrowLeft />
-              </Link>
-              {searchParams.get("da")} - {searchParams.get("aa")} -{" "}
-              {totalPassengers} Penumpang - {searchParams.get("class")}
-            </div>
-            <div className="w-full sm:w-auto mt-4 sm:mt-0 sm:ml-4">
-              <Link to="/">
-                <Button className="bg-[#43b027] hover:bg-[#338021] w-full sm:w-56 h-12 rounded-lg text-md">
-                  Ubah Pencarian
-                </Button>
-              </Link>
-            </div>
-          </div>
+          <Header
+            searchParams={searchParams}
+            totalPassengers={totalPassengers}
+          />
         </div>
       </div>
 
       <div className="container ">
-        <div className="flex justify-end mt-6 mb-2">
-          <Select onValueChange={handleSortChange}>
-            <SelectTrigger className="px-4 w-auto rounded-full border-2 border-color-primary text-color-primary font-bold">
-              <ArrowUpDown className="me-2"></ArrowUpDown>
-              <SelectValue placeholder="Sort" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="price-asc">Harga - Termurah</SelectItem>
-                <SelectItem value="price-desc">Harga - Termahal</SelectItem>
-                <SelectItem value="duration-asc">Durasi - Terpendek</SelectItem>
-                <SelectItem value="duration-desc">
-                  Durasi - Terpanjang
-                </SelectItem>
-                <SelectItem value="departure-asc">
-                  Keberangkatan - Paling Awal
-                </SelectItem>
-                <SelectItem value="departure-desc">
-                  Keberangkatan - Paling Akhir
-                </SelectItem>
-                <SelectItem value="arrival-asc">
-                  Kedatangan - Paling Awal
-                </SelectItem>
-                <SelectItem value="arrival-desc">
-                  Kedatangan - Paling Akhir
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
+        <SelectSort handleSortChange={handleSortChange} />
 
-        {!flights.departureFlights && !flights.returnFlights ? (
-          <div className="font-semibold flex flex-col items-center justify-center text-center">
-            <p className=" text-gray-400">Mencari Penerbangan Terbaik...</p>
-            <img src={loading} alt="loading" className=" w-60 py-4" />
-          </div>
+        {!flights.departureFlights ? (
+          <Loading />
         ) : flights.departureFlights && flights.returnFlights ? (
           <div>
             {selectedDepartureFlight && (
               <div className="mb-4">
                 <h2 className="text-lg font-bold mb-3">Penerbangan Pergi</h2>
-                <Card
-                  key={selectedDepartureFlight.id}
-                  className="w-full shadow-md mb-5"
-                >
-                  <div className="p-8">
-                    <div className="flex justify-between items-center pb-3">
-                      <div className="capitalize md:text-lg font-semibold flex items-center">
-                        <img
-                          src={selectedDepartureFlight.airline.image}
-                          alt="airlines logo"
-                          className="w-6 me-2"
-                        />{" "}
-                        {selectedDepartureFlight.airline.airlineName} -{" "}
-                        {selectedDepartureFlight.flightClass}
-                      </div>
-                      <button
-                        className="border-2 rounded-full p-1"
-                        onClick={() => toggleExpand(selectedDepartureFlight.id)}
-                      >
-                        {expandedCard === selectedDepartureFlight.id ? (
-                          <FaChevronUp />
-                        ) : (
-                          <FaChevronDown />
-                        )}
-                      </button>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="text-md flex flex-col items-center">
-                        <p className="font-bold">
-                          {new Date(
-                            selectedDepartureFlight.departureTime
-                          ).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: false,
-                          })}
-                        </p>
-                        <p className="uppercase font-semibold">
-                          {selectedDepartureFlight.departureAirport.airportCode}
-                        </p>
-                      </div>
-                      <div className="w-96 flex flex-col items-center text-gray-500 px-3">
-                        <p>
-                          {Math.floor(
-                            (new Date(selectedDepartureFlight.arrivalTime) -
-                              new Date(selectedDepartureFlight.departureTime)) /
-                              (1000 * 60 * 60)
-                          )}
-                          h{" "}
-                          {Math.floor(
-                            (new Date(selectedDepartureFlight.arrivalTime) -
-                              new Date(selectedDepartureFlight.departureTime)) /
-                              (1000 * 60)
-                          ) % 60}
-                          m
-                        </p>
-                        <div className="border-t-2 w-full border-gray-300"></div>
-                        <p>Direct</p>
-                      </div>
-                      <div className="text-md flex flex-col items-center">
-                        <p className="font-bold">
-                          {new Date(
-                            selectedDepartureFlight.arrivalTime
-                          ).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: false,
-                          })}
-                        </p>
-                        <p className="uppercase font-semibold">
-                          {selectedDepartureFlight.arrivalAirport.airportCode}
-                        </p>
-                      </div>
-                      <div className="flex flex-col items-center ps-3">
-                        <p className="md:text-lg font-bold text-color-primary pb-2">
-                          IDR{" "}
-                          {new Intl.NumberFormat("id-ID").format(
-                            selectedDepartureFlight.price
-                          )}
-                        </p>
-                      </div>
-                    </div>
-                    {expandedCard === selectedDepartureFlight.id && (
-                      <div className="transition-all duration-500 delay-1000 ease-in-out">
-                        <div className="border-t-2 my-7 border-gray-300"></div>
-                        <p className="font-bold text-lg text-color-primary">
-                          Detail Penerbangan
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="font-bold text-md">
-                              {new Date(
-                                selectedDepartureFlight.departureTime
-                              ).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: false,
-                              })}
-                            </p>
-                            <p>
-                              {new Date(
-                                selectedDepartureFlight.departureTime
-                              ).toLocaleDateString("id-ID", {
-                                day: "numeric",
-                                month: "long",
-                                year: "numeric",
-                              })}
-                            </p>
-                            <p>
-                              {
-                                selectedDepartureFlight.departureAirport
-                                  .airportName
-                              }{" "}
-                              - Terminal {selectedDepartureFlight.terminal}
-                            </p>
-                          </div>
-                          <div className="mb-auto text-color-primary font-bold">
-                            <p>Keberangkatan</p>
-                          </div>
-                        </div>
-                        <div className="border-t-2 my-5 w-3/4 mx-auto border-gray-300"></div>
-                        <div className="flex justify-start">
-                          <img
-                            src={selectedDepartureFlight.airline.image}
-                            alt="airlines logo"
-                            className="w-6 me-3 my-auto"
-                          />{" "}
-                          <div>
-                            <p className="capitalize font-bold">
-                              {selectedDepartureFlight.airline.airlineName} -{" "}
-                              {selectedDepartureFlight.flightClass}
-                            </p>
-                            <p className="uppercase font-bold">
-                              {selectedDepartureFlight.flightCode}
-                            </p>
-                            <p className="font-bold">Informasi :</p>
-                            <p>{selectedDepartureFlight.information}</p>
-                          </div>
-                        </div>
-                        <div className="border-t-2 my-5 w-3/4 mx-auto border-gray-300"></div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="font-bold text-md">
-                              {new Date(
-                                selectedDepartureFlight.arrivalTime
-                              ).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: false,
-                              })}
-                            </p>
-                            <p>
-                              {new Date(
-                                selectedDepartureFlight.arrivalTime
-                              ).toLocaleDateString("id-ID", {
-                                day: "numeric",
-                                month: "long",
-                                year: "numeric",
-                              })}
-                            </p>
-                            <p>
-                              {
-                                selectedDepartureFlight.arrivalAirport
-                                  .airportName
-                              }{" "}
-                              - Terminal {selectedDepartureFlight.terminal}
-                            </p>
-                          </div>
-
-                          <div className="mb-auto text-color-primary font-bold">
-                            <p>Kedatangan</p>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </Card>
+                <SelectedFlightCard
+                  selectedDepartureFlight={selectedDepartureFlight}
+                  toggleExpand={toggleExpand}
+                  expandedCard={expandedCard}
+                />
               </div>
             )}
 
@@ -360,235 +126,21 @@ const SearchFlightPage = () => {
                 {flights.returnFlights && flights.returnFlights.length > 0 ? (
                   <>
                     {flights.returnFlights.map((flight) => (
-                      <Card key={flight.id} className="w-full shadow-md mb-5">
-                        <div className="p-8">
-                          <div className="flex justify-between items-center pb-3">
-                            <div className="capitalize md:text-lg font-semibold flex items-center">
-                              <img
-                                src={flight.airline.image}
-                                alt="airlines logo"
-                                className="w-6 me-2"
-                              />{" "}
-                              {flight.airline.airlineName} -{" "}
-                              {flight.flightClass}
-                            </div>
-                            <button
-                              className=" border-2 rounded-full p-1"
-                              onClick={() => toggleExpand(flight.id)}
-                            >
-                              {expandedCard === flight.id ? (
-                                <FaChevronUp />
-                              ) : (
-                                <FaChevronDown />
-                              )}
-                            </button>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <div className="text-md flex flex-col items-center">
-                              <p className="font-bold">
-                                {new Date(
-                                  flight.departureTime
-                                ).toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: false,
-                                })}
-                              </p>
-                              <p className="uppercase font-semibold">
-                                {flight.departureAirport.airportCode}
-                              </p>
-                            </div>
-                            <div className="w-96 flex flex-col items-center text-gray-500 px-3">
-                              <p>
-                                {Math.floor(
-                                  (new Date(flight.arrivalTime) -
-                                    new Date(flight.departureTime)) /
-                                    (1000 * 60 * 60)
-                                )}
-                                h{" "}
-                                {Math.floor(
-                                  (new Date(flight.arrivalTime) -
-                                    new Date(flight.departureTime)) /
-                                    (1000 * 60)
-                                ) % 60}
-                                m
-                              </p>
-                              <div className="border-t-2 w-full border-gray-300"></div>
-                              <p>Direct</p>
-                            </div>
-                            <div className="text-md flex flex-col items-center">
-                              <p className="font-bold">
-                                {new Date(
-                                  flight.arrivalTime
-                                ).toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: false,
-                                })}
-                              </p>
-                              <p className="uppercase font-semibold">
-                                {flight.arrivalAirport.airportCode}
-                              </p>
-                            </div>
-                            <div className="flex flex-col items-center ps-3">
-                              <p className="md:text-lg font-bold text-color-primary pb-2">
-                                IDR{" "}
-                                {new Intl.NumberFormat("id-ID").format(
-                                  flight.price
-                                )}
-                              </p>
-                              <Button
-                                className="bg-color-primary hover:bg-hover-primary rounded-lg ms-auto md:text-lg w-24"
-                                onClick={() => handleSelectReturn(flight)}
-                              >
-                                Pilih
-                              </Button>
-                            </div>
-                          </div>
-                          {expandedCard === flight.id && (
-                            <div className="transition-all duration-500 delay-1000 ease-in-out">
-                              <div className="border-t-2 my-7 border-gray-300"></div>
-                              <p className="font-bold text-lg text-color-primary">
-                                Detail Penerbangan
-                              </p>
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <p className="font-bold text-md">
-                                    {new Date(
-                                      flight.departureTime
-                                    ).toLocaleTimeString([], {
-                                      hour: "2-digit",
-                                      minute: "2-digit",
-                                      hour12: false,
-                                    })}
-                                  </p>
-                                  <p>
-                                    {new Date(
-                                      flight.departureTime
-                                    ).toLocaleDateString("id-ID", {
-                                      day: "numeric",
-                                      month: "long",
-                                      year: "numeric",
-                                    })}
-                                  </p>
-                                  <p>
-                                    {flight.departureAirport.airportName} -
-                                    Terminal {flight.terminal}
-                                  </p>
-                                </div>
-                                <div className="mb-auto text-color-primary font-bold">
-                                  <p>Keberangkatan</p>
-                                </div>
-                              </div>
-                              <div className="border-t-2 my-5 w-3/4 mx-auto border-gray-300"></div>
-                              <div className="flex justify-start">
-                                <img
-                                  src={flight.airline.image}
-                                  alt="airlines logo"
-                                  className="w-6 me-3 my-auto"
-                                />{" "}
-                                <div>
-                                  <p className="capitalize font-bold">
-                                    {flight.airline.airlineName} -{" "}
-                                    {flight.flightClass}
-                                  </p>
-                                  <p className="uppercase font-bold">
-                                    {flight.flightCode}
-                                  </p>
-                                  <p className="font-bold">Informasi :</p>
-                                  <p>{flight.information}</p>
-                                </div>
-                              </div>
-                              <div className="border-t-2 my-5 w-3/4 mx-auto border-gray-300"></div>
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <p className="font-bold text-md">
-                                    {new Date(
-                                      flight.arrivalTime
-                                    ).toLocaleTimeString([], {
-                                      hour: "2-digit",
-                                      minute: "2-digit",
-                                      hour12: false,
-                                    })}
-                                  </p>
-                                  <p>
-                                    {new Date(
-                                      flight.arrivalTime
-                                    ).toLocaleDateString("id-ID", {
-                                      day: "numeric",
-                                      month: "long",
-                                      year: "numeric",
-                                    })}
-                                  </p>
-                                  <p>
-                                    {flight.arrivalAirport.airportName} -
-                                    Terminal {flight.terminal}
-                                  </p>
-                                </div>
-
-                                <div className="mb-auto text-color-primary font-bold">
-                                  <p>Kedatangan</p>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </Card>
+                      <FlightCard
+                        flight={flight}
+                        expandedCard={expandedCard}
+                        toggleExpand={toggleExpand}
+                        ButtonHandler={handleSelectReturn}
+                      />
                     ))}
-                    <Pagination>
-                      <PaginationContent>
-                        <PaginationItem>
-                          <PaginationPrevious
-                            onClick={
-                              currentPage !== 1
-                                ? () => handlePageChange(currentPage - 1)
-                                : null
-                            }
-                          />
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationLink onClick={() => handlePageChange(1)}>
-                            1
-                          </PaginationLink>
-                        </PaginationItem>
-
-                        <PaginationItem>
-                          <PaginationEllipsis />
-                        </PaginationItem>
-
-                        <PaginationItem>
-                          <PaginationLink
-                            onClick={() =>
-                              handlePageChange(flights.totalReturnPages)
-                            }
-                          >
-                            {flights.totalReturnPages}
-                          </PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationNext
-                            onClick={
-                              currentPage !== flights.totalReturnPages
-                                ? () => handlePageChange(currentPage + 1)
-                                : null
-                            }
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
+                    <PaginationComponent
+                      handlePageChange={handlePageChange}
+                      currentPage={currentPage}
+                      totalPages={flights.totalReturnPages}
+                    />
                   </>
                 ) : (
-                  <div className="font-semibold flex flex-col items-center justify-center text-center">
-                    <img
-                      src={notFound}
-                      alt="not found"
-                      className=" w-72 py-4"
-                    />
-                    <p>Maaf, pencarian Anda tidak ditemukan</p>
-                    <Link to="/" className="text-color-primary">
-                      Coba cari perjalanan lainnya!
-                    </Link>
-                  </div>
+                  <NotFound />
                 )}
               </div>
             ) : (
@@ -598,237 +150,21 @@ const SearchFlightPage = () => {
                 flights.departureFlights.length > 0 ? (
                   <>
                     {flights.departureFlights.map((flight) => (
-                      <Card key={flight.id} className="w-full shadow-md mb-5">
-                        <div className="p-8">
-                          <div className="flex justify-between items-center pb-3">
-                            <div className="capitalize md:text-lg font-semibold flex items-center">
-                              <img
-                                src={flight.airline.image}
-                                alt="airlines logo"
-                                className="w-6 me-2"
-                              />{" "}
-                              {flight.airline.airlineName} -{" "}
-                              {flight.flightClass}
-                            </div>
-                            <button
-                              className=" border-2 rounded-full p-1"
-                              onClick={() => toggleExpand(flight.id)}
-                            >
-                              {expandedCard === flight.id ? (
-                                <FaChevronUp />
-                              ) : (
-                                <FaChevronDown />
-                              )}
-                            </button>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <div className="text-md flex flex-col items-center">
-                              <p className="font-bold">
-                                {new Date(
-                                  flight.departureTime
-                                ).toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: false,
-                                })}
-                              </p>
-                              <p className="uppercase font-semibold">
-                                {flight.departureAirport.airportCode}
-                              </p>
-                            </div>
-                            <div className="w-96 flex flex-col items-center text-gray-500 px-3">
-                              <p>
-                                {Math.floor(
-                                  (new Date(flight.arrivalTime) -
-                                    new Date(flight.departureTime)) /
-                                    (1000 * 60 * 60)
-                                )}
-                                h{" "}
-                                {Math.floor(
-                                  (new Date(flight.arrivalTime) -
-                                    new Date(flight.departureTime)) /
-                                    (1000 * 60)
-                                ) % 60}
-                                m
-                              </p>
-                              <div className="border-t-2 w-full border-gray-300"></div>
-                              <p>Direct</p>
-                            </div>
-                            <div className="text-md flex flex-col items-center">
-                              <p className="font-bold">
-                                {new Date(
-                                  flight.arrivalTime
-                                ).toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: false,
-                                })}
-                              </p>
-                              <p className="uppercase font-semibold">
-                                {flight.arrivalAirport.airportCode}
-                              </p>
-                            </div>
-                            <div className="flex flex-col items-center ps-3">
-                              <p className="md:text-lg font-bold text-color-primary pb-2">
-                                IDR{" "}
-                                {new Intl.NumberFormat("id-ID").format(
-                                  flight.price
-                                )}
-                              </p>
-                              <Button
-                                className="bg-color-primary hover:bg-hover-primary rounded-lg ms-auto md:text-lg w-24"
-                                onClick={() =>
-                                  handleSelectDepartureAndResetPage(flight)
-                                }
-                              >
-                                Pilih
-                              </Button>
-                            </div>
-                          </div>
-                          {expandedCard === flight.id && (
-                            <div className="transition-all duration-500 delay-1000 ease-in-out">
-                              <div className="border-t-2 my-7 border-gray-300"></div>
-                              <p className="font-bold text-lg text-color-primary">
-                                Detail Penerbangan
-                              </p>
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <p className="font-bold text-md">
-                                    {new Date(
-                                      flight.departureTime
-                                    ).toLocaleTimeString([], {
-                                      hour: "2-digit",
-                                      minute: "2-digit",
-                                      hour12: false,
-                                    })}
-                                  </p>
-                                  <p>
-                                    {new Date(
-                                      flight.departureTime
-                                    ).toLocaleDateString("id-ID", {
-                                      day: "numeric",
-                                      month: "long",
-                                      year: "numeric",
-                                    })}
-                                  </p>
-                                  <p>
-                                    {flight.departureAirport.airportName} -
-                                    Terminal {flight.terminal}
-                                  </p>
-                                </div>
-                                <div className="mb-auto text-color-primary font-bold">
-                                  <p>Keberangkatan</p>
-                                </div>
-                              </div>
-                              <div className="border-t-2 my-5 w-3/4 mx-auto border-gray-300"></div>
-                              <div className="flex justify-start">
-                                <img
-                                  src={flight.airline.image}
-                                  alt="airlines logo"
-                                  className="w-6 me-3 my-auto"
-                                />{" "}
-                                <div>
-                                  <p className="capitalize font-bold">
-                                    {flight.airline.airlineName} -{" "}
-                                    {flight.flightClass}
-                                  </p>
-                                  <p className="uppercase font-bold">
-                                    {flight.flightCode}
-                                  </p>
-                                  <p className="font-bold">Informasi :</p>
-                                  <p>{flight.information}</p>
-                                </div>
-                              </div>
-                              <div className="border-t-2 my-5 w-3/4 mx-auto border-gray-300"></div>
-                              <div className="flex items-center justify-between">
-                                <div>
-                                  <p className="font-bold text-md">
-                                    {new Date(
-                                      flight.arrivalTime
-                                    ).toLocaleTimeString([], {
-                                      hour: "2-digit",
-                                      minute: "2-digit",
-                                      hour12: false,
-                                    })}
-                                  </p>
-                                  <p>
-                                    {new Date(
-                                      flight.arrivalTime
-                                    ).toLocaleDateString("id-ID", {
-                                      day: "numeric",
-                                      month: "long",
-                                      year: "numeric",
-                                    })}
-                                  </p>
-                                  <p>
-                                    {flight.arrivalAirport.airportName} -
-                                    Terminal {flight.terminal}
-                                  </p>
-                                </div>
-
-                                <div className="mb-auto text-color-primary font-bold">
-                                  <p>Kedatangan</p>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </Card>
+                      <FlightCard
+                        flight={flight}
+                        expandedCard={expandedCard}
+                        toggleExpand={toggleExpand}
+                        ButtonHandler={handleSelectDepartureAndResetPage}
+                      />
                     ))}
-                    <Pagination>
-                      <PaginationContent>
-                        <PaginationItem>
-                          <PaginationPrevious
-                            onClick={
-                              currentPage !== 1
-                                ? () => handlePageChange(currentPage - 1)
-                                : null
-                            }
-                          />
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationLink onClick={() => handlePageChange(1)}>
-                            1
-                          </PaginationLink>
-                        </PaginationItem>
-
-                        <PaginationItem>
-                          <PaginationEllipsis />
-                        </PaginationItem>
-
-                        <PaginationItem>
-                          <PaginationLink
-                            onClick={() =>
-                              handlePageChange(flights.totalDeparturePages)
-                            }
-                          >
-                            {flights.totalDeparturePages}
-                          </PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationNext
-                            onClick={
-                              currentPage !== flights.totalDeparturePages
-                                ? () => handlePageChange(currentPage + 1)
-                                : null
-                            }
-                          />
-                        </PaginationItem>
-                      </PaginationContent>
-                    </Pagination>
+                    <PaginationComponent
+                      handlePageChange={handlePageChange}
+                      currentPage={currentPage}
+                      totalPages={flights.totalDeparturePages}
+                    />
                   </>
                 ) : (
-                  <div className="font-semibold flex flex-col items-center justify-center text-center">
-                    <img
-                      src={notFound}
-                      alt="not found"
-                      className=" w-72 py-4"
-                    />
-                    <p>Maaf, pencarian Anda tidak ditemukan</p>
-                    <Link to="/" className="text-color-primary">
-                      Coba cari perjalanan lainnya!
-                    </Link>
-                  </div>
+                  <NotFound />
                 )}
               </div>
             )}
@@ -839,232 +175,21 @@ const SearchFlightPage = () => {
             {flights.departureFlights && flights.departureFlights.length > 0 ? (
               <>
                 {flights.departureFlights.map((flight) => (
-                  <Card key={flight.id} className="w-full shadow-md mb-5">
-                    <div className="p-8">
-                      <div className="flex justify-between items-center pb-3">
-                        <div className="capitalize md:text-lg font-semibold flex items-center">
-                          <img
-                            src={flight.airline.image}
-                            alt="airlines logo"
-                            className="w-6 me-2"
-                          />{" "}
-                          {flight.airline.airlineName} - {flight.flightClass}
-                        </div>
-                        <button
-                          className=" border-2 rounded-full p-1"
-                          onClick={() => toggleExpand(flight.id)}
-                        >
-                          {expandedCard === flight.id ? (
-                            <FaChevronUp />
-                          ) : (
-                            <FaChevronDown />
-                          )}
-                        </button>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="text-md flex flex-col items-center">
-                          <p className="font-bold">
-                            {new Date(flight.departureTime).toLocaleTimeString(
-                              [],
-                              {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: false,
-                              }
-                            )}
-                          </p>
-                          <p className="uppercase font-semibold">
-                            {flight.departureAirport.airportCode}
-                          </p>
-                        </div>
-                        <div className="w-96 flex flex-col items-center text-gray-500 px-3">
-                          <p>
-                            {Math.floor(
-                              (new Date(flight.arrivalTime) -
-                                new Date(flight.departureTime)) /
-                                (1000 * 60 * 60)
-                            )}
-                            h{" "}
-                            {Math.floor(
-                              (new Date(flight.arrivalTime) -
-                                new Date(flight.departureTime)) /
-                                (1000 * 60)
-                            ) % 60}
-                            m
-                          </p>
-                          <div className="border-t-2 w-full border-gray-300"></div>
-                          <p>Direct</p>
-                        </div>
-                        <div className="text-md flex flex-col items-center">
-                          <p className="font-bold">
-                            {new Date(flight.arrivalTime).toLocaleTimeString(
-                              [],
-                              {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: false,
-                              }
-                            )}
-                          </p>
-                          <p className="uppercase font-semibold">
-                            {flight.arrivalAirport.airportCode}
-                          </p>
-                        </div>
-                        <div className="flex flex-col items-center ps-3">
-                          <p className="md:text-lg font-bold text-color-primary pb-2">
-                            IDR{" "}
-                            {new Intl.NumberFormat("id-ID").format(
-                              flight.price
-                            )}
-                          </p>
-                          <Button
-                            className="bg-color-primary hover:bg-hover-primary rounded-lg ms-auto md:text-lg w-24"
-                            onClick={() => handleSelectDepartureOneWay(flight)}
-                          >
-                            Pilih
-                          </Button>
-                        </div>
-                      </div>
-                      {expandedCard === flight.id && (
-                        <div className="transition-all duration-500 delay-1000 ease-in-out">
-                          <div className="border-t-2 my-7 border-gray-300"></div>
-                          <p className="font-bold text-lg text-color-primary">
-                            Detail Penerbangan
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="font-bold text-md">
-                                {new Date(
-                                  flight.departureTime
-                                ).toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: false,
-                                })}
-                              </p>
-                              <p>
-                                {new Date(
-                                  flight.departureTime
-                                ).toLocaleDateString("id-ID", {
-                                  day: "numeric",
-                                  month: "long",
-                                  year: "numeric",
-                                })}
-                              </p>
-                              <p>
-                                {flight.departureAirport.airportName} - Terminal{" "}
-                                {flight.terminal}
-                              </p>
-                            </div>
-                            <div className="mb-auto text-color-primary font-bold">
-                              <p>Keberangkatan</p>
-                            </div>
-                          </div>
-                          <div className="border-t-2 my-5 w-3/4 mx-auto border-gray-300"></div>
-                          <div className="flex justify-start">
-                            <img
-                              src={flight.airline.image}
-                              alt="airlines logo"
-                              className="w-6 me-3 my-auto"
-                            />{" "}
-                            <div>
-                              <p className="capitalize font-bold">
-                                {flight.airline.airlineName} -{" "}
-                                {flight.flightClass}
-                              </p>
-                              <p className="uppercase font-bold">
-                                {flight.flightCode}
-                              </p>
-                              <p className="font-bold">Informasi :</p>
-                              <p>{flight.information}</p>
-                            </div>
-                          </div>
-                          <div className="border-t-2 my-5 w-3/4 mx-auto border-gray-300"></div>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="font-bold text-md">
-                                {new Date(
-                                  flight.arrivalTime
-                                ).toLocaleTimeString([], {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: false,
-                                })}
-                              </p>
-                              <p>
-                                {new Date(
-                                  flight.arrivalTime
-                                ).toLocaleDateString("id-ID", {
-                                  day: "numeric",
-                                  month: "long",
-                                  year: "numeric",
-                                })}
-                              </p>
-                              <p>
-                                {flight.arrivalAirport.airportName} - Terminal{" "}
-                                {flight.terminal}
-                              </p>
-                            </div>
-
-                            <div className="mb-auto text-color-primary font-bold">
-                              <p>Kedatangan</p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </Card>
+                  <FlightCard
+                    flight={flight}
+                    expandedCard={expandedCard}
+                    toggleExpand={toggleExpand}
+                    ButtonHandler={handleSelectDepartureOneWay}
+                  />
                 ))}
-                <Pagination>
-                  <PaginationContent>
-                    <PaginationItem>
-                      <PaginationPrevious
-                        onClick={
-                          currentPage !== 1
-                            ? () => handlePageChange(currentPage - 1)
-                            : null
-                        }
-                      />
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationLink onClick={() => handlePageChange(1)}>
-                        1
-                      </PaginationLink>
-                    </PaginationItem>
-
-                    <PaginationItem>
-                      <PaginationEllipsis />
-                    </PaginationItem>
-
-                    <PaginationItem>
-                      <PaginationLink
-                        onClick={() =>
-                          handlePageChange(flights.totalDeparturePages)
-                        }
-                      >
-                        {flights.totalDeparturePages}
-                      </PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationNext
-                        onClick={
-                          currentPage !== flights.totalDeparturePages
-                            ? () => handlePageChange(currentPage + 1)
-                            : null
-                        }
-                      />
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
+                <PaginationComponent
+                  handlePageChange={handlePageChange}
+                  currentPage={currentPage}
+                  totalPages={flights.totalDeparturePages}
+                />
               </>
             ) : (
-              <div className="font-semibold flex flex-col items-center justify-center text-center">
-                <img src={notFound} alt="not found" className=" w-72 py-4" />
-                <p>Maaf, pencarian Anda tidak ditemukan</p>
-                <Link to="/" className="text-color-primary">
-                  Coba cari perjalanan lainnya!
-                </Link>
-              </div>
+              <NotFound />
             )}
           </div>
         )}
