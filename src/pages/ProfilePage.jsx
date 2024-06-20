@@ -4,16 +4,17 @@ import UbahProfile from "@/components/Profile/UbahProfile";
 
 const ProfilePage = () => {
   return (
-    <div className="container mx-auto h-screen p-4 md:ml-44">
-      <div className="flex flex-col items-center pt-2 w-full h-full">
+    <div className="container  px-2 sm:px-8 md:px-12 lg:px-20 xl:px-32 mt-5 sm:mt-5">
+      <div className="grid grid-cols-1">
         <HeaderProfile />
-        <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
-          <div className="w-full md:w-4/5 sm:ml-14 px-4 md:px-0">
-            <ListProfile />
-          </div>
-          <div className="w-full px-4 md:px-0">
-            <UbahProfile />
-          </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+        <div className="p-4 ">
+          <ListProfile />
+        </div>
+        <div className="p-4">
+          <UbahProfile />
         </div>
       </div>
     </div>
