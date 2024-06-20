@@ -58,10 +58,10 @@ const router = createBrowserRouter([
   {
     path: "/flight/search",
     element: (
-      <Protected>
+      <>
         <Navbar />
         <SearchFlightPage />,
-      </Protected>
+      </>
     ),
   },
   {
