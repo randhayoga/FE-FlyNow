@@ -1,5 +1,9 @@
-import React from "react";
+import { React, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
+import { getPaymentByBookingId } from "../../redux/actions/booking";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,8 +13,24 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Link } from "react-router-dom";
+import useSnap from "@/hook/useSnap";
 
 const PaymentPage = () => {
+  const dispatch = useDispatch();
+  const { booking } = useSelector((state) => state.booking);
+  const { id } = useParams();
+  useEffect(() => {
+    dispatch(getPaymentByBookingId(id));
+  }, [dispatch, id]);
+
+  const { snapEmbed } = useSnap();
+
+  useEffect(() => {
+    if (booking?.snapToken) {
+      snapEmbed(booking?.snapToken, "snap-container");
+    }
+  }, [booking, snapEmbed]);
+
   return (
     <div className="container mt-32">
       <div className="w-full font-semibold tracking-wide mb-6 bg-white">
@@ -39,10 +59,13 @@ const PaymentPage = () => {
         </div>
       </div>
 
-      <div className="flex">
-        <div className="w-full">Kiri</div>
+      <div className="flex mb-44">
+        <div
+          id="snap-container"
+          className="w-full me-10 rounded-md border border-gray-300 border-2 border-round"
+        ></div>
         <div className="lg:w-2/5">
-          <h1>Booking Code : abcedadsasd</h1>
+          <h1>Booking Code : {booking?.booking?.bookingCode}</h1>
           <section>
             <div className="flex w-full justify-between items-center font-semibold tracking-wide">
               <p className="text-lg">07:00</p>

@@ -81,7 +81,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/flight/payment/",
+    path: "/flight/payment/:id",
     element: (
       <Protected>
         <Navbar />
