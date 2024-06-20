@@ -5,7 +5,7 @@ import { getSeatsByFlightId } from "../../../redux/actions/flight";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const SeatPicker = ({ flight, maxSeats }) => {
+const SeatPicker = ({ flight, label, maxSeats }) => {
   const dispatch = useDispatch();
   const { seats } = useSelector((state) => state.flights);
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -38,15 +38,16 @@ const SeatPicker = ({ flight, maxSeats }) => {
   const rightLetters = ["D", "E", "F"];
 
   return (
-    <div className="w-full font-semibold">
-      <h1 className="text-xl font-bold tracking-wide mb-3">Pilih Kursi</h1>
+    <section className="border-2 border-[#8A8A8A] rounded-xl px-3 py-6 mb-6">
+      <h1 className="text-xl font-bold tracking-wide mb-3">{label}</h1>
       <div className="w-full bg-alert-success tracking-wide text-white text-center p-2 mb-3">
+        {flight.airline && flight?.airline?.airlineName} (
         {flight.flightClass &&
-          flight.flightClass
+          flight?.flightClass
             .split("_")
             .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ")}{" "}
-        - {availableSeatsCount} Seats Available
+            .join(" ")}
+        ) - {availableSeatsCount} Seats Available
       </div>
       <p className="text-center">
         {selectedSeats.length} of {maxSeats} Seats Chosen
@@ -118,7 +119,7 @@ const SeatPicker = ({ flight, maxSeats }) => {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -8,73 +8,34 @@ import {
   getReturnFlightDetail,
 } from "../../redux/actions/flight";
 
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 
-import { useFieldArray, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { id } from "date-fns/locale";
-
-import { Check, CalendarIcon, ChevronDown } from "lucide-react";
-import { FaCheckCircle } from "react-icons/fa";
-
-import countries from "@/lib/countries";
+import { CgArrowsV } from "react-icons/cg";
 
 import {
   BreadcrumbWithTimer,
   FlightDetail,
-  FormSchema,
-  SeatPicker,
+  OrdererField,
+  BookingForm
 } from "@/components/Booking";
-import { CgArrowsV } from "react-icons/cg";
 
 const BookingPage = () => {
   const dispatch = useDispatch();
 
-  const { user, token } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
   const { flight, returnFlight } = useSelector((state) => state.flights);
 
   const [searchParams] = useSearchParams();
 
   const [passengers, setPassengers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isReturnLoading, setIsReturnLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
 
   const flightId = parseInt(searchParams.get("df"));
@@ -90,13 +51,13 @@ const BookingPage = () => {
 
   useEffect(() => {
     if (flightId) {
-      dispatch(getFlightDetail(flightId));
+      dispatch(getFlightDetail(setIsLoading, flightId));
     }
   }, [dispatch, flightId]);
 
   useEffect(() => {
     if (returnFlightId) {
-      dispatch(getReturnFlightDetail(returnFlightId));
+      dispatch(getReturnFlightDetail(setIsReturnLoading, returnFlightId));
     }
   }, [dispatch, returnFlightId]);
 
@@ -124,495 +85,27 @@ const BookingPage = () => {
     setPassengers(passengerArray);
   }, [adult, children, baby]);
 
-  const form = useForm({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      nameOrderer: user?.name,
-      email: user?.email,
-      phoneNumber: user?.phoneNumber,
-      passengers: [],
-    },
-  });
-
-  useEffect(() => {
-    form.reset({
-      ...form.getValues(),
-      passengers: passengers.map(() => ({
-        title: "",
-        name: "",
-        dateOfBirth: null,
-        nationality: "",
-        docType: "",
-        docNumber: "",
-        issuingCountry: "",
-        expiryDate: null,
-      })),
-    });
-  }, [passengers, form]);
-
-  const { fields } = useFieldArray({
-    control: form.control,
-    name: "passengers",
-  });
-
-  const onSubmit = (data) => {
-    console.log(data);
+  // Rincian Harga
+  const calculateTotalPrice = (flight, adult, children) => {
+    const priceAdult = flight?.price * adult || 0;
+    const priceChildren = flight?.price * children || 0;
+    const tax = 0.11 * (priceAdult + priceChildren);
+    return priceAdult + priceChildren + tax;
   };
 
-  const formatDate = (date) => {
-    return date ? format(new Date(date), "d LLL yyyy", { locale: id }) : "";
-  };
+  const totalDeparturePrice = calculateTotalPrice(flight, adult, children);
+  const totalReturnPrice = calculateTotalPrice(returnFlight, adult, children);
+  const combinedTotalPrice = totalDeparturePrice + totalReturnPrice;
 
   return (
-    <div className="flex flex-col mx-auto w-4/5 min-h-screen items-center pt-24">
+    <div className="flex flex-col mx-auto w-4/5 min-h-screen items-center">
       <BreadcrumbWithTimer />
-
-      <div className="w-full flex flex-col lg:flex-row">
+      <div className="w-full flex flex-col lg:flex-row pt-48">
         <div className="lg:w-3/5 p-3">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <section className="border-2 border-[#8A8A8A] rounded-xl px-3 py-6 mb-6">
-                <h1 className="text-lg font-bold tracking-wide mb-3">
-                  Isi Data Pemesan
-                </h1>
-                <Card className="border-none">
-                  <CardHeader className="flex flex-row justify-between w-full rounded-t-lg bg-[#3C3C3C] text-white px-4 py-3">
-                    <p>Data Diri Pemesan</p>
-                    <FaCheckCircle className="text-alert-success" />
-                  </CardHeader>
-                  <CardContent className="p-4">
-                    <FormField
-                      name="nameOrderer"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem className="mb-4">
-                          <FormLabel className="text-color-primary font-bold text-base tracking-wide">
-                            Nama Lengkap
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              disabled
-                              className="border py-2 rounded-md font-medium"
-                              type="text"
-                              {...field}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      name="phoneNumber"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem className="mb-4">
-                          <FormLabel className="text-color-primary font-bold text-base tracking-wide">
-                            Nomor Telepon
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              disabled
-                              className="border py-2 rounded-md font-medium"
-                              type="tel"
-                              {...field}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      name="email"
-                      control={form.control}
-                      render={({ field }) => (
-                        <FormItem className="mb-4">
-                          <FormLabel className="text-color-primary font-bold text-base tracking-wide">
-                            Email
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              disabled
-                              className="border py-2 rounded-md font-medium"
-                              type="email"
-                              {...field}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </CardContent>
-                </Card>
-              </section>
-              <section className="border-2 border-[#8A8A8A] rounded-xl px-3 py-6 mb-6">
-                <h1 className="text-lg font-bold tracking-wide mb-3">
-                  Isi Data Penumpang
-                </h1>
-                {fields.map((field, index) => (
-                  <div key={field.id} className="mb-6">
-                    <Card className="border-none">
-                      <CardHeader className="flex flex-row justify-between w-full rounded-t-lg bg-[#3C3C3C] text-white px-4 py-3">
-                        <p>
-                          Data Diri Penumpang {passengers[index]?.index} -{" "}
-                          {passengers[index]?.type}
-                        </p>
-                        <FaCheckCircle className="text-alert-success" />
-                      </CardHeader>
-                      <CardContent className="p-4">
-                        <FormField
-                          name={`passengers.${index}.title`}
-                          control={form.control}
-                          render={({ field }) => (
-                            <FormItem className="mb-4">
-                              <FormLabel className="text-color-primary font-bold text-base tracking-wide">
-                                Title
-                              </FormLabel>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl>
-                                  <SelectTrigger
-                                    className={cn(
-                                      "px-4 py-5 font-medium text-base",
-                                      !field.value && "text-muted-foreground"
-                                    )}
-                                  >
-                                    <SelectValue placeholder="Pilih Title" />
-                                    <ChevronDown className="h-4 w-4 opacity-50" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="Mr.">Mr.</SelectItem>
-                                  <SelectItem value="Mrs.">Mrs.</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          name={`passengers.${index}.name`}
-                          control={form.control}
-                          render={({ field }) => (
-                            <FormItem className="mb-4">
-                              <FormLabel className="text-color-primary font-bold text-base tracking-wide">
-                                Nama Lengkap
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  className="border py-2 rounded-md font-medium"
-                                  type="text"
-                                  {...field}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          name={`passengers.${index}.dateOfBirth`}
-                          control={form.control}
-                          render={({ field }) => (
-                            <FormItem className="mb-4 flex flex-col">
-                              <FormLabel className="text-color-primary mb-1 font-bold text-base tracking-wide">
-                                Tanggal Lahir
-                              </FormLabel>
-                              <Popover>
-                                <PopoverTrigger asChild>
-                                  <FormControl>
-                                    <Button
-                                      variant={"outline"}
-                                      className={cn(
-                                        "w-full px-4 py-5 text-left text-base",
-                                        !field.value && "text-muted-foreground"
-                                      )}
-                                    >
-                                      {field.value ? (
-                                        `${formatDate(field.value)}`
-                                      ) : (
-                                        <span>Pilih Tanggal</span>
-                                      )}
-                                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                    </Button>
-                                  </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                  <Calendar
-                                    initialFocus
-                                    mode="single"
-                                    selected={field.value}
-                                    onSelect={field.onChange}
-                                    locale={id}
-                                  />
-                                </PopoverContent>
-                              </Popover>
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          name={`passengers.${index}.nationality`}
-                          control={form.control}
-                          render={({ field }) => (
-                            <FormItem className="mb-4">
-                              <FormLabel className="text-color-primary font-bold text-base tracking-wide">
-                                Kewarganegaraan
-                              </FormLabel>
-                              <Popover>
-                                <PopoverTrigger asChild>
-                                  <FormControl>
-                                    <Button
-                                      variant={"outline"}
-                                      className={cn(
-                                        "w-full px-4 py-5 text-left text-base",
-                                        !field.value && "text-muted-foreground"
-                                      )}
-                                    >
-                                      {field.value ? (
-                                        `${field.value}`
-                                      ) : (
-                                        <span>Pilih Negara</span>
-                                      )}
-                                      <ChevronDown className="ml-auto h-4 w-4 opacity-50" />
-                                    </Button>
-                                  </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                  <Command>
-                                    <CommandInput placeholder="Search Country..." />
-                                    <CommandEmpty>
-                                      No Country found.
-                                    </CommandEmpty>
-                                    <CommandGroup>
-                                      <CommandList>
-                                        {countries &&
-                                          countries.map((country, index) => (
-                                            <CommandItem
-                                              value={country}
-                                              key={index}
-                                              onSelect={() => {
-                                                form.setValue(
-                                                  `nationality-${passenger.index}`,
-                                                  country
-                                                );
-                                                form.trigger(
-                                                  `nationality-${passenger.index}`
-                                                );
-                                              }}
-                                            >
-                                              <Check
-                                                className={cn(
-                                                  "mr-2 h-4 w-4",
-                                                  country === field.value
-                                                    ? "opacity-100"
-                                                    : "opacity-0"
-                                                )}
-                                              />
-                                              {country}
-                                            </CommandItem>
-                                          ))}
-                                      </CommandList>
-                                    </CommandGroup>
-                                  </Command>
-                                </PopoverContent>
-                              </Popover>
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          name={`passengers.${index}.docType`}
-                          control={form.control}
-                          render={({ field }) => (
-                            <FormItem className="space-y-3 mb-3">
-                              <FormLabel className="text-color-primary font-bold text-base tracking-wide">
-                                KTP/Paspor
-                              </FormLabel>
-                              <FormControl>
-                                <RadioGroup
-                                  onValueChange={field.onChange}
-                                  defaultValue={field.value}
-                                  className={cn(
-                                    "flex flex-col",
-                                    !field.value && "text-muted-foreground"
-                                  )}
-                                >
-                                  <FormItem className="flex items-center space-x-3 space-y-0">
-                                    <FormControl>
-                                      <RadioGroupItem value="KTP" />
-                                    </FormControl>
-                                    <FormLabel className="font-medium text-base">
-                                      KTP
-                                    </FormLabel>
-                                  </FormItem>
-                                  <FormItem className="flex items-center space-x-3 space-y-0">
-                                    <FormControl>
-                                      <RadioGroupItem value="Pasport" />
-                                    </FormControl>
-                                    <FormLabel className="font-medium text-base">
-                                      Pasport
-                                    </FormLabel>
-                                  </FormItem>
-                                  <FormItem className="flex items-center space-x-3 space-y-0">
-                                    <FormControl>
-                                      <RadioGroupItem value="Kartu Keluarga" />
-                                    </FormControl>
-                                    <FormLabel className="font-medium text-base">
-                                      Kartu Keluarga
-                                    </FormLabel>
-                                  </FormItem>
-                                </RadioGroup>
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-
-                        {form.watch(`passengers.${index}.docType`) && (
-                          <FormField
-                            name={`passengers.${index}.docNumber`}
-                            control={form.control}
-                            render={({ field }) => (
-                              <FormItem className="mb-4">
-                                <FormControl>
-                                  <Input
-                                    className="border py-2 rounded-md font-medium"
-                                    type="text"
-                                    placeholder={`Masukkan Nomor ${form.watch(
-                                      `passengers.${index}.docType`
-                                    )}`}
-                                    {...field}
-                                  />
-                                </FormControl>
-                              </FormItem>
-                            )}
-                          />
-                        )}
-
-                        <FormField
-                          name={`passengers.${index}.issuingCountry`}
-                          control={form.control}
-                          render={({ field }) => (
-                            <FormItem className="mb-4">
-                              <FormLabel className="text-color-primary font-bold text-base tracking-wide">
-                                Negara Penerbit
-                              </FormLabel>
-                              <Popover>
-                                <PopoverTrigger asChild>
-                                  <FormControl>
-                                    <Button
-                                      variant={"outline"}
-                                      className={cn(
-                                        "w-full px-4 py-5 text-left text-base",
-                                        !field.value && "text-muted-foreground"
-                                      )}
-                                    >
-                                      {field.value ? (
-                                        `${field.value}`
-                                      ) : (
-                                        <span>Pilih Negara</span>
-                                      )}
-                                      <ChevronDown className="ml-auto h-4 w-4 opacity-50" />
-                                    </Button>
-                                  </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                  <Command>
-                                    <CommandInput placeholder="Search Country..." />
-                                    <CommandEmpty>
-                                      No Country found.
-                                    </CommandEmpty>
-                                    <CommandGroup>
-                                      <CommandList>
-                                        {countries &&
-                                          countries.map((country, index) => (
-                                            <CommandItem
-                                              value={country}
-                                              key={index}
-                                              onSelect={() => {
-                                                form.setValue(
-                                                  `issuingCountry-${passenger.index}`,
-                                                  country
-                                                );
-                                                form.trigger(
-                                                  `issuingCountry-${passenger.index}`
-                                                );
-                                              }}
-                                            >
-                                              <Check
-                                                className={cn(
-                                                  "mr-2 h-4 w-4",
-                                                  country === field.value
-                                                    ? "opacity-100"
-                                                    : "opacity-0"
-                                                )}
-                                              />
-                                              {country}
-                                            </CommandItem>
-                                          ))}
-                                      </CommandList>
-                                    </CommandGroup>
-                                  </Command>
-                                </PopoverContent>
-                              </Popover>
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          name={`passengers.${index}.expiryDate`}
-                          control={form.control}
-                          render={({ field }) => (
-                            <FormItem className="mb-4 flex flex-col">
-                              <FormLabel className="text-color-primary mb-1 font-bold text-base tracking-wide">
-                                Berlaku Sampai
-                              </FormLabel>
-                              <Popover>
-                                <PopoverTrigger asChild>
-                                  <FormControl>
-                                    <Button
-                                      variant={"outline"}
-                                      className={cn(
-                                        "w-full px-4 py-5 text-left text-base",
-                                        !field.value && "text-muted-foreground"
-                                      )}
-                                    >
-                                      {field.value ? (
-                                        `${formatDate(field.value)}`
-                                      ) : (
-                                        <span>Pilih Tanggal</span>
-                                      )}
-                                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                    </Button>
-                                  </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                  <Calendar
-                                    initialFocus
-                                    mode="single"
-                                    selected={field.value}
-                                    onSelect={field.onChange}
-                                    locale={id}
-                                  />
-                                </PopoverContent>
-                              </Popover>
-                            </FormItem>
-                          )}
-                        />
-                      </CardContent>
-                    </Card>
-                  </div>
-                ))}
-              </section>
-              <section className="border-2 border-[#8A8A8A] rounded-xl px-3 py-6 mb-6">
-                <SeatPicker flight={flight} maxSeats={passengers.length} />
-              </section>
-              <Button
-                className="w-full bg-color-primary text-base hover:bg-hover-primary text-white"
-                type="submit"
-              >
-                Simpan
-              </Button>
-            </form>
-          </Form>
+          <OrdererField />
+          <BookingForm passengers={passengers} />
         </div>
+
         <div className="lg:w-2/5 p-3">
           <h1 className="font-bold tracking-wide text-lg mb-2">
             Detail Penerbangan
@@ -636,6 +129,7 @@ const BookingPage = () => {
                 adult={adult}
                 children={children}
                 baby={baby}
+                isLoading={isLoading}
               />
             </CollapsibleContent>
           </Collapsible>
@@ -656,9 +150,46 @@ const BookingPage = () => {
                   adult={adult}
                   children={children}
                   baby={baby}
+                  isLoading={isReturnLoading}
                 />
               </CollapsibleContent>
             </Collapsible>
+          ) : (
+            ""
+          )}
+
+          {returnFlightId ? (
+            <>
+              <h1 className="font-semibold text-lg mt-4">Rincian Harga</h1>
+              {!isLoading ? (
+                <div className="flex w-full justify-between items-center">
+                  <h2>Harga Penerbangan Pergi</h2>
+                  <p>IDR {totalDeparturePrice.toLocaleString("id-ID")}</p>
+                </div>
+              ) : (
+                <Skeleton className="w-full h-4 mb-2" />
+              )}
+
+              {!isReturnLoading ? (
+                <div className="flex w-full justify-between items-center">
+                  <h2>Harga Penerbangan Pulang</h2>
+                  <p>IDR {totalReturnPrice.toLocaleString("id-ID")}</p>
+                </div>
+              ) : (
+                <Skeleton className="w-full h-4 mb-2" />
+              )}
+
+              <Separator className="my-2" />
+
+              {!isLoading && !isReturnLoading ? (
+                <div className="flex w-full justify-between items-center text-xl font-bold text-color-primary">
+                  <h2>Total Harga</h2>
+                  <p>IDR {combinedTotalPrice.toLocaleString("id-ID")}</p>
+                </div>
+              ) : (
+                <Skeleton className="w-full h-6" />
+              )}
+            </>
           ) : (
             ""
           )}
