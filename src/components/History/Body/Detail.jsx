@@ -9,6 +9,10 @@ import { GoArrowLeft } from "react-icons/go";
 import { GiCommercialAirplane } from "react-icons/gi";
 import { Button } from "@/components/ui/button";
 import { PaymentBadge } from "@/components/ui/paymentBadge";
+import jsPDFInvoiceTemplate, {
+  OutputType,
+  jsPDF,
+} from "jspdf-invoice-template";
 
 function Detail({ currentHistory, modal, setModal }) {
   const adultsTotalPrice =
@@ -19,6 +23,140 @@ function Detail({ currentHistory, modal, setModal }) {
     (currentHistory.flight.departure?.price +
       (currentHistory.flight.arrival?.price || 0)) *
     currentHistory.numChildren;
+
+  const printTicket = async (booking) => {
+    var props = {
+      outputType: OutputType.Save,
+      returnJsPDFDocObject: true,
+      fileName: `booking_${booking.bookingCode}`,
+      orientationLandscape: false,
+      compress: true,
+      logo: {
+        src: "https://res.cloudinary.com/ddfjulghf/image/upload/v1718854561/tspu5gqjtmu4xuymfxdc.png",
+        type: "PNG",
+        width: 33.33,
+        height: 30.33,
+        margin: {
+          top: 0,
+          left: 0,
+        },
+      },
+      stamp: {
+        inAllPages: true,
+        src: "https://raw.githubusercontent.com/edisonneza/jspdf-invoice-template/demo/images/qr_code.jpg",
+        type: "JPG",
+        width: 20,
+        height: 20,
+        margin: {
+          top: 0,
+          left: 0,
+          bottom: 5,
+        },
+      },
+      contact: {
+        label: "Invoice issued for:",
+        name: `${booking.user.name}`,
+        phone: `Phone: ${booking.user.phoneNumber}`,
+        email: `Email: ${booking.user.email}`,
+      },
+      invoice: {
+        label: "Booking Code: ",
+        num: `${booking.bookingCode}`,
+        invGenDate: `Booking Date: ${new Date(
+          booking.createdAt
+        ).toLocaleDateString("id-ID")}`,
+        headerBorder: false,
+        tableBodyBorder: false,
+        header: [
+          {
+            title: "#",
+            style: {
+              width: 10,
+            },
+          },
+          {
+            title: "Passenger Name",
+            style: {
+              width: 30,
+            },
+          },
+          {
+            title: "Nationality",
+            style: {
+              width: 30,
+            },
+          },
+          {
+            title: "Document Number",
+            style: {
+              width: 40,
+            },
+          },
+          {
+            title: "Type",
+          },
+          { title: "Price" },
+        ],
+        table: Array.from(booking.details.departure, (item, index) => [
+          index + 1,
+          item.passenger.name,
+          item.passenger.nationality,
+          item.passenger.docNumber,
+          item.passenger.passengerType,
+          item.passenger.passengerType == "baby"
+            ? 0
+            : booking.flight.departure.price.toLocaleString("id-ID"),
+        ]),
+        additionalRows: [
+          {
+            col1: "Subtotal:",
+            col2: `${(
+              booking.flight.departure.price *
+              (booking.numAdults + booking.numChildren)
+            ).toLocaleString("id-ID")}`,
+
+            style: {
+              fontSize: 10,
+            },
+          },
+          {
+            col1: "Tax:",
+            col2: `${(
+              0.11 *
+              (booking.flight.departure.price *
+                (booking.numAdults + booking.numChildren))
+            ).toLocaleString("id-ID")}`,
+            col3: "11%",
+            style: {
+              fontSize: 10, //optional, default 12
+            },
+          },
+
+          {
+            col1: "Total:",
+            col2: `${booking.payment.paymentAmount.toLocaleString("id-ID")}`,
+
+            style: {
+              fontSize: 14, //optional, default 12
+            },
+          },
+        ],
+        invDescLabel: "Invoice Note",
+        invDesc: `
+1. Check-in Information: Please arrive at the airport at least 2 hours before your flight for check-in and security procedures.
+2. Baggage Allowance: Ensure you are aware of the baggage allowance for your flight. Additional charges may apply for excess baggage.
+3. Flight Changes: For any changes or cancellations to your booking, please refer to our terms and conditions or contact customer support.
+        `,
+      },
+      footer: {
+        text: "The invoice is created on a computer and is valid without the signature and stamp.",
+      },
+      pageEnable: true,
+      pageLabel: "Page ",
+    };
+
+    const pdfObject = jsPDFInvoiceTemplate(props);
+  };
 
   return (
     <div
@@ -256,12 +394,14 @@ function Detail({ currentHistory, modal, setModal }) {
         <div className="font-semibold">Rincian Harga</div>
         <div className="flex justify-between w-full">
           <div className="">{currentHistory.numAdults} Dewasa</div>
-          <div className="">IDR {adultsTotalPrice}</div>
+          <div className="">IDR {adultsTotalPrice.toLocaleString("id-ID")}</div>
         </div>
         {currentHistory.numChildren > 0 && (
           <div className="flex justify-between w-full">
             <div className="">{currentHistory.numChildren} Anak-anak</div>
-            <div className="">IDR {childrenTotalPrice}</div>
+            <div className="">
+              IDR {childrenTotalPrice.toLocaleString("id-ID")}
+            </div>
           </div>
         )}
         {currentHistory.numBabies > 0 && (
@@ -273,7 +413,11 @@ function Detail({ currentHistory, modal, setModal }) {
         <div className="flex justify-between w-full">
           <div className="">Pajak (11%)</div>
           <div className="">
-            IDR {(11 / 100) * (adultsTotalPrice + childrenTotalPrice)}
+            IDR{" "}
+            {(
+              (11 / 100) *
+              (adultsTotalPrice + childrenTotalPrice)
+            ).toLocaleString("id-ID")}
           </div>
         </div>
         <div className="flex justify-between font-bold w-full my-3 items-center">
@@ -284,7 +428,12 @@ function Detail({ currentHistory, modal, setModal }) {
         </div>
 
         {currentHistory.payment?.paymentStatus === "paid" ? (
-          <Button size="lg" variant="primary" className="w-full">
+          <Button
+            size="lg"
+            variant="primary"
+            className="w-full"
+            onClick={() => printTicket(currentHistory)}
+          >
             Cetak Tiket
           </Button>
         ) : currentHistory.payment?.paymentStatus === "unpaid" ? (
