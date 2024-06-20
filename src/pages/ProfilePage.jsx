@@ -4,7 +4,7 @@ import UbahProfile from "@/components/Profile/UbahProfile";
 
 const ProfilePage = () => {
   return (
-    <div className="container  px-2 sm:px-8 md:px-12 lg:px-20 xl:px-32 mt-5 sm:mt-5">
+    <div className="container  px-2 sm:px-8 md:px-12 lg:px-20 xl:px-32 ">
       <div className="grid grid-cols-1">
         <HeaderProfile />
       </div>

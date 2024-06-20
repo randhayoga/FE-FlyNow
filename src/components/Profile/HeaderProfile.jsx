@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 
 const HeaderProfile = () => {
   return (
-    <div className="mt-10">
+    <div className="">
       <h1 className="text-lg font-bold my-6">Akun</h1>
       <button
         type="button"
