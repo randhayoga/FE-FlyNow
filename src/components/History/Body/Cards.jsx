@@ -126,7 +126,7 @@ function Cards({ histories, currentHistory, setCurrentHistory, setModal }) {
                 </div>
                 <div className="price">
                   <p className="font-bold text-color-primary lg:text-lg">
-                    IDR {history.payment?.paymentAmount}
+                    IDR {history.payment?.paymentAmount.toLocaleString("id-ID")}
                   </p>
                 </div>
               </div>
