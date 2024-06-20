@@ -99,35 +99,35 @@ export const login = (navigate, email, password) => async (dispatch) => {
 
 export const loginWithGoogle = (navigate, accessToken) => async (dispatch) => {
   let data = JSON.stringify({
-      access_token: accessToken,
+    access_token: accessToken,
   });
 
   let config = {
-      method: "post",
-      url: `${import.meta.env.VITE_BACKEND_API}/auth/google-login`,
-      headers: {
-          "Content-Type": "application/json",
-      },
-      data: data,
+    method: "post",
+    url: `${import.meta.env.VITE_BACKEND_API}/auth/google-login`,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: data,
   };
 
   try {
-      const response = await axios.request(config);
+    const response = await axios.request(config);
 
-      // get and save the token to local storage
-      const { data } = response.data;
-      const { token, user } = data;
+    // get and save the token to local storage
+    const { data } = response.data;
+    const { token, user } = data;
 
-      // Change the token value in the reducer
-      dispatch(setToken(token));
-      dispatch(setUser(user));
+    // Change the token value in the reducer
+    dispatch(setToken(token));
+    dispatch(setUser(user));
 
-      // redirect to home
-      navigate("/"); // it will be not consistent, so alternative we use window until we used the state management
+    // redirect to home
+    navigate("/"); // it will be not consistent, so alternative we use window until we used the state management
   } catch (error) {
-      toast.error(error?.response?.data?.message);
+    toast.error(error?.response?.data?.message);
 
-      dispatch(logout());
+    dispatch(logout());
   }
 };
 
@@ -135,3 +135,34 @@ export const logout = () => (dispatch) => {
   dispatch(setToken(null));
   dispatch(setUser(null));
 };
+
+export const editProfile =
+  (name, phoneNumber, image) => async (dispatch, getState) => {
+    const { token } = getState().auth;
+
+    let data = new FormData();
+    data.append("name", name);
+    data.append("phoneNumber", phoneNumber);
+    if (image) {
+      data.append("image", image);
+    }
+
+    let config = {
+      method: "patch",
+      maxBodyLength: Infinity,
+      url: `${import.meta.env.VITE_BACKEND_API}auth/edit-profile`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: data,
+    };
+
+    try {
+      const response = await axios.request(config);
+      console.log(JSON.stringify(response.data));
+      toast.success("Berhasil Memperbaharui Profil");
+      dispatch(profile());
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
