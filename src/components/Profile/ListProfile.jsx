@@ -1,8 +1,10 @@
+import { VerifiedIcon } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { logout } from "../../../redux/actions/auth";
 
 const ListProfile = () => {
+  const user = useSelector((state) => state.auth.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -52,6 +54,16 @@ const ListProfile = () => {
         </svg>
         <span className="text-base font-semibold">Pengaturan Akun</span>
       </button>
+      {user.isVerified ? null : (
+        <Link
+          to="/otp"
+          state={{ email: user.email }}
+          className="border-b-2 w-full flex items-center p-2 text-primary"
+        >
+          <VerifiedIcon className="mr-2" stroke="#30628C" />
+          <span className="text-base font-semibold">Verifikasi Akun</span>
+        </Link>
+      )}
       <button
         type="button"
         className="border-b-2 w-full flex items-center p-2"

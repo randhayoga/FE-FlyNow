@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Link,
+  redirect,
   useLocation,
   useNavigate,
   useNavigation,
@@ -28,7 +29,21 @@ import { Button } from "../components/ui/button";
 
 import { toast } from "sonner";
 import Timer from "../components/Otp/Timer";
-import { verifyOtpService } from "../services/otp";
+import { resendOtpService, verifyOtpService } from "../services/otp";
+
+export async function loader() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user?.isVerified) {
+    return redirect("/?message=Anda sudah terverifikasi");
+  }
+
+  if (user?.isVerified === false) {
+    await resendOtpService({ email: user.email });
+    return null;
+  }
+
+  return null;
+}
 
 const FormSchema = z.object({
   otp: z.string().min(6, {

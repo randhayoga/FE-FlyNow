@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, redirect, useNavigate, useSearchParams } from "react-router-dom";
 
 import { profile } from "../../redux/actions/auth";
 import { getFlightDetail } from "../../redux/actions/flight";
@@ -13,21 +13,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Command,
   CommandEmpty,
@@ -37,31 +25,61 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Calendar } from "@/components/ui/calendar";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 
 import SeatPicker from "@/components/Booking/SeatPicker";
 
-import { z } from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { id } from "date-fns/locale";
 
-import { Check, CalendarIcon, ChevronDown } from "lucide-react";
+import { CalendarIcon, Check, ChevronDown } from "lucide-react";
 import { FaCheckCircle } from "react-icons/fa";
 
 import countries from "@/lib/countries";
 import { toast } from "sonner";
+
+export const loader = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user.phoneNumber || !user.isVerified) {
+    const message =
+      !user.phoneNumber && !user.isVerified
+        ? "Anda harus verifikasi otp dan menambahkan nomor telepon terlebih dahulu!"
+        : !user.phoneNumber
+        ? "Anda harus menambahkan nomor telepon terlebih dahulu!"
+        : !user.isVerified
+        ? "Anda harus verifikasi otp terlebih dahulu!"
+        : null;
+
+    return redirect(`/profile?message=${message}`);
+  }
+  return null;
+};
 
 const BookingPage = () => {
   const dispatch = useDispatch();

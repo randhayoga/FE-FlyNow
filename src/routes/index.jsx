@@ -1,21 +1,21 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import Navbar from "@/components/Navbar";
+import BookingPage, { loader as BookingPageLoader } from "@/pages/BookingPage";
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
-import OtpPage from "@/pages/OtpPage";
+import OtpPage, {loader as OtpPageLoader} from "@/pages/OtpPage";
+import PaymentPage from "@/pages/PaymentPage";
 import RegisterPage from "@/pages/RegisterPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
-import BookingPage from "@/pages/BookingPage";
-import PaymentPage from "@/pages/PaymentPage";
 
-import Protected from "@/components/Protected";
-import NonProtected from "@/components/Nonprotected";
-import ProfilePage from "@/pages/ProfilePage";
-import HistoryPage from "@/pages/HistoryPage";
 import NavbarComponent from "@/components/Navbar";
+import NonProtected from "@/components/Nonprotected";
+import Protected from "@/components/Protected";
+import HistoryPage from "@/pages/HistoryPage";
+import ProfilePage, { loader as ProfilePageLoader } from "@/pages/ProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +45,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/otp",
+    loader: OtpPageLoader,
     element: <OtpPage />,
   },
   {
@@ -66,6 +67,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
+    loader: ProfilePageLoader,
     element: (
       <Protected>
         <NavbarComponent />
@@ -84,6 +86,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/flight/booking/",
+    loader: BookingPageLoader,
     element: (
       <Protected>
         <Navbar />
