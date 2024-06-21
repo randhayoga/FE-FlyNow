@@ -13,6 +13,7 @@ const UbahProfile = () => {
   const { user } = useSelector((state) => state.auth);
 
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [phoneNumber, setphoneNumber] = useState("");
   const [isValidNoTelp, setIsValidNoTelp] = useState(false);
   const [image, setImage] = useState(null);
@@ -66,6 +67,7 @@ const UbahProfile = () => {
 
   useEffect(() => {
     if (user) {
+      setEmail(user.email);
       setName(user.name);
       setphoneNumber(user.phoneNumber);
       setImage(user.image);
@@ -84,9 +86,9 @@ const UbahProfile = () => {
       {!user ? (
         <h1>Loading.....</h1>
       ) : (
-        <div className="border w-auto">
-          <div className="p-4 w-auto">
-            <form className="space-y-4" action="#" onSubmit={onSubmit}>
+        <div className="border-2  rounded-sm w-auto">
+          <div className="p-4 w-full">
+            <form className="space-y-2" action="#" onSubmit={onSubmit}>
               <h1 className="text-lg font-bold">Ubah Data Profil</h1>
               <div className="border rounded-t-xl h-10 text-white bg-color-primary flex items-center">
                 <span className="m-auto text-lg ">Data Diri</span>
@@ -99,6 +101,26 @@ const UbahProfile = () => {
                 />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
+
+              <div className="space-y-1">
+                <label
+                  htmlFor="email"
+                  className="ml-1 text-sm font-bold text-color-primary"
+                >
+                  Email
+                </label>
+                <div className="relative border-2 border-slate-200 rounded-xl ">
+                  <input
+                    type="text"
+                    name="email"
+                    id="email"
+                    value={email}
+                    className="relative  border-slate-200 rounded-xl focus:ring-color-primary-500 focus:border-color-primary-500 block w-full p-2"
+                    disabled
+                    required
+                  />
+                </div>
+              </div>
 
               <div className="space-y-1">
                 <label
@@ -164,7 +186,7 @@ const UbahProfile = () => {
 
               <button
                 type="submit"
-                className="w-32 h-10 mt-4 text-white bg-color-primary font-bold rounded-xl text-sm px-5 py-2.5 mx-auto block"
+                className="w-40 h-10 mt-4 text-white bg-color-primary font-bold rounded-xl text-sm px-5 py-2.5 mx-auto block"
                 disabled={!isChanged}
               >
                 Simpan
