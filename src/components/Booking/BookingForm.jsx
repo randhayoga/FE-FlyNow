@@ -7,6 +7,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import {
   Command,
@@ -50,7 +51,7 @@ const BookingForm = ({
   setIsSubmitted,
 }) => {
   const form = useForm({
-    // resolver: zodResolver(formSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       passengers: [],
     },
@@ -142,26 +143,30 @@ const BookingForm = ({
                   <FormField
                     name={`passengers.${index}.type`}
                     control={form.control}
-                    render={({ field }) => (
+                    render={({ field, fieldState: { error } }) => (
                       <FormItem className="mb-4">
                         <FormLabel className="text-color-primary font-bold text-base tracking-wide">
                           Tipe Penumpang
                         </FormLabel>
                         <FormControl>
                           <Input
-                            className="border py-2 rounded-md font-medium"
+                            className={cn(
+                              "border py-2 rounded-md font-medium",
+                              error && "text-red-500"
+                            )}
                             type="text"
                             disabled
                             {...field}
                           />
                         </FormControl>
+                        {error && <FormMessage className="italic" />}
                       </FormItem>
                     )}
                   />
                   <FormField
                     name={`passengers.${index}.title`}
                     control={form.control}
-                    render={({ field }) => (
+                    render={({ field, fieldState: { error } }) => (
                       <FormItem className="mb-4">
                         <FormLabel className="text-color-primary font-bold text-base tracking-wide">
                           Title
@@ -173,7 +178,8 @@ const BookingForm = ({
                                 variant={"outline"}
                                 className={cn(
                                   "w-full px-4 py-5 text-left text-base",
-                                  !field.value && "text-muted-foreground"
+                                  !field.value && "text-muted-foreground",
+                                  error && "border-red-500"
                                 )}
                               >
                                 {field.value ? (
@@ -226,6 +232,7 @@ const BookingForm = ({
                             </Command>
                           </PopoverContent>
                         </Popover>
+                        {error && <FormMessage className="italic" />}
                       </FormItem>
                     )}
                   />
@@ -233,18 +240,22 @@ const BookingForm = ({
                   <FormField
                     name={`passengers.${index}.name`}
                     control={form.control}
-                    render={({ field }) => (
+                    render={({ field, fieldState: { error } }) => (
                       <FormItem className="mb-4">
                         <FormLabel className="text-color-primary font-bold text-base tracking-wide">
                           Nama Lengkap
                         </FormLabel>
                         <FormControl>
                           <Input
-                            className="border py-2 rounded-md font-medium"
+                            className={cn(
+                              "border py-2 rounded-md font-medium",
+                              error && "border-red-500"
+                            )}
                             type="text"
                             {...field}
                           />
                         </FormControl>
+                        {error && <FormMessage className="italic" />}
                       </FormItem>
                     )}
                   />
@@ -252,7 +263,7 @@ const BookingForm = ({
                   <FormField
                     name={`passengers.${index}.dateOfBirth`}
                     control={form.control}
-                    render={({ field }) => (
+                    render={({ field, fieldState: { error } }) => (
                       <FormItem className="mb-4 flex flex-col">
                         <FormLabel className="text-color-primary mb-1 font-bold text-base tracking-wide">
                           Tanggal Lahir
@@ -264,7 +275,8 @@ const BookingForm = ({
                                 variant={"outline"}
                                 className={cn(
                                   "w-full px-4 py-5 text-left text-base",
-                                  !field.value && "text-muted-foreground"
+                                  !field.value && "text-muted-foreground",
+                                  error && "border-red-500"
                                 )}
                               >
                                 {field.value ? (
@@ -286,6 +298,7 @@ const BookingForm = ({
                             />
                           </PopoverContent>
                         </Popover>
+                        {error && <FormMessage className="italic" />}
                       </FormItem>
                     )}
                   />
@@ -293,7 +306,7 @@ const BookingForm = ({
                   <FormField
                     name={`passengers.${index}.nationality`}
                     control={form.control}
-                    render={({ field }) => (
+                    render={({ field, fieldState: { error } }) => (
                       <FormItem className="mb-4">
                         <FormLabel className="text-color-primary font-bold text-base tracking-wide">
                           Kewarganegaraan
@@ -305,7 +318,8 @@ const BookingForm = ({
                                 variant={"outline"}
                                 className={cn(
                                   "w-full px-4 py-5 text-left text-base",
-                                  !field.value && "text-muted-foreground"
+                                  !field.value && "text-muted-foreground",
+                                  error && "border-red-500"
                                 )}
                               >
                                 {field.value ? (
@@ -354,6 +368,7 @@ const BookingForm = ({
                             </Command>
                           </PopoverContent>
                         </Popover>
+                        {error && <FormMessage className="italic" />}
                       </FormItem>
                     )}
                   />
@@ -361,7 +376,7 @@ const BookingForm = ({
                   <FormField
                     name={`passengers.${index}.docType`}
                     control={form.control}
-                    render={({ field }) => (
+                    render={({ field, fieldState: { error } }) => (
                       <FormItem className="space-y-3 mb-3">
                         <FormLabel className="text-color-primary font-bold text-base tracking-wide">
                           KTP/Paspor
@@ -401,6 +416,7 @@ const BookingForm = ({
                             </FormItem>
                           </RadioGroup>
                         </FormControl>
+                        {error && <FormMessage className="italic" />}
                       </FormItem>
                     )}
                   />
@@ -409,18 +425,24 @@ const BookingForm = ({
                     <FormField
                       name={`passengers.${index}.docNumber`}
                       control={form.control}
-                      render={({ field }) => (
+                      render={({ field, fieldState: { error } }) => (
                         <FormItem className="mb-4">
                           <FormControl>
                             <Input
-                              className="border py-2 rounded-md font-medium"
+                              className={cn(
+                                "border py-2 rounded-md font-medium",
+                                error && "border-red-500"
+                              )}
                               type="text"
-                              placeholder={`Masukkan Nomor ${form.watch(
-                                `passengers.${index}.docType`
-                              )}`}
+                              placeholder={`Masukkan Nomor ${form
+                                .watch(`passengers.${index}.docType`)
+                                .toUpperCase()
+                                .split("_")
+                                .join(" ")}`}
                               {...field}
                             />
                           </FormControl>
+                          {error && <FormMessage className="italic" />}
                         </FormItem>
                       )}
                     />
@@ -429,7 +451,7 @@ const BookingForm = ({
                   <FormField
                     name={`passengers.${index}.issuingCountry`}
                     control={form.control}
-                    render={({ field }) => (
+                    render={({ field, fieldState: { error } }) => (
                       <FormItem className="mb-4">
                         <FormLabel className="text-color-primary font-bold text-base tracking-wide">
                           Negara Penerbit
@@ -441,7 +463,8 @@ const BookingForm = ({
                                 variant={"outline"}
                                 className={cn(
                                   "w-full px-4 py-5 text-left text-base",
-                                  !field.value && "text-muted-foreground"
+                                  !field.value && "text-muted-foreground",
+                                  error && "border-red-500"
                                 )}
                               >
                                 {field.value ? (
@@ -490,6 +513,7 @@ const BookingForm = ({
                             </Command>
                           </PopoverContent>
                         </Popover>
+                        {error && <FormMessage className="italic" />}
                       </FormItem>
                     )}
                   />
@@ -497,7 +521,7 @@ const BookingForm = ({
                   <FormField
                     name={`passengers.${index}.expiryDate`}
                     control={form.control}
-                    render={({ field }) => (
+                    render={({ field, fieldState: { error } }) => (
                       <FormItem className="mb-4 flex flex-col">
                         <FormLabel className="text-color-primary mb-1 font-bold text-base tracking-wide">
                           Berlaku Sampai
@@ -509,7 +533,8 @@ const BookingForm = ({
                                 variant={"outline"}
                                 className={cn(
                                   "w-full px-4 py-5 text-left text-base",
-                                  !field.value && "text-muted-foreground"
+                                  !field.value && "text-muted-foreground",
+                                  error && "border-red-500"
                                 )}
                               >
                                 {field.value ? (
@@ -531,6 +556,7 @@ const BookingForm = ({
                             />
                           </PopoverContent>
                         </Popover>
+                        {error && <FormMessage className="italic" />}
                       </FormItem>
                     )}
                   />
@@ -556,7 +582,7 @@ const BookingForm = ({
                 />
               )} */}
         <Button
-          className="w-full bg-color-primary text-base hover:bg-hover-primary text-white"
+          className="w-full py-6 rounded-xl bg-color-primary text-base hover:bg-hover-primary text-white"
           type="submit"
           disabled={isSubmitting || isSubmitted}
         >
