@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
@@ -39,8 +39,16 @@ import { FaCheckCircle } from "react-icons/fa";
 import countries from "@/lib/countries";
 
 import formSchema from "./FormSchema";
+import axios from "axios";
 
-const BookingForm = ({ passengers }) => {
+const BookingForm = ({
+  passengers,
+  token,
+  isSubmitting,
+  isSubmitted,
+  setIsSubmitting,
+  setIsSubmitted,
+}) => {
   const form = useForm({
     // resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,7 +59,8 @@ const BookingForm = ({ passengers }) => {
   useEffect(() => {
     form.reset({
       ...form.getValues(),
-      passengers: passengers.map(() => ({
+      passengers: passengers.map((passenger) => ({
+        type: passenger.type,
         title: "",
         name: "",
         dateOfBirth: null,
@@ -69,8 +78,43 @@ const BookingForm = ({ passengers }) => {
     name: "passengers",
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const dataFormat = (passenger) => {
+    return {
+      name: `${passenger.title} ${passenger.name}`,
+      dateOfBirth: new Date(passenger.dateOfBirth).toISOString(),
+      nationality: passenger.nationality,
+      docType: passenger.docType,
+      docNumber: passenger.docNumber,
+      issuingCountry: passenger.issuingCountry,
+      expiryDate: new Date(passenger.expiryDate).toISOString(),
+      passengerType: passenger.type.toLowerCase(),
+    };
+  };
+
+  const axiosConfig = (passenger, token) => ({
+    method: "post",
+    url: `${import.meta.env.VITE_BACKEND_API}/passengers`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    data: passenger,
+  });
+
+  const onSubmit = async (data) => {
+    try {
+      setIsSubmitting(true);
+      const promises = data.passengers.map((passenger) =>
+        axios(axiosConfig(dataFormat(passenger), token))
+      );
+      await Promise.all(promises);
+
+      setIsSubmitting(false);
+      setIsSubmitted(true);
+    } catch (error) {
+      setIsSubmitting(false);
+      console.log("Something went wrong:", error);
+    }
   };
 
   const formatDate = (date) => {
@@ -95,6 +139,25 @@ const BookingForm = ({ passengers }) => {
                   <FaCheckCircle className="text-alert-success" />
                 </CardHeader>
                 <CardContent className="p-4">
+                  <FormField
+                    name={`passengers.${index}.type`}
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem className="mb-4">
+                        <FormLabel className="text-color-primary font-bold text-base tracking-wide">
+                          Tipe Penumpang
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className="border py-2 rounded-md font-medium"
+                            type="text"
+                            disabled
+                            {...field}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     name={`passengers.${index}.title`}
                     control={form.control}
@@ -122,7 +185,7 @@ const BookingForm = ({ passengers }) => {
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
-                          <PopoverContent>
+                          <PopoverContent className="popover-full">
                             <Command>
                               <CommandGroup>
                                 <CommandList>
@@ -151,7 +214,7 @@ const BookingForm = ({ passengers }) => {
                                     <Check
                                       className={cn(
                                         "mr-2 h-4 w-4",
-                                        field.value === "Mr."
+                                        field.value === "Mrs."
                                           ? "opacity-100"
                                           : "opacity-0"
                                       )}
@@ -254,7 +317,7 @@ const BookingForm = ({ passengers }) => {
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
-                          <PopoverContent>
+                          <PopoverContent className="popover-full">
                             <Command>
                               <CommandInput placeholder="Search Country..." />
                               <CommandEmpty>No Country found.</CommandEmpty>
@@ -314,7 +377,7 @@ const BookingForm = ({ passengers }) => {
                           >
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem value="KTP" />
+                                <RadioGroupItem value="ktp" />
                               </FormControl>
                               <FormLabel className="font-medium text-base">
                                 KTP
@@ -322,7 +385,7 @@ const BookingForm = ({ passengers }) => {
                             </FormItem>
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem value="Pasport" />
+                                <RadioGroupItem value="paspor" />
                               </FormControl>
                               <FormLabel className="font-medium text-base">
                                 Pasport
@@ -330,7 +393,7 @@ const BookingForm = ({ passengers }) => {
                             </FormItem>
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem value="Kartu Keluarga" />
+                                <RadioGroupItem value="kartu_keluarga" />
                               </FormControl>
                               <FormLabel className="font-medium text-base">
                                 Kartu Keluarga
@@ -390,7 +453,7 @@ const BookingForm = ({ passengers }) => {
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
-                          <PopoverContent>
+                          <PopoverContent className="popover-full">
                             <Command>
                               <CommandInput placeholder="Search Country..." />
                               <CommandEmpty>No Country found.</CommandEmpty>
@@ -495,8 +558,9 @@ const BookingForm = ({ passengers }) => {
         <Button
           className="w-full bg-color-primary text-base hover:bg-hover-primary text-white"
           type="submit"
+          disabled={isSubmitting || isSubmitted}
         >
-          Simpan
+          {isSubmitting ? "Submitting..." : "Simpan"}
         </Button>
       </form>
     </Form>

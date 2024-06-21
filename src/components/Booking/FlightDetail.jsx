@@ -37,7 +37,7 @@ const FlightDetail = ({ flight, adult, children, baby, isLoading }) => {
             </div>
             <p className="font-normal">{formatDate(flight?.departureTime)}</p>
             <p className="font-medium">
-              {flight?.departureAirport?.airportName} - {flight?.terminal}
+              {flight?.departureAirport?.airportName} - Terminal {flight?.terminal}
             </p>
           </section>
           <Separator className="my-4" />

@@ -8,8 +8,10 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-const BreadcrumbWithTimer = () => {
-  const timeLeft = useTimer(15 * 60, "Waktu pemesanan habis");
+import { cn } from "@/lib/utils";
+
+const BreadcrumbWithTimer = ({ isSubmitted }) => {
+  const timeLeft = useTimer(15 * 60, "Waktu pemesanan habis", isSubmitted);
 
   const formatTime = (time) => {
     const hours = Math.floor(time / 3600);
@@ -44,8 +46,15 @@ const BreadcrumbWithTimer = () => {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <div className="w-full flex justify-center items-center rounded-xl py-3 font-semibold text-base bg-red-600 text-white">
-          Selesaikan dalam {formatTime(timeLeft)}
+        <div
+          className={cn(
+            "w-full flex justify-center items-center rounded-xl py-3 font-semibold text-base text-white",
+            isSubmitted ? "bg-alert-success" : "bg-red-600"
+          )}
+        >
+          {isSubmitted
+            ? "Data Anda Berhasil Disimpan!"
+            : `Selesaikan dalam ${formatTime(timeLeft)}`}
         </div>
       </div>
     </div>

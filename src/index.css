@@ -6,6 +6,12 @@
   @apply font-sans;
 } */
 
+@layer utilities {
+  .popover-full {
+    @apply w-[var(--radix-popover-trigger-width)] max-h-[var(--radix-popover-content-available-height)];
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

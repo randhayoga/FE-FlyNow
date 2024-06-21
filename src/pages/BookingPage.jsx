@@ -22,8 +22,9 @@ import {
   BreadcrumbWithTimer,
   FlightDetail,
   OrdererField,
-  BookingForm
+  BookingForm,
 } from "@/components/Booking";
+import { Button } from "@/components/ui/button";
 
 const BookingPage = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,8 @@ const BookingPage = () => {
   const [passengers, setPassengers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isReturnLoading, setIsReturnLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
 
   const flightId = parseInt(searchParams.get("df"));
@@ -73,7 +76,7 @@ const BookingPage = () => {
       passengerArray.push({ type: "Adult", index: i + 1 });
     }
     for (let i = 0; i < params.children; i++) {
-      passengerArray.push({ type: "Child", index: i + 1 + params.adult });
+      passengerArray.push({ type: "Children", index: i + 1 + params.adult });
     }
     for (let i = 0; i < params.baby; i++) {
       passengerArray.push({
@@ -99,11 +102,18 @@ const BookingPage = () => {
 
   return (
     <div className="flex flex-col mx-auto w-4/5 min-h-screen items-center">
-      <BreadcrumbWithTimer />
+      <BreadcrumbWithTimer isSubmitted={isSubmitted} />
       <div className="w-full flex flex-col lg:flex-row pt-48">
         <div className="lg:w-3/5 p-3">
           <OrdererField />
-          <BookingForm passengers={passengers} />
+          <BookingForm
+            passengers={passengers}
+            token={token}
+            isSubmitting={isSubmitting}
+            isSubmitted={isSubmitted}
+            setIsSubmitting={setIsSubmitting}
+            setIsSubmitted={setIsSubmitted}
+          />
         </div>
 
         <div className="lg:w-2/5 p-3">
@@ -192,6 +202,12 @@ const BookingPage = () => {
             </>
           ) : (
             ""
+          )}
+
+          {isSubmitted && (
+            <Button className="w-full mt-4 py-6 rounded-xl text-lg font-medium bg-red-600 hover:bg-red-700">
+              Lanjut Bayar
+            </Button>
           )}
         </div>
       </div>
