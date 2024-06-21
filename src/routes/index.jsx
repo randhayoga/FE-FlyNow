@@ -5,13 +5,12 @@ import BookingPage, { loader as BookingPageLoader } from "@/pages/BookingPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
-import OtpPage, {loader as OtpPageLoader} from "@/pages/OtpPage";
+import OtpPage, { loader as OtpPageLoader } from "@/pages/OtpPage";
 import PaymentPage from "@/pages/PaymentPage";
 import RegisterPage from "@/pages/RegisterPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
 
-import NavbarComponent from "@/components/Navbar";
 import NonProtected from "@/components/Nonprotected";
 import Protected from "@/components/Protected";
 import HistoryPage from "@/pages/HistoryPage";
