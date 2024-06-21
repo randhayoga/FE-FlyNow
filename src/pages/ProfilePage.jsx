@@ -27,11 +27,11 @@ const ProfilePage = () => {
         <HeaderProfile />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3  mt-4">
         <div className="p-4 ">
           <ListProfile />
         </div>
-        <div className="p-4">
+        <div className="p-4 col-span-2">
           <UbahProfile />
         </div>
       </div>

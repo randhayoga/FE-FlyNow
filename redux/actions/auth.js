@@ -150,7 +150,7 @@ export const editProfile =
     let config = {
       method: "patch",
       maxBodyLength: Infinity,
-      url: `${import.meta.env.VITE_BACKEND_API}auth/edit-profile`,
+      url: `${import.meta.env.VITE_BACKEND_API}/auth/edit-profile`,
       headers: {
         Authorization: `Bearer ${token}`,
       },

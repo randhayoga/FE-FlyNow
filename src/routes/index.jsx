@@ -70,7 +70,7 @@ const router = createBrowserRouter([
     loader: ProfilePageLoader,
     element: (
       <Protected>
-        <NavbarComponent />
+        <Navbar />
         <ProfilePage />
       </Protected>
     ),
