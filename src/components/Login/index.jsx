@@ -67,80 +67,86 @@ const Login = () => {
 
           {/* Form */}
           <div>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-sans text-black">
-                      Email/No Telepon
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Contoh: johndoe@gmail.com"
-                        type="email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="italic" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex justify-between font-sans font-medium text-sm">
-                      <FormLabel className="text-black">Password</FormLabel>
-                      <FormLabel>
-                        <Link
-                          to="/forgot-password"
-                          className="text-color-primary"
-                        >
-                          Lupa kata sandi
-                        </Link>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-3"
+              >
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-sans text-black">
+                        Email/No Telepon
                       </FormLabel>
-                    </div>
-                    <FormControl>
-                      <div className="relative flex flex-col">
+                      <FormControl>
                         <Input
-                          placeholder="Masukkan password"
-                          type={showPassword ? "text" : "password"}
+                          placeholder="Contoh: johndoe@gmail.com"
+                          type="email"
                           {...field}
                         />
-                        {!showPassword ? (
-                          <Eye
-                            className="text-slate-300 cursor-pointer absolute right-3 top-1/2 -translate-y-1/2"
-                            onClick={() => setShowPassword(!showPassword)}
-                            size={28}
-                          />
-                        ) : (
-                          <EyeOff
-                            className="text-slate-300 cursor-pointer absolute right-3 top-1/2 -translate-y-1/2"
-                            onClick={() => setShowPassword(!showPassword)}
-                            size={28}
-                          />
-                        )}
+                      </FormControl>
+                      <FormMessage className="italic" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="flex justify-between font-sans font-medium text-sm">
+                        <FormLabel className="text-black">Password</FormLabel>
+                        <FormLabel>
+                          <Link
+                            to="/reset-password"
+                            className="text-color-primary"
+                          >
+                            Lupa kata sandi
+                          </Link>
+                        </FormLabel>
                       </div>
-                    </FormControl>
-                    <FormMessage className="italic" />
-                  </FormItem>
-                )}
-              />
-              <Button className="w-full bg-color-primary hover:bg-hover-primary mt-5" type="submit">
-                Masuk
-              </Button>
-            </form>
-            <div className="flex items-center my-4">
-          <div className="flex-grow h-px bg-gray-300"></div>
-          <span className="px-4 text-gray-500">or</span>
-          <div className="flex-grow h-px bg-gray-300"></div>
-        </div>
+                      <FormControl>
+                        <div className="relative flex flex-col">
+                          <Input
+                            placeholder="Masukkan password"
+                            type={showPassword ? "text" : "password"}
+                            {...field}
+                          />
+                          {!showPassword ? (
+                            <Eye
+                              className="text-slate-300 cursor-pointer absolute right-3 top-1/2 -translate-y-1/2"
+                              onClick={() => setShowPassword(!showPassword)}
+                              size={28}
+                            />
+                          ) : (
+                            <EyeOff
+                              className="text-slate-300 cursor-pointer absolute right-3 top-1/2 -translate-y-1/2"
+                              onClick={() => setShowPassword(!showPassword)}
+                              size={28}
+                            />
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormMessage className="italic" />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  className="w-full bg-color-primary hover:bg-hover-primary mt-5"
+                  type="submit"
+                >
+                  Masuk
+                </Button>
+              </form>
+              <div className="flex items-center my-4">
+                <div className="flex-grow h-px bg-gray-300"></div>
+                <span className="px-4 text-gray-500">or</span>
+                <div className="flex-grow h-px bg-gray-300"></div>
+              </div>
               <GoogleLoginComponent text={"Masuk dengan Google"} />
-          </Form>
+            </Form>
           </div>
 
           <p className="text-center text-sm text-muted-foreground mt-5">

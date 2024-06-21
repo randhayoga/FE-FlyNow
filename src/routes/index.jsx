@@ -48,7 +48,7 @@ const router = createBrowserRouter([
     element: <OtpPage />,
   },
   {
-    path: "/forgot-password",
+    path: "/reset-password",
     element: <ForgotPasswordPage />,
   },
   {
