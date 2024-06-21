@@ -9,13 +9,6 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Command,
   CommandEmpty,
   CommandGroup,
@@ -47,7 +40,7 @@ import countries from "@/lib/countries";
 
 import formSchema from "./FormSchema";
 
-const BookingForm = ({passengers}) => {
+const BookingForm = ({ passengers }) => {
   const form = useForm({
     // resolver: zodResolver(formSchema),
     defaultValues: {
@@ -85,7 +78,6 @@ const BookingForm = ({passengers}) => {
   };
 
   return (
-    
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <section className="border-2 border-[#8A8A8A] rounded-xl px-3 py-6 mb-6">
@@ -111,26 +103,66 @@ const BookingForm = ({passengers}) => {
                         <FormLabel className="text-color-primary font-bold text-base tracking-wide">
                           Title
                         </FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger
-                              className={cn(
-                                "px-4 py-5 font-medium text-base",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              <SelectValue placeholder="Pilih Title" />
-                              <ChevronDown className="h-4 w-4 opacity-50" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Mr.">Mr.</SelectItem>
-                            <SelectItem value="Mrs.">Mrs.</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-full px-4 py-5 text-left text-base",
+                                  !field.value && "text-muted-foreground"
+                                )}
+                              >
+                                {field.value ? (
+                                  `${field.value}`
+                                ) : (
+                                  <span>Pilih Title</span>
+                                )}
+                                <ChevronDown className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent>
+                            <Command>
+                              <CommandGroup>
+                                <CommandList>
+                                  <CommandItem
+                                    value="Mr. "
+                                    onSelect={(value) => {
+                                      field.onChange(value);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        field.value === "Mr."
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    Mr.
+                                  </CommandItem>
+                                  <CommandItem
+                                    value="Mrs. "
+                                    onSelect={(value) => {
+                                      field.onChange(value);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        field.value === "Mr."
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                    Mrs.
+                                  </CommandItem>
+                                </CommandList>
+                              </CommandGroup>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
                       </FormItem>
                     )}
                   />
@@ -239,7 +271,7 @@ const BookingForm = ({passengers}) => {
                                             country
                                           );
                                           form.trigger(
-                                            `passengers.${index}.nationality`,
+                                            `passengers.${index}.nationality`
                                           );
                                         }}
                                       >
@@ -375,7 +407,7 @@ const BookingForm = ({passengers}) => {
                                             country
                                           );
                                           form.trigger(
-                                            `passengers.${index}.issuingCountry`,
+                                            `passengers.${index}.issuingCountry`
                                           );
                                         }}
                                       >
