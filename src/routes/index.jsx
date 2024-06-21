@@ -15,7 +15,6 @@ import Protected from "@/components/Protected";
 import NonProtected from "@/components/Nonprotected";
 import ProfilePage from "@/pages/ProfilePage";
 import HistoryPage from "@/pages/HistoryPage";
-import NavbarComponent from "@/components/Navbar";
 
 const router = createBrowserRouter([
   {
@@ -68,7 +67,7 @@ const router = createBrowserRouter([
     path: "/profile",
     element: (
       <Protected>
-        <NavbarComponent />
+        <Navbar />
         <ProfilePage />
       </Protected>
     ),

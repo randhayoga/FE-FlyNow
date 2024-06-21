@@ -10,7 +10,7 @@ const Protected = ({ children }) => {
 
   useEffect(() => {
     // get user profile if we have token
-    dispatch(profile(navigate, null, "/"));
+    dispatch(profile(navigate, null, "/login"));
   }, [dispatch, navigate]);
 
   return children;
