@@ -1,24 +1,21 @@
-import { React, useEffect } from "react";
-import { Separator } from "@/components/ui/separator";
-import { getPaymentByBookingId } from "../../redux/actions/booking";
-import { useDispatch, useSelector } from "react-redux";
+import { React, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getPaymentByBookingId } from "../../redux/actions/booking";
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Link } from "react-router-dom";
+import BookingDetail from "@/components/Payment/BookingDetail";
+import BreadcrumbPayment from "@/components/Payment/BreadcrumbPayment";
+
 import useSnap from "@/hook/useSnap";
 
 const PaymentPage = () => {
+  const [isOpenPergi, setIsOpenPergi] = useState(true);
+  const [isOpenPulang, setIsOpenPulang] = useState(false);
+
   const dispatch = useDispatch();
   const { booking } = useSelector((state) => state.booking);
   const { id } = useParams();
+
   useEffect(() => {
     dispatch(getPaymentByBookingId(id));
   }, [dispatch, id]);
@@ -32,100 +29,46 @@ const PaymentPage = () => {
   }, [booking, snapEmbed]);
 
   return (
-    <div className="container mt-32">
-      <div className="w-full font-semibold tracking-wide mb-6 bg-white">
-        <Breadcrumb className="mb-2">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage className="font-semibold cursor-default">
-                Isi Data Diri
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage className="font-semibold">Bayar</BreadcrumbPage>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbLink>
-                Selesai
-                {/* <Link to="/flight/payment/success">Selesai</Link> */}
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-        <div className="w-full flex justify-center items-center rounded-xl py-3 font-normal text-base bg-red-600 text-white">
-          Selesaikan dalam 00:
+    <>
+      <div className="shadow-md py-4">
+        <div className="container">
+          <h1 className="text-xl font-bold mt-20 mb-5">Pilih Penerbangan</h1>
+          <div className="w-full font-semibold tracking-wide mb-6 bg-white">
+            <BreadcrumbPayment />
+          </div>
+          <div className="flex flex-col sm:flex-row items-center">
+            <div className="w-full flex justify-center items-center rounded-xl py-3 font-normal text-base bg-[#ba1a1a] text-white">
+              Selesaikan Pembayaran Sebelum 10 Maret 2024 10:00
+            </div>
+          </div>
         </div>
       </div>
-
-      <div className="flex mb-44">
+      <div className="container mx-auto my-10 flex flex-col lg:flex-row">
         <div
           id="snap-container"
-          className="w-full me-10 rounded-md border border-gray-300 border-2 border-round"
+          className="w-full lg:me-10 rounded-md border-2 border-gray-300 border-round order-1 mb-6 lg:mb-0"
         ></div>
-        <div className="lg:w-2/5">
-          <h1>Booking Code : {booking?.booking?.bookingCode}</h1>
-          <section>
-            <div className="flex w-full justify-between items-center font-semibold tracking-wide">
-              <p className="text-lg">07:00</p>
-              <p className="text-sm text-color-primary">Keberangkatan</p>
-            </div>
-            <p className="font-normal">07:00</p>
-            <p className="font-medium">123</p>
-          </section>
-          <Separator className="my-4" />
-          <section className="flex w-full gap-2">
-            <div className="flex w-6 justify-center items-center">
-              <img src="" alt="flight" className="w-6" />
-            </div>
-            <div className="flex-grow font-semibold tracking-wide">
-              <p>Lion Air - Economy</p>
-              <p className="mb-4">SD-123</p>
-              <p>Informasi:</p>
-
-              <p className="font-normal text-sm">dasdasd</p>
-            </div>
-          </section>
-          <Separator className="my-4" />
-          <section>
-            <div className="flex w-full justify-between items-center font-semibold tracking-wide">
-              <p className="text-lg">dasdasdasd</p>
-              <p className="text-sm text-color-primary">Kedatangan</p>
-            </div>
-            <p className="font-normal">asdasdasd</p>
-            <p className="font-medium">dasdasd</p>
-          </section>
-          <Separator className="my-4" />
-          <section>
-            <p className="font-semibold tracking-wide">Rincian Harga</p>
-            <div className="flex w-full justify-between items-center">
-              <p> Adult</p>
-              <p>IDR 123</p>
-            </div>
-            <div className="flex w-full justify-between items-center">
-              <p> Children</p>
-              <p>IDR dasdasd</p>
-            </div>
-            <div className="flex w-full justify-between items-center">
-              <p> Babies</p>
-              <p>IDR 0</p>
-            </div>
-            <div className="flex w-full justify-between items-center">
-              <p>Tax (11%)</p>
-              <p>IDR dasdasd</p>
-            </div>
-            <Separator className="my-4" />
-            <section className="font-semibold tracking-wide">
-              <div className="flex w-full justify-between items-center">
-                <p>Total</p>
-                <p className="text-xl text-color-primary">IDR sdasdas</p>
-              </div>
-            </section>
-          </section>
+        <div className=" lg:w-1/2 order-2 ">
+          <p>Kode Pemesanan : {booking?.booking?.bookingCode}</p>
+          <BookingDetail
+            booking={booking?.booking}
+            flight={booking?.booking?.departureFlight}
+            isOpen={isOpenPergi}
+            setIsOpen={setIsOpenPergi}
+            title="Penerbangan Pergi"
+          />
+          {booking?.booking?.returnFlight && (
+            <BookingDetail
+              booking={booking?.booking}
+              flight={booking?.booking?.returnFlight}
+              isOpen={isOpenPulang}
+              setIsOpen={setIsOpenPulang}
+              title="Penerbangan Pulang"
+            />
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
