@@ -1,4 +1,8 @@
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getSeatsByFlightId, getSeatsByReturnFlightId } from "../../../redux/actions/flight";
+import { createBooking } from "../../../redux/actions/booking";
+import axios from "axios";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
@@ -40,16 +44,36 @@ import { FaCheckCircle } from "react-icons/fa";
 import countries from "@/lib/countries";
 
 import formSchema from "./FormSchema";
-import axios from "axios";
+import SeatPicker from "./SeatPicker";
 
 const BookingForm = ({
   passengers,
   token,
+  flightId,
+  returnFlightId,
   isSubmitting,
   isSubmitted,
   setIsSubmitting,
   setIsSubmitted,
 }) => {
+  const dispatch = useDispatch();
+  const { flight, returnFlight, seats, returnSeats } = useSelector(
+    (state) => state.flights
+  );
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedSeats, setSelectedSeats] = useState([]);
+  const [selectedReturnSeats, setSelectedReturnSeats] = useState([]);
+
+  useEffect(() => {
+    dispatch(getSeatsByFlightId(parseInt(flightId), setIsLoading));
+    if (returnFlightId) {
+      dispatch(
+        getSeatsByReturnFlightId(parseInt(returnFlightId), setIsLoading)
+      );
+    }
+  }, [dispatch, flightId, returnFlightId]);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -79,43 +103,40 @@ const BookingForm = ({
     name: "passengers",
   });
 
-  const dataFormat = (passenger) => {
-    return {
-      name: `${passenger.title} ${passenger.name}`,
-      dateOfBirth: new Date(passenger.dateOfBirth).toISOString(),
-      nationality: passenger.nationality,
-      docType: passenger.docType,
-      docNumber: passenger.docNumber,
-      issuingCountry: passenger.issuingCountry,
-      expiryDate: new Date(passenger.expiryDate).toISOString(),
-      passengerType: passenger.type.toLowerCase(),
-    };
+  const passengersFormat = (passengers) => {
+    return passengers.map((passenger) => {
+      return {
+        name: `${passenger.title} ${passenger.name}`,
+        dateOfBirth: new Date(passenger.dateOfBirth).toISOString(),
+        nationality: passenger.nationality,
+        docType: passenger.docType,
+        docNumber: passenger.docNumber,
+        issuingCountry: passenger.issuingCountry,
+        expiryDate: new Date(passenger.expiryDate).toISOString(),
+        passengerType: passenger.type.toLowerCase(),
+      };
+    });
   };
 
-  const axiosConfig = (passenger, token) => ({
-    method: "post",
-    url: `${import.meta.env.VITE_BACKEND_API}/passengers`,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    data: passenger,
-  });
-
+  
   const onSubmit = async (data) => {
-    try {
-      setIsSubmitting(true);
-      const promises = data.passengers.map((passenger) =>
-        axios(axiosConfig(dataFormat(passenger), token))
-      );
-      await Promise.all(promises);
-
-      setIsSubmitting(false);
-      setIsSubmitted(true);
-    } catch (error) {
-      setIsSubmitting(false);
-      console.log("Something went wrong:", error);
+    const passengerPayloads = passengersFormat(data.passengers)
+    const seatPayloads  = {
+      departureSeats: selectedSeats,
+      returnSeats: selectedReturnSeats,
     }
+
+    const payload = {
+      departureFlightId: flightId,
+      returnFlightId: returnFlightId || null,
+      numAdults: passengers.filter((p) => p.type === "Adult").length,
+      numChildren: passengers.filter((p) => p.type === "Child").length,
+      numBabies: passengers.filter((p) => p.type === "Baby").length,
+      passengerPayloads,
+      seatPayloads,
+    }
+
+    dispatch(createBooking(payload, setIsSubmitting, setIsSubmitted))
   };
 
   const formatDate = (date) => {
@@ -566,21 +587,29 @@ const BookingForm = ({
           ))}
         </section>
 
-        {/* {flightId && (
+        {flightId && (
           <SeatPicker
-            label={"Pilih Kursi"}
+            label={"Pilih Kursi Penerbangan"}
             flight={flight}
+            seats={seats}
             maxSeats={passengers.length}
+            isLoading={isLoading}
+            selectedSeats={selectedSeats}
+            setSelectedSeats={setSelectedSeats}
           />
-        )} */}
+        )}
 
-        {/* {returnFlightId && (
-                <SeatPicker
-                  label={"Pilih Kursi Penerbangan Pulang"}
-                  flight={returnFlight}
-                  maxSeats={passengers.length}
-                />
-              )} */}
+        {returnFlightId && (
+          <SeatPicker
+            label={"Pilih Kursi Penerbangan Pulang"}
+            flight={returnFlight}
+            seats={returnSeats}
+            maxSeats={passengers.length}
+            isLoading={isLoading}
+            selectedSeats={selectedReturnSeats}
+            setSelectedSeats={setSelectedReturnSeats}
+          />
+        )}
         <Button
           className="w-full py-6 rounded-xl bg-color-primary text-base hover:bg-hover-primary text-white"
           type="submit"

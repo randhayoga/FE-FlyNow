@@ -31,6 +31,7 @@ const flightsSlice = createSlice({
     setSeatsByReturnFlightId: (state, action) => {
       state.returnSeats = action.payload;
     },
+
   },
 });
 
@@ -40,7 +41,7 @@ export const {
   setFlightDetail,
   setReturnFlightDetail,
   setSeatsByFlightId,
-  setSeatsByReturnFlightId
+  setSeatsByReturnFlightId,
 } = flightsSlice.actions;
 
 export default flightsSlice.reducer;

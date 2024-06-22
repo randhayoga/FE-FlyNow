@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { profile } from "../../redux/actions/auth";
@@ -7,6 +7,7 @@ import {
   getFlightDetail,
   getReturnFlightDetail,
 } from "../../redux/actions/flight";
+import { createPayment } from "../../redux/actions/booking";
 
 import {
   Collapsible,
@@ -28,9 +29,11 @@ import { Button } from "@/components/ui/button";
 
 const BookingPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { token } = useSelector((state) => state.auth);
   const { flight, returnFlight } = useSelector((state) => state.flights);
+  const { bookings } = useSelector((state) => state.bookings);
 
   const [searchParams] = useSearchParams();
 
@@ -52,18 +55,21 @@ const BookingPage = () => {
     dispatch(profile(null, null, null));
   }, [dispatch, token]);
 
+  // Get Departure Flight
   useEffect(() => {
     if (flightId) {
       dispatch(getFlightDetail(setIsLoading, flightId));
     }
   }, [dispatch, flightId]);
 
+  // Get Return Flight
   useEffect(() => {
     if (returnFlightId) {
       dispatch(getReturnFlightDetail(setIsReturnLoading, returnFlightId));
     }
   }, [dispatch, returnFlightId]);
 
+  // Generate Passengers Field
   useEffect(() => {
     const params = {
       adult,
@@ -88,7 +94,14 @@ const BookingPage = () => {
     setPassengers(passengerArray);
   }, [adult, children, baby]);
 
-  // Rincian Harga
+  // Automatically scroll to top after submmiteed the form
+  useEffect(() => {
+    if (isSubmitted) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [isSubmitted]);
+
+  // Total Price For Roundtrip
   const calculateTotalPrice = (flight, adult, children) => {
     const priceAdult = flight?.price * adult || 0;
     const priceChildren = flight?.price * children || 0;
@@ -100,118 +113,128 @@ const BookingPage = () => {
   const totalReturnPrice = calculateTotalPrice(returnFlight, adult, children);
   const combinedTotalPrice = totalDeparturePrice + totalReturnPrice;
 
+  const handlePayment = () => {
+    dispatch(createPayment(bookings.booking.id, combinedTotalPrice));
+    navigate(`/flight/payment/${bookings.booking.id}`);
+  };
+
   return (
-    <div className="flex flex-col mx-auto w-4/5 min-h-screen items-center">
-      <BreadcrumbWithTimer isSubmitted={isSubmitted} />
-      <div className="w-full flex flex-col lg:flex-row pt-48">
-        <div className="lg:w-3/5 p-3">
-          <OrdererField />
-          <BookingForm
-            passengers={passengers}
-            token={token}
-            isSubmitting={isSubmitting}
-            isSubmitted={isSubmitted}
-            setIsSubmitting={setIsSubmitting}
-            setIsSubmitted={setIsSubmitted}
-          />
-        </div>
+    <div className="container flex flex-col mx-auto min-h-screen items-center">
+        <BreadcrumbWithTimer isSubmitted={isSubmitted} />
+        <div className="w-full flex flex-col lg:flex-row pt-48">
+          <div className="lg:w-3/5 p-3">
+            <OrdererField />
+            <BookingForm
+              passengers={passengers}
+              token={token}
+              flightId={flightId}
+              returnFlightId={returnFlightId}
+              isSubmitting={isSubmitting}
+              isSubmitted={isSubmitted}
+              setIsSubmitting={setIsSubmitting}
+              setIsSubmitted={setIsSubmitted}
+            />
+          </div>
 
-        <div className="lg:w-2/5 p-3">
-          <h1 className="font-bold tracking-wide text-lg mb-2">
-            Detail Penerbangan
-          </h1>
-          <Collapsible
-            open={isOpen}
-            onOpenChange={setIsOpen}
-            className="flex flex-col gap-5 mt-4 border-2 px-4 py-2 rounded-md"
-          >
-            <CollapsibleTrigger>
-              <div className="flex justify-between items-center">
-                <h1 className="font-semibold tracking-wide text-base text-color-primary">
-                  Penerbangan Pergi
-                </h1>
-                <CgArrowsV className="text-lg text-gray-400" />
-              </div>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <FlightDetail
-                flight={flight}
-                adult={adult}
-                children={children}
-                baby={baby}
-                isLoading={isLoading}
-              />
-            </CollapsibleContent>
-          </Collapsible>
-
-          {returnFlightId ? (
-            <Collapsible className="flex flex-col gap-5 mt-4 border-2 px-4 py-2 rounded-md">
+          <div className="lg:w-2/5 p-3">
+            <h1 className="font-bold tracking-wide text-lg mb-2">
+              Detail Penerbangan
+            </h1>
+            <Collapsible
+              open={isOpen}
+              onOpenChange={setIsOpen}
+              className="flex flex-col gap-5 mt-4 border-2 px-4 py-2 rounded-md"
+            >
               <CollapsibleTrigger>
                 <div className="flex justify-between items-center">
                   <h1 className="font-semibold tracking-wide text-base text-color-primary">
-                    Penerbangan Pulang
+                    Penerbangan Pergi
                   </h1>
                   <CgArrowsV className="text-lg text-gray-400" />
                 </div>
               </CollapsibleTrigger>
               <CollapsibleContent>
                 <FlightDetail
-                  flight={returnFlight}
+                  flight={flight}
                   adult={adult}
                   children={children}
                   baby={baby}
-                  isLoading={isReturnLoading}
+                  isLoading={isLoading}
                 />
               </CollapsibleContent>
             </Collapsible>
-          ) : (
-            ""
-          )}
 
-          {returnFlightId ? (
-            <>
-              <h1 className="font-semibold text-lg mt-4">Rincian Harga</h1>
-              {!isLoading ? (
-                <div className="flex w-full justify-between items-center">
-                  <h2>Harga Penerbangan Pergi</h2>
-                  <p>IDR {totalDeparturePrice.toLocaleString("id-ID")}</p>
-                </div>
-              ) : (
-                <Skeleton className="w-full h-4 mb-2" />
-              )}
+            {returnFlightId ? (
+              <Collapsible className="flex flex-col gap-5 mt-4 border-2 px-4 py-2 rounded-md">
+                <CollapsibleTrigger>
+                  <div className="flex justify-between items-center">
+                    <h1 className="font-semibold tracking-wide text-base text-color-primary">
+                      Penerbangan Pulang
+                    </h1>
+                    <CgArrowsV className="text-lg text-gray-400" />
+                  </div>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <FlightDetail
+                    flight={returnFlight}
+                    adult={adult}
+                    children={children}
+                    baby={baby}
+                    isLoading={isReturnLoading}
+                  />
+                </CollapsibleContent>
+              </Collapsible>
+            ) : (
+              ""
+            )}
 
-              {!isReturnLoading ? (
-                <div className="flex w-full justify-between items-center">
-                  <h2>Harga Penerbangan Pulang</h2>
-                  <p>IDR {totalReturnPrice.toLocaleString("id-ID")}</p>
-                </div>
-              ) : (
-                <Skeleton className="w-full h-4 mb-2" />
-              )}
+            {returnFlightId ? (
+              <>
+                <h1 className="font-semibold text-lg mt-4">Rincian Harga</h1>
+                {!isLoading ? (
+                  <div className="flex w-full justify-between items-center">
+                    <h2>Harga Penerbangan Pergi</h2>
+                    <p>IDR {totalDeparturePrice.toLocaleString("id-ID")}</p>
+                  </div>
+                ) : (
+                  <Skeleton className="w-full h-4 mb-2" />
+                )}
 
-              <Separator className="my-2" />
+                {!isReturnLoading ? (
+                  <div className="flex w-full justify-between items-center">
+                    <h2>Harga Penerbangan Pulang</h2>
+                    <p>IDR {totalReturnPrice.toLocaleString("id-ID")}</p>
+                  </div>
+                ) : (
+                  <Skeleton className="w-full h-4 mb-2" />
+                )}
 
-              {!isLoading && !isReturnLoading ? (
-                <div className="flex w-full justify-between items-center text-xl font-bold text-color-primary">
-                  <h2>Total Harga</h2>
-                  <p>IDR {combinedTotalPrice.toLocaleString("id-ID")}</p>
-                </div>
-              ) : (
-                <Skeleton className="w-full h-6" />
-              )}
-            </>
-          ) : (
-            ""
-          )}
+                <Separator className="my-2" />
 
-          {isSubmitted && (
-            <Button className="w-full mt-4 py-6 rounded-xl text-lg font-medium bg-red-600 hover:bg-red-700">
-              Lanjut Bayar
-            </Button>
-          )}
+                {!isLoading && !isReturnLoading ? (
+                  <div className="flex w-full justify-between items-center text-xl font-bold text-color-primary">
+                    <h2>Total Harga</h2>
+                    <p>IDR {combinedTotalPrice.toLocaleString("id-ID")}</p>
+                  </div>
+                ) : (
+                  <Skeleton className="w-full h-6" />
+                )}
+              </>
+            ) : (
+              ""
+            )}
+
+            {isSubmitted && (
+              <Button
+                onClick={handlePayment}
+                className="w-full mt-4 py-6 rounded-xl text-lg font-medium bg-alert-danger hover:bg-red-700"
+              >
+                Lanjut Bayar
+              </Button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 

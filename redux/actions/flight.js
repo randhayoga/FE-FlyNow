@@ -73,7 +73,7 @@ export const getFlightDetail = (setIsLoading, flightId) => async (dispatch) => {
   } catch (error) {
     console.log(error);
   }
-  
+
   setIsLoading(false);
 };
 
@@ -99,7 +99,7 @@ export const getReturnFlightDetail =
   };
 
 export const getSeatsByFlightId =
-  (setIsLoading, flightId) => async (dispatch) => {
+  (flightId, setIsLoading) => async (dispatch) => {
     setIsLoading(true);
 
     let config = {
@@ -117,8 +117,9 @@ export const getSeatsByFlightId =
 
     setIsLoading(false);
   };
+  
 export const getSeatsByReturnFlightId =
-  (setIsLoading, returnFlightId) => async (dispatch) => {
+  (returnFlightId, setIsLoading) => async (dispatch) => {
     setIsLoading(true);
 
     let config = {

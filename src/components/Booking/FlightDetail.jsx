@@ -50,7 +50,7 @@ const FlightDetail = ({ flight, adult, children, baby, isLoading }) => {
                 {flight?.airline?.airlineName} - {flight?.flightClass}
               </p>
               <p className="mb-4">
-                {flight?.flightCode?.replace(/([A-Za-z]+)(\d+)/, "$1 - $2")}
+                {flight?.flightCode}
               </p>
               <p>Informasi:</p>
               {flight?.information?.split(", ").map((info, index) => (

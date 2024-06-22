@@ -23,8 +23,8 @@ const BreadcrumbWithTimer = ({ isSubmitted }) => {
   };
 
   return (
-    <div className="fixed w-full flex items-center justify-center bg-white mt-16 z-10 tracking-wide pt-6 pb-3 border-b border-gray-200 dark:border-gray-600 shadow-lg mb-6">
-      <div className="w-4/5">
+    <div className="fixed container flex items-center justify-center bg-white mt-16 z-10 tracking-wide pt-6 pb-3 border-b border-gray-200 dark:border-gray-600 shadow-lg mb-6">
+      <div className="w-full">
         <Breadcrumb className="mb-2">
           <BreadcrumbList className="text-base cursor-default">
             <BreadcrumbItem>
@@ -49,7 +49,7 @@ const BreadcrumbWithTimer = ({ isSubmitted }) => {
         <div
           className={cn(
             "w-full flex justify-center items-center rounded-xl py-3 font-semibold text-base text-white",
-            isSubmitted ? "bg-alert-success" : "bg-red-600"
+            isSubmitted ? "bg-alert-success" : "bg-alert-danger"
           )}
         >
           {isSubmitted

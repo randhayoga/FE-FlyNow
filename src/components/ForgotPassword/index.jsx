@@ -54,7 +54,7 @@ const ForgotPasswordComponent = () => {
       <div className="flex-1 flex flex-col min-h-screen">
         <div className="flex flex-col px-8 md:px-16 lg:px-32 justify-center h-full gap-10">
           <div>
-            <h1 className="text-3xl font-bold">Forgot Password</h1>
+            <h1 className="text-3xl font-bold">Reset Password</h1>
           </div>
 
           {/* Form */}

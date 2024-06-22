@@ -13,6 +13,7 @@ import PaymentPage from "@/pages/PaymentPage";
 
 import Protected from "@/components/Protected";
 import NonProtected from "@/components/Nonprotected";
+import ProfilePage from "@/pages/ProfilePage";
 import HistoryPage from "@/pages/HistoryPage";
 
 const router = createBrowserRouter([
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
     element: <OtpPage />,
   },
   {
-    path: "/forgot-password",
+    path: "/reset-password",
     element: <ForgotPasswordPage />,
   },
   {
@@ -60,6 +61,15 @@ const router = createBrowserRouter([
         <Navbar />
         <SearchFlightPage />,
       </>
+    ),
+  },
+  {
+    path: "/profile",
+    element: (
+      <Protected>
+        <Navbar />
+        <ProfilePage />
+      </Protected>
     ),
   },
   {

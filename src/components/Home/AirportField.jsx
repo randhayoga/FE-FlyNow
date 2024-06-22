@@ -70,7 +70,7 @@ const AirportField = ({ name, label, form, airports, isLoading }) => {
                   </Button>
                 </FormControl>
               </PopoverTrigger>
-              <PopoverContent>
+              <PopoverContent className="popover-full">
                 <Command>
                   <CommandInput placeholder="Search Airport..." />
                   <CommandEmpty>No Airports found.</CommandEmpty>
