@@ -7,7 +7,7 @@ import FlightDetailLoading from "./FlightDetailLoading";
 const FlightDetail = ({ flight, adult, children, baby, isLoading }) => {
   const priceAdult = flight?.price * adult || 0;
   const priceChildren = flight?.price * children || 0;
-  const tax = 0.11 * (priceAdult + priceChildren);
+  const tax = 300000;
   const totalPrice = priceAdult + priceChildren + tax;
 
   const formatTime = (time) => {

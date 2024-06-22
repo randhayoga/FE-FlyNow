@@ -39,14 +39,13 @@ export const createPayment =
         "Content-Type": "application/json",
       },
       data: {
-        bookingId,
-        paymentAmount,
+        bookingId: bookingId,
+        paymentAmount: paymentAmount,
       },
     };
     try {
       const response = await axios.request(config);
       const { data } = response.data;
-      console.log(data);
       return data;
     } catch (error) {
       toast.error(error?.response?.data?.message);

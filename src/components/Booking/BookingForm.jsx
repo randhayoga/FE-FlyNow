@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSeatsByFlightId, getSeatsByReturnFlightId } from "../../../redux/actions/flight";
 import { createBooking } from "../../../redux/actions/booking";
-import axios from "axios";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
@@ -48,7 +47,6 @@ import SeatPicker from "./SeatPicker";
 
 const BookingForm = ({
   passengers,
-  token,
   flightId,
   returnFlightId,
   isSubmitting,
@@ -599,7 +597,7 @@ const BookingForm = ({
           />
         )}
 
-        {returnFlightId && (
+        {returnFlightId ? (
           <SeatPicker
             label={"Pilih Kursi Penerbangan Pulang"}
             flight={returnFlight}
@@ -609,7 +607,8 @@ const BookingForm = ({
             selectedSeats={selectedReturnSeats}
             setSelectedSeats={setSelectedReturnSeats}
           />
-        )}
+        ) : ""}
+
         <Button
           className="w-full py-6 rounded-xl bg-color-primary text-base hover:bg-hover-primary text-white"
           type="submit"

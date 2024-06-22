@@ -117,7 +117,7 @@ export const getSeatsByFlightId =
 
     setIsLoading(false);
   };
-  
+
 export const getSeatsByReturnFlightId =
   (returnFlightId, setIsLoading) => async (dispatch) => {
     setIsLoading(true);

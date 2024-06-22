@@ -105,7 +105,7 @@ const BookingPage = () => {
   const calculateTotalPrice = (flight, adult, children) => {
     const priceAdult = flight?.price * adult || 0;
     const priceChildren = flight?.price * children || 0;
-    const tax = 0.11 * (priceAdult + priceChildren);
+    const tax = 300000;
     return priceAdult + priceChildren + tax;
   };
 
@@ -114,7 +114,7 @@ const BookingPage = () => {
   const combinedTotalPrice = totalDeparturePrice + totalReturnPrice;
 
   const handlePayment = () => {
-    dispatch(createPayment(bookings.booking.id, combinedTotalPrice));
+    dispatch(createPayment(bookings.booking.id, parseInt(combinedTotalPrice)));
     navigate(`/flight/payment/${bookings.booking.id}`);
   };
 
