@@ -2,10 +2,16 @@ import HeaderProfile from "@/components/Profile/HeaderProfile";
 import ListProfile from "@/components/Profile/ListProfile";
 import UbahProfile from "@/components/Profile/UbahProfile";
 import { useEffect } from "react";
-import { useLoaderData } from "react-router-dom";
+import { redirect, useLoaderData } from "react-router-dom";
 import { toast } from "sonner";
 
 export async function loader({ request }) {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user) {
+    return redirect("/login");
+  }
+
   return new URL(request.url).searchParams.get("message");
 }
 

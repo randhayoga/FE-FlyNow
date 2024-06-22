@@ -66,7 +66,11 @@ import { toast } from "sonner";
 export const loader = () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
-  if (!user.phoneNumber || !user.isVerified) {
+  if (!user) {
+    return redirect("/login");
+  }
+
+  if (!user?.phoneNumber || !user?.isVerified) {
     const message =
       !user.phoneNumber && !user.isVerified
         ? "Anda harus verifikasi otp dan menambahkan nomor telepon terlebih dahulu!"
