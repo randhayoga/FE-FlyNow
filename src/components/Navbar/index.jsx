@@ -28,73 +28,92 @@ const NavbarComponent = () => {
     navigate("/login"); // Navigasi ke halaman login saat tombol "Masuk" diklik
   };
 
+  const handleHistory = () => {
+    navigate("/history");
+  };
   return (
-    <nav className="bg-white dark:bg-gray-800 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 shadow-lg rounded-lg">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-1">
-        <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img src={logoImg} alt="FlyNow Logo" className="w-14 py-1" />
-        </a>
-        {user ? (
-          <div className="flex md:order-2 space-x-4 md:space-x-6 rtl:space-x-reverse">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="size-6 mt-1"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-              />
-            </svg>
+    <div className="border-b-2 shadow-md rounded-md">
+      <nav className="container bg-white">
+        <div className="sm:max-w-screen- flex flex-wrap items-center justify-between mx-auto">
+          <button
+            onClick={() => {
+              navigate("/");
+            }}
+            className="flex items-center space-x-3 rtl:space-x-reverse"
+          >
+            <img src={logoImg} alt="FlyNow Logo" className="w-14 py-1" />
+          </button>
+          <div className="flex items-center md:order-2 space-x-5 rtl:space-x-reverse">
+            {user ? (
+              <>
+                <button type="button" className="" onClick={handleHistory}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                    />
+                  </svg>
+                </button>
+                <img src={bellRing} alt="Notifications" className="w-5 " />
+                {/* <DropdownMenu>
+                  <DropdownMenuTrigger> */}
 
-            <img src={bellRing} alt="bellRing" className="w-5 mr-3" />
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <img
-                  className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
-                  src={user?.image}
-                  alt="profile"
-                />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => {
-                    navigate("/profile");
-                  }}
-                >
-                  Profile
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    dispatch(logout());
-                    navigate("/");
-                  }}
-                >
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                <Link to="/profile">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                    />
+                  </svg>
+                </Link>
+                {/* </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigate("/profile")}>
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        dispatch(logout());
+                        navigate("/");
+                      }}
+                    >
+                      Logout
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu> */}
+              </>
+            ) : (
+              <button
+                type="button"
+                className="flex items-center text-white bg-[#30628C] hover:bg-[#20496C] focus:ring-4 focus:outline-none focus:ring-[#20496C] font-medium rounded-lg text-sm px-3 py-2 text-center shadow-md"
+                onClick={handleLogin}
+              >
+                <img src={logoIn} alt="Login" className="w-5" />
+                <div className="flex items-center ml-3 mr-1">Masuk</div>
+              </button>
+            )}
           </div>
-        ) : (
-          <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-            <button
-              type="button"
-              className="flex items-center text-white bg-color-primary hover:bg-hover-primary focus:ring-4 focus:outline-none focus:ring-[#20496C] font-medium rounded-lg text-sm px-3 py-2 text-center shadow-md"
-              onClick={handleLogin}
-            >
-              <img src={logoIn} alt="FlyNow Logo" className="w-5" />
-              <div className="flex items-center ml-3 mr-1">Masuk</div>
-            </button>
-          </div>
-        )}
-      </div>
-    </nav>
+        </div>
+      </nav>
+    </div>
   );
 };
 

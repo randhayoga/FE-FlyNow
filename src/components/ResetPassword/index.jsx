@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { resetPasswordService } from "@/services/user/auth/reset-password";
 
 const formSchema = z
@@ -34,6 +34,8 @@ const formSchema = z
   });
 
 const ResetPasswordComponent = () => {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
@@ -65,6 +67,11 @@ const ResetPasswordComponent = () => {
       toast.success("Reset Password Berhasil!", {
         description: "Silahkan Login kembali",
       });
+
+      // next handle this delay with loading page
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
     }
   }
 
