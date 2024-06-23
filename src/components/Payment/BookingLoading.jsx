@@ -5,7 +5,7 @@ const BookingLoading = () => {
   return (
     <div>
       {/* Departure */}
-      <div className="flex w-full justify-between">
+      <div className="flex w-full justify-between mt-5">
         <Skeleton className="w-[75px] h-6 mb-2" />
         <Skeleton className="w-[150px] h-6 mb-2" />
       </div>
