@@ -10,6 +10,7 @@ import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
 import BookingPage from "@/pages/BookingPage";
 import PaymentPage from "@/pages/PaymentPage";
+import PaymentSuccessPage from "@/pages/PaymentSuccessPage";
 
 import Protected from "@/components/Protected";
 import NonProtected from "@/components/Nonprotected";
@@ -91,11 +92,20 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/flight/payment/",
+    path: "/flight/payment/:id",
     element: (
       <Protected>
         <Navbar />
         <PaymentPage />
+      </Protected>
+    ),
+  },
+  {
+    path: "/flight/payment/success",
+    element: (
+      <Protected>
+        <Navbar />
+        <PaymentSuccessPage />
       </Protected>
     ),
   },
