@@ -10,12 +10,12 @@ import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
 import BookingPage from "@/pages/BookingPage";
 import PaymentPage from "@/pages/PaymentPage";
+import PaymentSuccessPage from "@/pages/PaymentSuccessPage";
 
 import Protected from "@/components/Protected";
 import NonProtected from "@/components/Nonprotected";
 import ProfilePage from "@/pages/ProfilePage";
 import HistoryPage from "@/pages/HistoryPage";
-import NavbarComponent from "@/components/Navbar";
 
 const router = createBrowserRouter([
   {
@@ -68,7 +68,7 @@ const router = createBrowserRouter([
     path: "/profile",
     element: (
       <Protected>
-        <NavbarComponent />
+        <Navbar />
         <ProfilePage />
       </Protected>
     ),
@@ -92,11 +92,20 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/flight/payment/",
+    path: "/flight/payment/:id",
     element: (
       <Protected>
         <Navbar />
         <PaymentPage />
+      </Protected>
+    ),
+  },
+  {
+    path: "/flight/payment/success",
+    element: (
+      <Protected>
+        <Navbar />
+        <PaymentSuccessPage />
       </Protected>
     ),
   },

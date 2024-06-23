@@ -100,7 +100,7 @@ const RegisterForm = () => {
   return (
     <form onSubmit={onSubmit} className="grid gap-4">
       <div className="grid gap-2">
-        <Label htmlFor="name" className="text-black text-md">
+        <Label htmlFor="name" className="text-black">
           Nama
         </Label>
         <Input
@@ -113,7 +113,7 @@ const RegisterForm = () => {
         />
       </div>
       <div className="grid gap-2 email-input">
-        <Label htmlFor="email" className="text-black text-md">
+        <Label htmlFor="email" className="text-black">
           Email
         </Label>
         <div className="input-icon-form">
@@ -136,7 +136,7 @@ const RegisterForm = () => {
         </div>
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="phone" className="text-black text-md">
+        <Label htmlFor="phone" className="text-black">
           Nomor Telepon
         </Label>
         <div className="input-icon-form">
@@ -160,7 +160,7 @@ const RegisterForm = () => {
       </div>
       <div className="grid gap-2">
         <div className="flex items-center">
-          <Label htmlFor="password" className="text-black text-md">
+          <Label htmlFor="password" className="text-black">
             Buat Password (minimal 6 karakter)
           </Label>
         </div>
@@ -195,7 +195,7 @@ const RegisterForm = () => {
         </div>
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="image" className="text-black text-md">
+        <Label htmlFor="image" className="text-black">
           Foto Profil
         </Label>
         <div className="relative border-3 border-slate-200 rounded-xl">
@@ -233,11 +233,11 @@ const RegisterForm = () => {
       >
         Daftar
       </Button>
-      <div className="flex items-center my-4">
-          <div className="flex-grow h-px bg-gray-300"></div>
-          <span className="px-4 text-gray-500">or</span>
-          <div className="flex-grow h-px bg-gray-300"></div>
-        </div>
+      <div className="flex items-center">
+        <div className="flex-grow h-px bg-gray-300"></div>
+        <span className="px-4 text-gray-500">or</span>
+        <div className="flex-grow h-px bg-gray-300"></div>
+      </div>
       <GoogleLoginComponent text={"Daftar dengan Google"} />
     </form>
   );
