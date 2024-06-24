@@ -19,6 +19,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Link,
+  redirect,
+  useLoaderData,
   useLocation,
   useNavigate,
   useNavigation,
@@ -28,7 +30,26 @@ import { Button } from "../components/ui/button";
 
 import { toast } from "sonner";
 import Timer from "../components/Otp/Timer";
-import { verifyOtpService } from "../services/otp";
+import { resendOtpService, verifyOtpService } from "../services/otp";
+
+export async function loader() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user) {
+    return redirect("/login");
+  }
+
+  if (user?.isVerified) {
+    return redirect("/?message=Anda sudah terverifikasi");
+  }
+
+  if (user?.isVerified === false) {
+    await resendOtpService({ email: user.email });
+    return user.email;
+  }
+
+  return null;
+}
 
 const FormSchema = z.object({
   otp: z.string().min(6, {
@@ -38,9 +59,16 @@ const FormSchema = z.object({
 
 const OtpPage = () => {
   const { state } = useLocation();
+  const loaderData = useLoaderData();
+
   if (state?.email) {
     localStorage.setItem("email", state.email);
   }
+
+  if (loaderData) {
+    localStorage.setItem("email", loaderData);
+  }
+
   const [email, setEmail] = useState(localStorage.getItem("email") || "");
 
   const navigation = useNavigation();
