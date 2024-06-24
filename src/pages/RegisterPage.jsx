@@ -4,6 +4,18 @@ import RegisterForm from "@/components/Register/RegisterForm";
 
 import bgAuth from "@/assets/images/bgauth.png";
 
+import { redirect } from "react-router-dom";
+
+export const loader = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (user) {
+    return redirect("/");
+  }
+
+  return null;
+};
+
 const RegisterPage = () => {
   return (
     <div className="w-full lg:grid lg:h-[100vh] lg:grid-cols-2 xl:h-[100vh]">

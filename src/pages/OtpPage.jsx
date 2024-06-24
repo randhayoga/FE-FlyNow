@@ -35,12 +35,8 @@ import { resendOtpService, verifyOtpService } from "../services/otp";
 export async function loader() {
   const user = JSON.parse(localStorage.getItem("user"));
 
-  if (!user) {
-    return redirect("/login");
-  }
-
   if (user?.isVerified) {
-    return redirect("/?message=Anda sudah terverifikasi");
+    return redirect("/");
   }
 
   if (user?.isVerified === false) {
@@ -60,6 +56,7 @@ const FormSchema = z.object({
 const OtpPage = () => {
   const { state } = useLocation();
   const loaderData = useLoaderData();
+  const [isLoading, setIsLoading] = useState(false);
 
   if (state?.email) {
     localStorage.setItem("email", state.email);
@@ -92,6 +89,7 @@ const OtpPage = () => {
 
   async function onSubmit(data) {
     try {
+      setIsLoading(true);
       await verifyOtpService({
         otp: data.otp,
         email,
@@ -99,6 +97,8 @@ const OtpPage = () => {
       navigate("/", { replace: true });
     } catch (error) {
       toast.error("Maaf, kode OTP salah!");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -159,9 +159,9 @@ const OtpPage = () => {
             <Button
               className="w-full bg-color-primary hover:bg-hover-primary"
               type="submit"
-              disabled={navigation.state === "submitting"}
+              disabled={isLoading}
             >
-              {navigation.state === "submitting"
+              {isLoading
                 ? "Verify OTP Code..."
                 : "Simpan"}
             </Button>
