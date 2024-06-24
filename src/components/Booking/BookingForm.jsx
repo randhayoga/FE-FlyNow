@@ -128,7 +128,7 @@ const BookingForm = ({
       departureFlightId: flightId,
       returnFlightId: returnFlightId || null,
       numAdults: passengers.filter((p) => p.type === "Adult").length,
-      numChildren: passengers.filter((p) => p.type === "Child").length,
+      numChildren: passengers.filter((p) => p.type === "Children").length,
       numBabies: passengers.filter((p) => p.type === "Baby").length,
       passengerPayloads,
       seatPayloads,

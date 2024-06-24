@@ -7,8 +7,7 @@ import FlightDetailLoading from "./FlightDetailLoading";
 const FlightDetail = ({ flight, adult, children, baby, isLoading }) => {
   const priceAdult = flight?.price * adult || 0;
   const priceChildren = flight?.price * children || 0;
-  const tax = 300000;
-  const totalPrice = priceAdult + priceChildren + tax;
+  const totalPrice = priceAdult + priceChildren;
 
   const formatTime = (time) => {
     return time
@@ -20,7 +19,7 @@ const FlightDetail = ({ flight, adult, children, baby, isLoading }) => {
 
   const formatDate = (date) => {
     return date
-      ? format(new Date(date), "dd MMM yyyy", {
+      ? format(new Date(date), "dd MMMM yyyy", {
           locale: id,
         })
       : "";
@@ -37,7 +36,8 @@ const FlightDetail = ({ flight, adult, children, baby, isLoading }) => {
             </div>
             <p className="font-normal">{formatDate(flight?.departureTime)}</p>
             <p className="font-medium">
-              {flight?.departureAirport?.airportName} - Terminal {flight?.terminal}
+              {flight?.departureAirport?.airportName} - Terminal{" "}
+              {flight?.terminal}
             </p>
           </section>
           <Separator className="my-4" />
@@ -49,9 +49,7 @@ const FlightDetail = ({ flight, adult, children, baby, isLoading }) => {
               <p>
                 {flight?.airline?.airlineName} - {flight?.flightClass}
               </p>
-              <p className="mb-4">
-                {flight?.flightCode}
-              </p>
+              <p className="mb-4">{flight?.flightCode}</p>
               <p>Informasi:</p>
               {flight?.information?.split(", ").map((info, index) => (
                 <p className="font-normal text-base" key={index}>
@@ -72,28 +70,30 @@ const FlightDetail = ({ flight, adult, children, baby, isLoading }) => {
           <Separator className="my-4" />
           <section>
             <p>Rincian Harga</p>
-            <div className="flex w-full justify-between items-center">
-              <p>
-                {adult} {adult > 1 ? "Adults" : "Adult"}
-              </p>
-              <p>IDR {priceAdult.toLocaleString("id-ID")}</p>
-            </div>
-            <div className="flex w-full justify-between items-center">
-              <p>
-                {children} {children > 1 ? "Children" : "Child"}
-              </p>
-              <p>IDR {priceChildren.toLocaleString("id-ID")}</p>
-            </div>
-            <div className="flex w-full justify-between items-center">
-              <p>
-                {baby} {baby > 1 ? "Babies" : "Baby"}
-              </p>
-              <p>IDR 0</p>
-            </div>
-            <div className="flex w-full justify-between items-center">
-              <p>Tax</p>
-              <p>IDR {tax.toLocaleString("id-ID")}</p>
-            </div>
+            {adult > 0 && (
+              <div className="flex w-full justify-between items-center font-normal">
+                <p>
+                  {adult} {adult > 1 ? "Adults" : "Adult"}
+                </p>
+                <p>IDR {priceAdult.toLocaleString("id-ID")}</p>
+              </div>
+            )}
+            {children > 0 && (
+              <div className="flex w-full justify-between items-center font-normal">
+                <p>
+                  {children} {children > 1 ? "Children" : "Child"}
+                </p>
+                <p>IDR {priceChildren.toLocaleString("id-ID")}</p>
+              </div>
+            )}
+            {baby > 0 && (
+              <div className="flex w-full justify-between items-center font-normal">
+                <p>
+                  {baby} {baby > 1 ? "Babies" : "Baby"}
+                </p>
+                <p>IDR 0</p>
+              </div>
+            )}
             <Separator className="my-4" />
             <section>
               <div className="flex w-full justify-between items-center">
