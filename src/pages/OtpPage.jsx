@@ -22,8 +22,8 @@ import {
   redirect,
   useLoaderData,
   useLocation,
-  useNavigate,
   useNavigation,
+  useSubmit,
 } from "react-router-dom";
 import { z } from "zod";
 import { Button } from "../components/ui/button";
@@ -47,16 +47,31 @@ export async function loader() {
   return null;
 }
 
+export async function action({ request }) {
+  try {
+    const payload = await request.json();
+    console.log(payload);
+    await verifyOtpService(payload);
+    return redirect("/");
+  } catch (error) {
+    toast.error("Maaf, kode OTP salah!");
+    return null;
+  }
+}
+
 const FormSchema = z.object({
   otp: z.string().min(6, {
-    message: "Your one-time OTP must be 6 characters.",
+    message: "Kode OTP harus 6 karakter.",
   }),
 });
 
 const OtpPage = () => {
   const { state } = useLocation();
   const loaderData = useLoaderData();
-  const [isLoading, setIsLoading] = useState(false);
+  const navigation = useNavigation();
+  const submit = useSubmit();
+
+  const [resend, setResend] = useState(false);
 
   if (state?.email) {
     localStorage.setItem("email", state.email);
@@ -67,11 +82,6 @@ const OtpPage = () => {
   }
 
   const [email, setEmail] = useState(localStorage.getItem("email") || "");
-
-  const navigation = useNavigation();
-  const navigate = useNavigate();
-
-  const [resend, setResend] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("email", state?.email || email);
@@ -88,18 +98,16 @@ const OtpPage = () => {
   });
 
   async function onSubmit(data) {
-    try {
-      setIsLoading(true);
-      await verifyOtpService({
+    submit(
+      {
         otp: data.otp,
         email,
-      });
-      navigate("/", { replace: true });
-    } catch (error) {
-      toast.error("Maaf, kode OTP salah!");
-    } finally {
-      setIsLoading(false);
-    }
+      },
+      {
+        method: "put",
+        encType: "application/json",
+      }
+    );
   }
 
   return (
@@ -157,11 +165,11 @@ const OtpPage = () => {
             />
 
             <Button
-              className="w-full bg-color-primary hover:bg-hover-primary"
+              className="w-60 bg-color-primary hover:bg-hover-primary mx-auto block"
               type="submit"
-              disabled={isLoading}
+              disabled={navigation.state === "submitting"}
             >
-              {isLoading
+              {navigation.state === "submitting"
                 ? "Verify OTP Code..."
                 : "Simpan"}
             </Button>

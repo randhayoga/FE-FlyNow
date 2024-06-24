@@ -5,7 +5,10 @@ import BookingPage, { loader as BookingPageLoader } from "@/pages/BookingPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import HomePage from "@/pages/HomePage";
 import LoginPage, { loader as loginPageLoader } from "@/pages/LoginPage";
-import OtpPage, { loader as OtpPageLoader } from "@/pages/OtpPage";
+import OtpPage, {
+  loader as otpPageLoader,
+  action as otpPageAction,
+} from "@/pages/OtpPage";
 import PaymentPage from "@/pages/PaymentPage";
 import PaymentSuccessPage from "@/pages/PaymentSuccessPage";
 import RegisterPage, {
@@ -40,7 +43,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/otp",
-    loader: OtpPageLoader,
+    loader: otpPageLoader,
+    action: otpPageAction,
     element: <OtpPage />,
   },
   {
