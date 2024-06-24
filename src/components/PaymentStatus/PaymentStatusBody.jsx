@@ -22,8 +22,8 @@ const PaymentStatusBody = ({ status }) => {
         </>
       ) : status == 201 ? (
         <>
-          <img src={pending} alt="pending" className="pb-4 w-1/5" />
-          <p className="text-color-primary ">Transaksi Pending!</p>
+          <img src={pending} alt="pending" className="pb-4 w-72" />
+          <p className="text-color-primary ">Menunggu Pembayaran</p>
           <p>Segera Lanjutkan Transaksi Pembayaran</p>
           <Button className="rounded-xl bg-color-primary hover:bg-hover-primary w-80 mt-7">
             <Link to="/history">Lanjutkan Pembayaran</Link>
