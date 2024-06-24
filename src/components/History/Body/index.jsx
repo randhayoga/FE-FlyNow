@@ -35,7 +35,7 @@ function Body({ histories }) {
   return histories.length === 0 ? (
     <NotFound />
   ) : (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-8 mt-4 mb-16">
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
       <Cards
         histories={histories}
         currentHistory={currentHistory}
