@@ -7,6 +7,7 @@ import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import OtpPage, { loader as OtpPageLoader } from "@/pages/OtpPage";
 import PaymentPage from "@/pages/PaymentPage";
+import PaymentSuccessPage from "@/pages/PaymentSuccessPage";
 import RegisterPage from "@/pages/RegisterPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
@@ -94,11 +95,20 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/flight/payment/",
+    path: "/flight/payment/:id",
     element: (
       <Protected>
         <Navbar />
         <PaymentPage />
+      </Protected>
+    ),
+  },
+  {
+    path: "/flight/payment/success",
+    element: (
+      <Protected>
+        <Navbar />
+        <PaymentSuccessPage />
       </Protected>
     ),
   },

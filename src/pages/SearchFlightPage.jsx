@@ -93,7 +93,7 @@ const SearchFlightPage = () => {
 
   return (
     <div>
-      <div className="shadow-md py-4">
+      <div className="shadow-md pb-5">
         <div className="container">
           <Header
             searchParams={searchParams}

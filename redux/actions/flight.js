@@ -3,7 +3,9 @@ import {
   setFlights,
   setAirports,
   setFlightDetail,
+  setReturnFlightDetail,
   setSeatsByFlightId,
+  setSeatsByReturnFlightId,
 } from "../reducers/flight";
 import { toast } from "sonner";
 
@@ -35,7 +37,9 @@ export const searchFlight = (queryParams) => async (dispatch) => {
   }
 };
 
-export const getAirports = () => async (dispatch) => {
+export const getAirports = (setIsLoading) => async (dispatch) => {
+  setIsLoading(true);
+
   let config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -49,9 +53,13 @@ export const getAirports = () => async (dispatch) => {
   } catch (error) {
     toast.error(error?.response?.data?.message);
   }
+
+  setIsLoading(false);
 };
 
-export const getFlightDetail = (flightId) => async (dispatch) => {
+export const getFlightDetail = (setIsLoading, flightId) => async (dispatch) => {
+  setIsLoading(true);
+
   let config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -61,25 +69,71 @@ export const getFlightDetail = (flightId) => async (dispatch) => {
   try {
     const response = await axios.request(config);
     const { data } = response.data;
-    console.log(data);
     dispatch(setFlightDetail(data));
   } catch (error) {
     console.log(error);
   }
+
+  setIsLoading(false);
 };
 
-export const getSeatsByFlightId = (flightId) => async (dispatch) => {
-  let config = {
-    method: "get",
-    maxBodyLength: Infinity,
-    url: `${import.meta.env.VITE_BACKEND_API}/seats/book/${flightId}`,
+export const getReturnFlightDetail =
+  (setIsLoading, returnFlightId) => async (dispatch) => {
+    setIsLoading(true);
+
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `${import.meta.env.VITE_BACKEND_API}/flight/${returnFlightId}`,
+    };
+
+    try {
+      const response = await axios.request(config);
+      const { data } = response.data;
+      dispatch(setReturnFlightDetail(data));
+    } catch (error) {
+      console.log(error);
+    }
+
+    setIsLoading(false);
   };
-  try {
-    const response = await axios.request(config);
-    const { data } = response.data;
-    console.log(data);
-    dispatch(setSeatsByFlightId(data));
-  } catch (error) {
-    console.log(error);
-  }
-};
+
+export const getSeatsByFlightId =
+  (flightId, setIsLoading) => async (dispatch) => {
+    setIsLoading(true);
+
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `${import.meta.env.VITE_BACKEND_API}/seats/book/${flightId}`,
+    };
+    try {
+      const response = await axios.request(config);
+      const { data } = response.data;
+      dispatch(setSeatsByFlightId(data));
+    } catch (error) {
+      console.log(error);
+    }
+
+    setIsLoading(false);
+  };
+
+export const getSeatsByReturnFlightId =
+  (returnFlightId, setIsLoading) => async (dispatch) => {
+    setIsLoading(true);
+
+    let config = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `${import.meta.env.VITE_BACKEND_API}/seats/book/${returnFlightId}`,
+    };
+    try {
+      const response = await axios.request(config);
+      const { data } = response.data;
+      dispatch(setSeatsByReturnFlightId(data));
+    } catch (error) {
+      console.log(error);
+    }
+
+    setIsLoading(false);
+  };

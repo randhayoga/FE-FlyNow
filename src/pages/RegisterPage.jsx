@@ -16,11 +16,11 @@ const RegisterPage = () => {
       </div>
       <div className="flex items-center justify-center">
         <div className="mx-auto grid w-[325px] sm:w-[600px] md:w-[700px] lg:w-[450px] xl:w-[500px]">
-          <div className="grid gap-4 my-5">
-            <h1 className="text-3xl font-bold">Daftar</h1>
+          <div className="grid gap-4 my-4">
+            <h1 className="text-3xl font-bold font-sans">Daftar</h1>
           </div>
           <RegisterForm />
-          <div className="mt-4 text-center text-md">
+          <div className="mt-4 text-center text-sm">
             Sudah punya akun?{" "}
             <Link
               to="/login"
