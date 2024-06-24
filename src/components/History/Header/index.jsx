@@ -19,7 +19,7 @@ function Header({ setLoading }) {
 
   return (
     <>
-      <h1 className="font-semibold text-xl mt-28">Riwayat Pemesanan</h1>
+      <h1 className="font-semibold text-xl mt-10">Riwayat Pemesanan</h1>
       <div className="head flex items-center gap-3 mt-4">
         <div className="page-text bg-color-primary rounded-lg p-3 grow">
           <div className="page-text-content flex items-center gap-4">
