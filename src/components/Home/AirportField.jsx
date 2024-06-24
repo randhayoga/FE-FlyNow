@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import { MdFlightTakeoff } from "react-icons/md";
 
-const AirportField = ({ name, label, form, airports }) => {
+const AirportField = ({ name, label, form, airports, isLoading }) => {
   return (
     <FormField
       name={name}
@@ -48,21 +48,29 @@ const AirportField = ({ name, label, form, airports }) => {
                       error && "border-red-500"
                     )}
                   >
-                    {field.value
-                      ? `(${
-                          airports.find(
-                            (airport) => airport?.airportCode === field.value
-                          )?.airportCode
-                        }) ${
-                          airports.find(
-                            (airport) => airport?.airportCode === field.value
-                          )?.airportName
-                        }`
-                      : "Pilih Bandara"}
+                    {isLoading ? (
+                      "Load Airports Data..."
+                    ) : (
+                      <p>
+                        {field.value
+                          ? `(${
+                              airports.find(
+                                (airport) =>
+                                  airport?.airportCode === field.value
+                              )?.airportCode
+                            }) ${
+                              airports.find(
+                                (airport) =>
+                                  airport?.airportCode === field.value
+                              )?.airportName
+                            }`
+                          : "Pilih Bandara"}
+                      </p>
+                    )}
                   </Button>
                 </FormControl>
               </PopoverTrigger>
-              <PopoverContent>
+              <PopoverContent className="popover-full">
                 <Command>
                   <CommandInput placeholder="Search Airport..." />
                   <CommandEmpty>No Airports found.</CommandEmpty>
