@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../../../redux/actions/auth";
 
-import { FiLogOut } from "react-icons/fi";
+import { FiEdit3, FiLogOut } from "react-icons/fi";
 import { TbPasswordUser } from "react-icons/tb";
-import { FiEdit3 } from "react-icons/fi";
 
 const ListProfile = () => {
   const user = useSelector((state) => state.auth.user);
@@ -31,17 +30,19 @@ const ListProfile = () => {
 
         <span className="text-base font-semibold">Ubah Profil</span>
       </button>
-      <button
-        className="border-b-2 w-full flex items-center p-2"
-        onClick={ResetPasswordPage}
-      >
-        <TbPasswordUser
-          className="w-6 h-6 mr-2 text-primary "
-          style={{ color: "#30628C" }}
-        />
-        <Link></Link>
-        <span className="text-base font-semibold">Reset Kata Sandi</span>
-      </button>
+      {user.isVerified ? (
+        <button
+          className="border-b-2 w-full flex items-center p-2"
+          onClick={ResetPasswordPage}
+        >
+          <TbPasswordUser
+            className="w-6 h-6 mr-2 text-primary "
+            style={{ color: "#30628C" }}
+          />
+          <Link></Link>
+          <span className="text-base font-semibold">Reset Kata Sandi</span>
+        </button>
+      ) : null}
       {user.isVerified ? null : (
         <Link
           to="/otp"

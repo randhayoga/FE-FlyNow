@@ -4,15 +4,19 @@ import Navbar from "@/components/Navbar";
 import BookingPage, { loader as BookingPageLoader } from "@/pages/BookingPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import HomePage from "@/pages/HomePage";
-import LoginPage from "@/pages/LoginPage";
-import OtpPage, { loader as OtpPageLoader } from "@/pages/OtpPage";
+import LoginPage, { loader as loginPageLoader } from "@/pages/LoginPage";
+import OtpPage, {
+  loader as otpPageLoader,
+  action as otpPageAction,
+} from "@/pages/OtpPage";
 import PaymentPage from "@/pages/PaymentPage";
 import PaymentSuccessPage from "@/pages/PaymentSuccessPage";
-import RegisterPage from "@/pages/RegisterPage";
+import RegisterPage, {
+  loader as registerPageLoader,
+} from "@/pages/RegisterPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
 
-import NonProtected from "@/components/Nonprotected";
 import Protected from "@/components/Protected";
 import HistoryPage from "@/pages/HistoryPage";
 import ProfilePage, { loader as ProfilePageLoader } from "@/pages/ProfilePage";
@@ -29,23 +33,18 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: (
-      <NonProtected>
-        <LoginPage />,
-      </NonProtected>
-    ),
+    loader: loginPageLoader,
+    element: <LoginPage />,
   },
   {
     path: "/register",
-    element: (
-      <NonProtected>
-        <RegisterPage />,
-      </NonProtected>
-    ),
+    loader: registerPageLoader,
+    element: <RegisterPage />,
   },
   {
     path: "/otp",
-    loader: OtpPageLoader,
+    loader: otpPageLoader,
+    action: otpPageAction,
     element: <OtpPage />,
   },
   {
