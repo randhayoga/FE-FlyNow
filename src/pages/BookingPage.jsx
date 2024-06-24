@@ -112,9 +112,15 @@ const BookingPage = () => {
   const totalReturnPrice = calculateTotalPrice(returnFlight, adult, children);
   const combinedTotalPrice = totalDeparturePrice + totalReturnPrice;
 
-  const handlePayment = () => {
-    dispatch(createPayment(bookings.booking.id, parseInt(combinedTotalPrice)));
-    navigate(`/flight/payment/${bookings.booking.id}`);
+  const handlePayment = async () => {
+    try {
+      await dispatch(
+        createPayment(bookings.booking.id, parseInt(combinedTotalPrice))
+      );
+      navigate(`/flight/payment/${bookings.booking.id}`);
+    } catch (error) {
+      console.error("Payment creation failed:", error);
+    }
   };
 
   return (
@@ -125,7 +131,7 @@ const BookingPage = () => {
         </div>
       </div>
       <div className="container w-full flex flex-col mt-4 lg:flex-row">
-        <div className="lg:w-3/5 p-3">
+        <div className="lg:w-2/3 p-3">
           <OrdererField />
           <BookingForm
             passengers={passengers}
@@ -139,7 +145,7 @@ const BookingPage = () => {
           />
         </div>
 
-        <div className="lg:w-2/5 p-3">
+        <div className="lg:w-1/3 p-3">
           <h1 className="font-bold tracking-wide text-lg mb-2">
             Detail Penerbangan
           </h1>

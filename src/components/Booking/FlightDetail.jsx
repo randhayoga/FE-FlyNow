@@ -26,7 +26,7 @@ const FlightDetail = ({ flight, adult, children, baby, isLoading }) => {
   };
 
   return (
-    <div className="font-semibold">
+    <div className="font-bold">
       {!isLoading ? (
         <>
           <section>

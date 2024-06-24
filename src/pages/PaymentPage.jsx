@@ -95,39 +95,37 @@ const PaymentPage = () => {
             />
           )}
 
-          <h1 className="font-bold  text-lg mt-4">Rincian Harga</h1>
-
-          {!isLoading ? (
-            <div className="flex w-full justify-between items-center">
-              <h2>Total Penerbangan Pergi</h2>
-              <p>IDR {totalDeparturePrice.toLocaleString("id-ID")}</p>
-            </div>
-          ) : (
-            <Skeleton className="w-full h-4 mb-2" />
-          )}
-
-          {!isLoading ? (
-            payment?.booking?.returnFlight && (
-              <div className="flex w-full justify-between items-center">
-                <h2>Total Penerbangan Pulang</h2>
-                <p>IDR {totalReturnPrice.toLocaleString("id-ID")}</p>
-              </div>
-            )
-          ) : (
-            <Skeleton className="w-full h-4 mb-2" />
-          )}
-
-          <Separator className="my-2" />
-
-          {!isLoading ? (
-            <div className="flex w-full justify-between items-center text-xl font-bold ">
-              <h2>Total</h2>
-              <p className="text-color-primary">
-                IDR {payment?.paymentAmount.toLocaleString("id-ID")}
-              </p>
-            </div>
-          ) : (
-            <Skeleton className="w-full h-6" />
+          {payment?.booking?.returnFlight && (
+            <>
+              <h1 className="font-bold  text-lg mt-4">Rincian Harga</h1>
+              {!isLoading ? (
+                <div className="flex w-full justify-between items-center">
+                  <h2>Total Penerbangan Pergi</h2>
+                  <p>IDR {totalDeparturePrice.toLocaleString("id-ID")}</p>
+                </div>
+              ) : (
+                <Skeleton className="w-full h-4 mb-2" />
+              )}
+              {!isLoading ? (
+                <div className="flex w-full justify-between items-center">
+                  <h2>Total Penerbangan Pulang</h2>
+                  <p>IDR {totalReturnPrice.toLocaleString("id-ID")}</p>
+                </div>
+              ) : (
+                <Skeleton className="w-full h-4 mb-2" />
+              )}
+              <Separator className="my-2" />
+              {!isLoading ? (
+                <div className="flex w-full justify-between items-center text-xl font-bold ">
+                  <h2>Total</h2>
+                  <p className="text-color-primary">
+                    IDR {payment?.paymentAmount.toLocaleString("id-ID")}
+                  </p>
+                </div>
+              ) : (
+                <Skeleton className="w-full h-6" />
+              )}
+            </>
           )}
         </div>
       </div>
