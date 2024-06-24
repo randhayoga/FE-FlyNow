@@ -57,7 +57,7 @@ const SelectField = ({ name, label, datas, form, btnLabel }) => {
                   </Button>
                 </FormControl>
               </PopoverTrigger>
-              <PopoverContent className="w-[200px] p-0">
+              <PopoverContent className="popover-full p-0">
                 <Command>
                   <CommandList>
                     <CommandGroup>

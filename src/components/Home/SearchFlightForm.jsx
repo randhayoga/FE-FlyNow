@@ -27,10 +27,11 @@ const SearchFlightForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { airports } = useSelector((state) => state.flights) || [];
+  const [isLoading, setIsLoading] = useState(false);
   const [isVertical, setIsVertical] = useState(false);
 
   useEffect(() => {
-    dispatch(getAirports());
+    dispatch(getAirports(setIsLoading));
   }, [dispatch]);
 
   // Load default values from localStorage if available
@@ -147,6 +148,7 @@ const SearchFlightForm = () => {
             label="From"
             form={form}
             airports={airports}
+            isLoading={isLoading}
           />
           <Button
             onClick={handleSwapAirports}
@@ -167,6 +169,7 @@ const SearchFlightForm = () => {
             label="To"
             form={form}
             airports={airports}
+            isLoading={isLoading}
           />
         </div>
         <div className="flex flex-col lg:flex-row gap-4 w-full mb-3 lg:flex">

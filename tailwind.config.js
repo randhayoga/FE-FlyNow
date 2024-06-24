@@ -17,9 +17,9 @@ module.exports = {
       },
     },
     extend: {
-      fontFamily: {
-        sans: ["Poppins", "system-ui", "sans-serif"],
-      },
+      // fontFamily: {
+      //   sans: ["Poppins", "system-ui", "sans-serif"],
+      // },
       fontSize: {
         uxl: "1rem",
       },
