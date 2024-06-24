@@ -4,7 +4,9 @@ const initialState = {
   flights: [],
   airports: [],
   flight: [],
-  seats: []
+  returnFlight: [],
+  seats: [],
+  returnSeats: []
 };
 
 const flightsSlice = createSlice({
@@ -20,12 +22,26 @@ const flightsSlice = createSlice({
     setFlightDetail: (state, action) => {
       state.flight = action.payload;
     },
+    setReturnFlightDetail: (state, action) => {
+      state.returnFlight = action.payload;
+    },
     setSeatsByFlightId: (state, action) => {
       state.seats = action.payload;
     },
+    setSeatsByReturnFlightId: (state, action) => {
+      state.returnSeats = action.payload;
+    },
+
   },
 });
 
-export const { setFlights, setAirports, setFlightDetail, setSeatsByFlightId } = flightsSlice.actions;
+export const {
+  setFlights,
+  setAirports,
+  setFlightDetail,
+  setReturnFlightDetail,
+  setSeatsByFlightId,
+  setSeatsByReturnFlightId,
+} = flightsSlice.actions;
 
 export default flightsSlice.reducer;
