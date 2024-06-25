@@ -8,6 +8,7 @@ const initialState = {
   seats: [],
   returnSeats: [],
   favoriteFlights: [],
+  favoriteFlight: null,
 };
 
 const flightsSlice = createSlice({
@@ -35,6 +36,9 @@ const flightsSlice = createSlice({
     setFavoriteFlights: (state, action) => {
       state.favoriteFlights = action.payload;
     },
+    setFavoriteFlight: (state, action) => {
+      state.favoriteFlight = action.payload;
+    },
   },
 });
 
@@ -45,7 +49,8 @@ export const {
   setReturnFlightDetail,
   setSeatsByFlightId,
   setSeatsByReturnFlightId,
-  setFavoriteFlights
+  setFavoriteFlights,
+  setFavoriteFlight,
 } = flightsSlice.actions;
 
 export default flightsSlice.reducer;
