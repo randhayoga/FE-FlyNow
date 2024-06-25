@@ -13,8 +13,10 @@ import jsPDFInvoiceTemplate, {
   OutputType,
   jsPDF,
 } from "jspdf-invoice-template";
+import { useNavigate } from "react-router-dom";
 
 function Detail({ currentHistory, modal, setModal }) {
+  const navigate = useNavigate();
   const returnAdultsPrice =
     currentHistory.numAdults * currentHistory.flight.return?.price;
   const returnChildrensPrice =
@@ -149,7 +151,6 @@ function Detail({ currentHistory, modal, setModal }) {
               booking.numBabies > 1 ? "Babies" : "Baby"
             }`,
             col2: `0`,
-
             style: {
               fontSize: 10,
             },
@@ -199,7 +200,7 @@ function Detail({ currentHistory, modal, setModal }) {
           variant={
             currentHistory.payment?.paymentStatus == "paid"
               ? "success"
-              : currentHistory.payment?.paymentStatus == "unpaid"
+              : currentHistory.payment?.paymentStatus == "expired"
               ? "destructive"
               : "secondary"
           }
@@ -332,7 +333,7 @@ function Detail({ currentHistory, modal, setModal }) {
                   <div className="">IDR 0</div>
                 </div>
               )}
-              <div className="flex justify-between font-bold w-full my-3 items-center">
+              <div className="flex justify-between border-t-2 font-bold w-full mt-3 pt-2 items-center">
                 <div className="">Total</div>
                 <div className="text-color-primary">
                   IDR {departurePrice.toLocaleString("id-ID")}
@@ -461,7 +462,7 @@ function Detail({ currentHistory, modal, setModal }) {
                     <div className="">IDR 0</div>
                   </div>
                 )}
-                <div className="flex justify-between font-bold w-full my-3 items-center">
+                <div className="flex justify-between border-t-2 font-bold w-full mt-3 pt-2 items-center">
                   <div className="">Total</div>
                   <div className="text-color-primary">
                     IDR {returnPrice.toLocaleString("id-ID")}
@@ -474,6 +475,21 @@ function Detail({ currentHistory, modal, setModal }) {
       )}
 
       <div className="py-2">
+        {currentHistory.returnFlightId !== null && (
+          <>
+            <div className="flex justify-between w-full">
+              <div className="">Penerbangan awal: </div>
+              <div className="">
+                IDR {departurePrice.toLocaleString("id-ID")}
+              </div>
+            </div>
+            <div className="flex justify-between w-full">
+              <div className="">Penerbangan pulang: </div>
+              <div className="">IDR {returnPrice.toLocaleString("id-ID")}</div>
+            </div>
+          </>
+        )}
+
         <div className="flex justify-between font-bold w-full my-3 items-center">
           <div className="">Total</div>
           <div className="text-color-primary text-lg">
@@ -490,12 +506,17 @@ function Detail({ currentHistory, modal, setModal }) {
           >
             Cetak Tiket
           </Button>
-        ) : currentHistory.payment?.paymentStatus === "unpaid" ? (
-          <Button disabled size="lg" variant="secondary" className="w-full">
+        ) : currentHistory.payment?.paymentStatus === "expired" ? (
+          <Button disabled size="lg" variant="success" className="w-full">
             Cetak Tiket
           </Button>
         ) : (
-          <Button size="lg" variant="primary" className="w-full">
+          <Button
+            size="lg"
+            variant="primary"
+            className="w-full"
+            onClick={() => navigate(`../flight/payment/${currentHistory.id}`)}
+          >
             Lanjutkan pembayaran
           </Button>
         )}
