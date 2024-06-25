@@ -17,7 +17,7 @@ const ListProfile = () => {
   };
 
   const ResetPasswordPage = () => {
-    navigate("/reset-password/:token");
+    navigate("/reset-password");
   };
 
   return (

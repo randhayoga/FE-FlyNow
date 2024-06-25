@@ -32,7 +32,7 @@ const NavbarComponent = () => {
     navigate("/history");
   };
   return (
-    <div className="border-b-2 shadow-md rounded-md">
+    <div className="border-b-2 shadow-md">
       <nav className="container bg-white">
         <div className="sm:max-w-screen- flex flex-wrap items-center justify-between mx-auto">
           <button
@@ -41,7 +41,7 @@ const NavbarComponent = () => {
             }}
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
-            <img src={logoImg} alt="FlyNow Logo" className="w-14 py-1" />
+            <img src={logoImg} alt="FlyNow Logo" className="w-14 py-2" />
           </button>
           <div className="flex items-center md:order-2 space-x-5 rtl:space-x-reverse">
             {user ? (
