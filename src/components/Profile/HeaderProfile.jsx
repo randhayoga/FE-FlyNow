@@ -8,7 +8,7 @@ const HeaderProfile = () => {
       <h1 className="text-lg font-bold my-6">Akun</h1>
       <button
         type="button"
-        className="flex items-center w-full h-12 px-4 bg-color-primary rounded-lg text-white capitalize text-md"
+        className="flex items-center w-full h-12 px-4 bg-color-primary rounded-xl text-white capitalize text-md"
       >
         <Link to="/" className="mr-3">
           <ArrowLeft />
