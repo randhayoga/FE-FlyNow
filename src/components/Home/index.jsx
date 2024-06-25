@@ -1,7 +1,9 @@
 import HomeBanner from "./HomeBanner";
 import SearchFlightForm from "./SearchFlightForm";
+import FavDestination from "./FavDestination";
 
-export default {
+export {
   HomeBanner,
   SearchFlightForm,
+  FavDestination
 };
