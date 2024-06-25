@@ -68,7 +68,7 @@ function Cards({ histories, currentHistory, setCurrentHistory, setModal }) {
                   variant={
                     history.payment?.paymentStatus == "paid"
                       ? "success"
-                      : history.payment?.paymentStatus == "unpaid"
+                      : history.payment?.paymentStatus == "expired"
                       ? "destructive"
                       : "secondary"
                   }
