@@ -6,7 +6,7 @@ import {
   setReturnFlightDetail,
   setSeatsByFlightId,
   setSeatsByReturnFlightId,
-  setFavoriteFlights
+  setFavoriteFlights,
 } from "../reducers/flight";
 import { toast } from "sonner";
 
@@ -54,6 +54,8 @@ export const getAirports = (setIsLoading) => async (dispatch) => {
   } catch (error) {
     toast.error(error?.response?.data?.message);
   }
+
+  setIsLoading(false);
 
   setIsLoading(false);
 };
@@ -149,7 +151,6 @@ export const getFavoriteFlights = () => async (dispatch) => {
   try {
     const response = await axios.request(config);
     const { data } = response.data;
-    console.log(data);
     dispatch(setFavoriteFlights(data));
   } catch (error) {
     console.log(error);

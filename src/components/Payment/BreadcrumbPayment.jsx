@@ -10,20 +10,18 @@ import {
 
 const BreadcrumbPayment = () => {
   return (
-    <Breadcrumb className="mb-2">
-      <BreadcrumbList>
+    <Breadcrumb className="mb-4 my-6">
+      <BreadcrumbList className="text-xl cursor-default">
         <BreadcrumbItem>
-          <BreadcrumbPage className="font-semibold cursor-default">
-            Isi Data Diri
-          </BreadcrumbPage>
+          <BreadcrumbPage className="font-bold">Isi Data Diri</BreadcrumbPage>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage className="font-semibold">Bayar</BreadcrumbPage>
+          <BreadcrumbPage className="font-bold">Bayar</BreadcrumbPage>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage className="font-semibold text-gray-500">
+          <BreadcrumbPage className="font-semibold text-muted-foreground">
             Selesai
           </BreadcrumbPage>
         </BreadcrumbItem>

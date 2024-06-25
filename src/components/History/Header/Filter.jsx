@@ -128,7 +128,7 @@ function Filter({ histories, setLoading, setFilter }) {
                 <span>Menunggu pembayaran</span>
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => paymentStatusFiltering("unpaid")}
+                onClick={() => paymentStatusFiltering("expired")}
               >
                 <GiCancel className="me-2" />
                 <span>Dibatalkan</span>

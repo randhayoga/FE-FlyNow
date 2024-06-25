@@ -1,21 +1,25 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import Navbar from "@/components/Navbar";
+import BookingPage, { loader as BookingPageLoader } from "@/pages/BookingPage";
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import HomePage from "@/pages/HomePage";
-import LoginPage from "@/pages/LoginPage";
-import OtpPage from "@/pages/OtpPage";
-import RegisterPage from "@/pages/RegisterPage";
+import LoginPage, { loader as loginPageLoader } from "@/pages/LoginPage";
+import OtpPage, {
+  loader as otpPageLoader,
+  action as otpPageAction,
+} from "@/pages/OtpPage";
+import PaymentPage from "@/pages/PaymentPage";
+import PaymentStatusPage from "@/pages/PaymentStatusPage";
+import RegisterPage, {
+  loader as registerPageLoader,
+} from "@/pages/RegisterPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
-import BookingPage from "@/pages/BookingPage";
-import PaymentPage from "@/pages/PaymentPage";
-import PaymentSuccessPage from "@/pages/PaymentSuccessPage";
 
 import Protected from "@/components/Protected";
-import NonProtected from "@/components/Nonprotected";
-import ProfilePage from "@/pages/ProfilePage";
 import HistoryPage from "@/pages/HistoryPage";
+import ProfilePage, { loader as ProfilePageLoader } from "@/pages/ProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -29,22 +33,18 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: (
-      <NonProtected>
-        <LoginPage />,
-      </NonProtected>
-    ),
+    loader: loginPageLoader,
+    element: <LoginPage />,
   },
   {
     path: "/register",
-    element: (
-      <NonProtected>
-        <RegisterPage />,
-      </NonProtected>
-    ),
+    loader: registerPageLoader,
+    element: <RegisterPage />,
   },
   {
     path: "/otp",
+    loader: otpPageLoader,
+    action: otpPageAction,
     element: <OtpPage />,
   },
   {
@@ -66,6 +66,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
+    loader: ProfilePageLoader,
     element: (
       <Protected>
         <Navbar />
@@ -84,6 +85,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/flight/booking/",
+    loader: BookingPageLoader,
     element: (
       <Protected>
         <Navbar />
@@ -101,12 +103,12 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/flight/payment/success",
+    path: "/flight/payment/status",
     element: (
-      <Protected>
+      <>
         <Navbar />
-        <PaymentSuccessPage />
-      </Protected>
+        <PaymentStatusPage />
+      </>
     ),
   },
 ]);

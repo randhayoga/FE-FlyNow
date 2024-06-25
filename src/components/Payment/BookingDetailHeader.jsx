@@ -21,11 +21,11 @@ const BookingDetailHeader = ({ createdAt }) => {
 
   return (
     <>
-      <div className="w-full font-semibold tracking-wide mb-6 bg-white">
+      <div className="w-full flex flex-col justify-center bg-white tracking-wide">
         <BreadcrumbPayment />
       </div>
       <div className="flex flex-col sm:flex-row items-center">
-        <div className="w-full flex justify-center items-center rounded-xl py-3 font-normal text-base bg-alert-danger text-white">
+        <div className="w-full flex justify-center items-center text-center rounded-xl py-3 text-base bg-alert-danger text-white font-semibold">
           {paymentMessage}
         </div>
       </div>

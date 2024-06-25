@@ -1,31 +1,54 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { redirect, useNavigate, useSearchParams } from "react-router-dom";
 
 import { profile } from "../../redux/actions/auth";
+import { createPayment } from "../../redux/actions/booking";
 import {
   getFlightDetail,
   getReturnFlightDetail,
 } from "../../redux/actions/flight";
-import { createPayment } from "../../redux/actions/booking";
+
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
 
 import { CgArrowsV } from "react-icons/cg";
 
 import {
+  BookingForm,
   BookingPageHeader,
   FlightDetail,
   OrdererField,
-  BookingForm,
 } from "@/components/Booking";
+
+export const loader = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user) {
+    return redirect("/login");
+  }
+
+  if (!user?.phoneNumber || !user?.isVerified) {
+    const message =
+      !user.phoneNumber && !user.isVerified
+        ? "Anda harus verifikasi otp dan menambahkan nomor telepon terlebih dahulu!"
+        : !user.phoneNumber
+        ? "Anda harus menambahkan nomor telepon terlebih dahulu!"
+        : !user.isVerified
+        ? "Anda harus verifikasi otp terlebih dahulu!"
+        : null;
+
+    return redirect(`/profile?message=${message}`);
+  }
+  return null;
+};
 
 const BookingPage = () => {
   const dispatch = useDispatch();
@@ -112,9 +135,15 @@ const BookingPage = () => {
   const totalReturnPrice = calculateTotalPrice(returnFlight, adult, children);
   const combinedTotalPrice = totalDeparturePrice + totalReturnPrice;
 
-  const handlePayment = () => {
-    dispatch(createPayment(bookings.booking.id, parseInt(combinedTotalPrice)));
-    navigate(`/flight/payment/${bookings.booking.id}`);
+  const handlePayment = async () => {
+    try {
+      await dispatch(
+        createPayment(bookings.booking.id, parseInt(combinedTotalPrice))
+      );
+      navigate(`/flight/payment/${bookings.booking.id}`);
+    } catch (error) {
+      console.error("Payment creation failed:", error);
+    }
   };
 
   return (
@@ -125,7 +154,7 @@ const BookingPage = () => {
         </div>
       </div>
       <div className="container w-full flex flex-col mt-4 lg:flex-row">
-        <div className="lg:w-3/5 p-3">
+        <div className="lg:w-2/3 p-3">
           <OrdererField />
           <BookingForm
             passengers={passengers}
@@ -139,7 +168,7 @@ const BookingPage = () => {
           />
         </div>
 
-        <div className="lg:w-2/5 p-3">
+        <div className="lg:w-1/3 p-3">
           <h1 className="font-bold tracking-wide text-lg mb-2">
             Detail Penerbangan
           </h1>

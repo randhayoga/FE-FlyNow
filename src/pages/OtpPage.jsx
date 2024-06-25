@@ -19,34 +19,69 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Link,
+  redirect,
+  useLoaderData,
   useLocation,
-  useNavigate,
   useNavigation,
+  useSubmit,
 } from "react-router-dom";
 import { z } from "zod";
 import { Button } from "../components/ui/button";
 
 import { toast } from "sonner";
 import Timer from "../components/Otp/Timer";
-import { verifyOtpService } from "../services/otp";
+import { resendOtpService, verifyOtpService } from "../services/otp";
+
+export async function loader() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (user?.isVerified) {
+    return redirect("/");
+  }
+
+  if (user?.isVerified === false) {
+    await resendOtpService({ email: user.email });
+    return user.email;
+  }
+
+  return null;
+}
+
+export async function action({ request }) {
+  try {
+    const payload = await request.json();
+    console.log(payload);
+    await verifyOtpService(payload);
+    return redirect("/");
+  } catch (error) {
+    toast.error("Maaf, kode OTP salah!");
+    return null;
+  }
+}
 
 const FormSchema = z.object({
   otp: z.string().min(6, {
-    message: "Your one-time OTP must be 6 characters.",
+    message: "Kode OTP harus 6 karakter.",
   }),
 });
 
 const OtpPage = () => {
   const { state } = useLocation();
+  const loaderData = useLoaderData();
+  const navigation = useNavigation();
+  const submit = useSubmit();
+
+  const [resend, setResend] = useState(false);
+
   if (state?.email) {
     localStorage.setItem("email", state.email);
   }
+
+  if (loaderData) {
+    localStorage.setItem("email", loaderData);
+  }
+
   const [email, setEmail] = useState(localStorage.getItem("email") || "");
-
-  const navigation = useNavigation();
-  const navigate = useNavigate();
-
-  const [resend, setResend] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("email", state?.email || email);
@@ -63,15 +98,16 @@ const OtpPage = () => {
   });
 
   async function onSubmit(data) {
-    try {
-      await verifyOtpService({
+    submit(
+      {
         otp: data.otp,
         email,
-      });
-      navigate("/", { replace: true });
-    } catch (error) {
-      toast.error("Maaf, kode OTP salah!");
-    }
+      },
+      {
+        method: "put",
+        encType: "application/json",
+      }
+    );
   }
 
   return (
@@ -129,7 +165,7 @@ const OtpPage = () => {
             />
 
             <Button
-              className="w-full bg-color-primary hover:bg-hover-primary"
+              className="w-60 bg-color-primary hover:bg-hover-primary mx-auto block"
               type="submit"
               disabled={navigation.state === "submitting"}
             >

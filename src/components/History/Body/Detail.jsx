@@ -15,14 +15,16 @@ import jsPDFInvoiceTemplate, {
 } from "jspdf-invoice-template";
 
 function Detail({ currentHistory, modal, setModal }) {
-  const adultsTotalPrice =
-    (currentHistory.flight.departure?.price +
-      (currentHistory.flight.arrival?.price || 0)) *
-    currentHistory.numAdults;
-  const childrenTotalPrice =
-    (currentHistory.flight.departure?.price +
-      (currentHistory.flight.arrival?.price || 0)) *
-    currentHistory.numChildren;
+  const returnAdultsPrice =
+    currentHistory.numAdults * currentHistory.flight.return?.price;
+  const returnChildrensPrice =
+    currentHistory.numChildren * currentHistory.flight.return?.price;
+  const returnPrice = returnAdultsPrice + returnChildrensPrice;
+  const departureAdultsPrice =
+    currentHistory.numAdults * currentHistory.flight.departure.price;
+  const departureChildrensPrice =
+    currentHistory.numChildren * currentHistory.flight.departure.price;
+  const departurePrice = departureAdultsPrice + departureChildrensPrice;
 
   const printTicket = async (booking) => {
     var props = {
@@ -53,6 +55,12 @@ function Detail({ currentHistory, modal, setModal }) {
           bottom: 5,
         },
       },
+      business: {
+        name: `Booking Code: ${booking.bookingCode}`,
+        address: `Booking Date: ${new Date(
+          booking.createdAt
+        ).toLocaleDateString("id-ID")} `,
+      },
       contact: {
         label: "Invoice issued for:",
         name: `${booking.user.name}`,
@@ -60,11 +68,15 @@ function Detail({ currentHistory, modal, setModal }) {
         email: `Email: ${booking.user.email}`,
       },
       invoice: {
-        label: "Booking Code: ",
-        num: `${booking.bookingCode}`,
-        invGenDate: `Booking Date: ${new Date(
-          booking.createdAt
-        ).toLocaleDateString("id-ID")}`,
+        label: "Flight",
+        num: `: `,
+        invDate: `Departure Flight ID: ${booking.flight.departure.id} (${booking.flight.departure.flightClass} class - ${booking.flight.departure.airline.airlineName})`,
+        invGenDate: `${
+          booking.returnFlightId !== null
+            ? `Return Flight ID: ${booking.flight.return.id} (${booking.flight.return.flightClass} class - ${booking.flight.return.airline.airlineName})`
+            : ""
+        }`,
+
         headerBorder: false,
         tableBodyBorder: false,
         header: [
@@ -109,10 +121,11 @@ function Detail({ currentHistory, modal, setModal }) {
         ]),
         additionalRows: [
           {
-            col1: "Subtotal:",
+            col1: `${booking.numAdults} ${
+              booking.numAdults > 1 ? "Adults" : "Adult"
+            }`,
             col2: `${(
-              booking.flight.departure.price *
-              (booking.numAdults + booking.numChildren)
+              booking.flight.departure.price * booking.numAdults
             ).toLocaleString("id-ID")}`,
 
             style: {
@@ -120,18 +133,27 @@ function Detail({ currentHistory, modal, setModal }) {
             },
           },
           {
-            col1: "Tax:",
+            col1: `${booking.numChildren} ${
+              booking.numChildren > 1 ? "Childrens" : "Children"
+            }`,
             col2: `${(
-              0.11 *
-              (booking.flight.departure.price *
-                (booking.numAdults + booking.numChildren))
+              booking.flight.departure.price * booking.numChildren
             ).toLocaleString("id-ID")}`,
-            col3: "11%",
+
             style: {
-              fontSize: 10, //optional, default 12
+              fontSize: 10,
             },
           },
+          {
+            col1: `${booking.numBabies} ${
+              booking.numBabies > 1 ? "Babies" : "Baby"
+            }`,
+            col2: `0`,
 
+            style: {
+              fontSize: 10,
+            },
+          },
           {
             col1: "Total:",
             col2: `${booking.payment.paymentAmount.toLocaleString("id-ID")}`,
@@ -160,6 +182,7 @@ function Detail({ currentHistory, modal, setModal }) {
 
   return (
     <div
+      id="detail"
       className={`${
         modal === true ? `fixed z-50` : `hidden -z-50`
       } currentHistory top-0 duration-300 transition-all ease-in overflow-auto h-screen lg:h-auto left-0 lg:static lg:w-auto w-screen lg:col-span-1 p-6 bg-white shadow-xl lg:shadow-none lg:z-auto`}
@@ -287,6 +310,35 @@ function Detail({ currentHistory, modal, setModal }) {
                 {currentHistory.flight.departure.arrivalAirport.airportName}
               </div>
             </div>
+            <div className="border-t-2 pt-2 mt-2">
+              <div className="font-semibold">Rincian Harga</div>
+              <div className="flex justify-between w-full">
+                <div className="">{currentHistory.numAdults} Dewasa</div>
+                <div className="">
+                  IDR {departureAdultsPrice.toLocaleString("id-ID")}
+                </div>
+              </div>
+              {currentHistory.numChildren > 0 && (
+                <div className="flex justify-between w-full">
+                  <div className="">{currentHistory.numChildren} Anak-anak</div>
+                  <div className="">
+                    IDR {departureChildrensPrice.toLocaleString("id-ID")}
+                  </div>
+                </div>
+              )}
+              {currentHistory.numBabies > 0 && (
+                <div className="flex justify-between w-full">
+                  <div className="">{currentHistory.numBabies} Bayi</div>
+                  <div className="">IDR 0</div>
+                </div>
+              )}
+              <div className="flex justify-between font-bold w-full my-3 items-center">
+                <div className="">Total</div>
+                <div className="text-color-primary">
+                  IDR {departurePrice.toLocaleString("id-ID")}
+                </div>
+              </div>
+            </div>
           </div>
         </CollapsibleContent>
       </Collapsible>
@@ -385,41 +437,43 @@ function Detail({ currentHistory, modal, setModal }) {
                   {currentHistory.flight.return.arrivalAirport.airportName}
                 </div>
               </div>
+              <div className="border-t-2 pt-2 mt-2">
+                <div className="font-semibold">Rincian Harga</div>
+                <div className="flex justify-between w-full">
+                  <div className="">{currentHistory.numAdults} Dewasa</div>
+                  <div className="">
+                    IDR {returnAdultsPrice.toLocaleString("id-ID")}
+                  </div>
+                </div>
+                {currentHistory.numChildren > 0 && (
+                  <div className="flex justify-between w-full">
+                    <div className="">
+                      {currentHistory.numChildren} Anak-anak
+                    </div>
+                    <div className="">
+                      IDR {returnChildrensPrice.toLocaleString("id-ID")}
+                    </div>
+                  </div>
+                )}
+                {currentHistory.numBabies > 0 && (
+                  <div className="flex justify-between w-full">
+                    <div className="">{currentHistory.numBabies} Bayi</div>
+                    <div className="">IDR 0</div>
+                  </div>
+                )}
+                <div className="flex justify-between font-bold w-full my-3 items-center">
+                  <div className="">Total</div>
+                  <div className="text-color-primary">
+                    IDR {returnPrice.toLocaleString("id-ID")}
+                  </div>
+                </div>
+              </div>
             </div>
           </CollapsibleContent>
         </Collapsible>
       )}
 
       <div className="py-2">
-        <div className="font-semibold">Rincian Harga</div>
-        <div className="flex justify-between w-full">
-          <div className="">{currentHistory.numAdults} Dewasa</div>
-          <div className="">IDR {adultsTotalPrice.toLocaleString("id-ID")}</div>
-        </div>
-        {currentHistory.numChildren > 0 && (
-          <div className="flex justify-between w-full">
-            <div className="">{currentHistory.numChildren} Anak-anak</div>
-            <div className="">
-              IDR {childrenTotalPrice.toLocaleString("id-ID")}
-            </div>
-          </div>
-        )}
-        {currentHistory.numBabies > 0 && (
-          <div className="flex justify-between w-full">
-            <div className="">{currentHistory.numBabies} Bayi</div>
-            <div className="">IDR 0</div>
-          </div>
-        )}
-        <div className="flex justify-between w-full">
-          <div className="">Pajak (11%)</div>
-          <div className="">
-            IDR{" "}
-            {(
-              (11 / 100) *
-              (adultsTotalPrice + childrenTotalPrice)
-            ).toLocaleString("id-ID")}
-          </div>
-        </div>
         <div className="flex justify-between font-bold w-full my-3 items-center">
           <div className="">Total</div>
           <div className="text-color-primary text-lg">
