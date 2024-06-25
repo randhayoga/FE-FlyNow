@@ -6,6 +6,7 @@ import {
   setReturnFlightDetail,
   setSeatsByFlightId,
   setSeatsByReturnFlightId,
+  setFavoriteFlights
 } from "../reducers/flight";
 import { toast } from "sonner";
 
@@ -137,3 +138,20 @@ export const getSeatsByReturnFlightId =
 
     setIsLoading(false);
   };
+
+export const getFavoriteFlights = () => async (dispatch) => {
+  let config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${import.meta.env.VITE_BACKEND_API}/favorite-flights`,
+  };
+
+  try {
+    const response = await axios.request(config);
+    const { data } = response.data;
+    console.log(data);
+    dispatch(setFavoriteFlights(data));
+  } catch (error) {
+    console.log(error);
+  }
+};
