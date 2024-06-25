@@ -31,7 +31,7 @@ const BookingDetail = ({ booking, flight, isLoading }) => {
   };
 
   return (
-    <div className="font-semibold">
+    <div className="font-bold">
       {!isLoading ? (
         <>
           <section>
@@ -74,7 +74,7 @@ const BookingDetail = ({ booking, flight, isLoading }) => {
           </section>
           <Separator className="my-4" />
           <section>
-            <p className="font-bold">Rincian Harga</p>
+            <p>Rincian Harga</p>
             {numAdults > 0 && (
               <div className="flex w-full justify-between items-center font-normal">
                 <p>

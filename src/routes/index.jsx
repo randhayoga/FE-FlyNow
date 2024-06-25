@@ -10,7 +10,7 @@ import OtpPage, {
   action as otpPageAction,
 } from "@/pages/OtpPage";
 import PaymentPage from "@/pages/PaymentPage";
-import PaymentSuccessPage from "@/pages/PaymentSuccessPage";
+import PaymentStatusPage from "@/pages/PaymentStatusPage";
 import RegisterPage, {
   loader as registerPageLoader,
 } from "@/pages/RegisterPage";
@@ -103,12 +103,12 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/flight/payment/success",
+    path: "/flight/payment/status",
     element: (
-      <Protected>
+      <>
         <Navbar />
-        <PaymentSuccessPage />
-      </Protected>
+        <PaymentStatusPage />
+      </>
     ),
   },
 ]);
