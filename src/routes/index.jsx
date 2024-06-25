@@ -16,6 +16,7 @@ import RegisterPage, {
 } from "@/pages/RegisterPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
+import DetailDestinasiFavoritPage from "@/pages/DetailDestinasiFavoritPage";
 
 import Protected from "@/components/Protected";
 import HistoryPage from "@/pages/HistoryPage";
@@ -105,9 +106,18 @@ const router = createBrowserRouter([
   {
     path: "/flight/payment/status",
     element: (
-      <>
+      <Protected>
         <Navbar />
         <PaymentStatusPage />
+      </Protected>
+    ),
+  },
+  {
+    path: "/destinasi-favorit/:id",
+    element: (
+      <>
+        <Navbar />
+        <DetailDestinasiFavoritPage />
       </>
     ),
   },
