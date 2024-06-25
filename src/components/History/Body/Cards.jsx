@@ -50,13 +50,14 @@ function Cards({ histories, currentHistory, setCurrentHistory, setModal }) {
           const durationText = `${durationInHours} Jam ${durationInMinutes} Menit`;
 
           return (
-            <div
+            <a
               className={`card p-4 border-2 rounded-md hover:border-color-primary cursor-pointer ${
                 currentHistory?.id === history.id
                   ? "lg:border-color-primary"
                   : ""
               }`}
               key={index}
+              href="#detail"
               onClick={() => {
                 setCurrentHistory(histories[index]);
                 setModal(true);
@@ -130,7 +131,7 @@ function Cards({ histories, currentHistory, setCurrentHistory, setModal }) {
                   </p>
                 </div>
               </div>
-            </div>
+            </a>
           );
         })}
       </div>
