@@ -142,7 +142,8 @@ export const getSeatsByReturnFlightId =
     setIsLoading(false);
   };
 
-export const getFavoriteFlights = () => async (dispatch) => {
+export const getFavoriteFlights = (setIsLoading) => async (dispatch) => {
+  setIsLoading(true);
   let config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -156,6 +157,8 @@ export const getFavoriteFlights = () => async (dispatch) => {
   } catch (error) {
     console.log(error);
   }
+  
+  setIsLoading(false);
 };
 
 export const getFavoriteFlightById = (id) => async (dispatch) => {

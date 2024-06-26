@@ -70,7 +70,7 @@ const AirportField = ({ name, label, form, airports, isLoading }) => {
                   </Button>
                 </FormControl>
               </PopoverTrigger>
-              <PopoverContent className="popover-full">
+              <PopoverContent>
                 <Command>
                   <CommandInput placeholder="Search Airport..." />
                   <CommandEmpty>No Airports found.</CommandEmpty>
@@ -79,7 +79,7 @@ const AirportField = ({ name, label, form, airports, isLoading }) => {
                       {airports &&
                         airports.map((airport) => (
                           <CommandItem
-                            value={airport?.airportCode}
+                            value={airport?.airportCity}
                             key={airport?.airportCode}
                             onSelect={() => {
                               form.setValue(`${name}`, airport?.airportCode);
