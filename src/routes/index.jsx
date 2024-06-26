@@ -20,6 +20,7 @@ import SearchFlightPage from "@/pages/SearchFlightPage";
 import Protected from "@/components/Protected";
 import HistoryPage from "@/pages/HistoryPage";
 import ProfilePage, { loader as ProfilePageLoader } from "@/pages/ProfilePage";
+import NotFoundPage from "@/pages/NotFoundPage";
 
 const router = createBrowserRouter([
   {
@@ -110,6 +111,11 @@ const router = createBrowserRouter([
         <PaymentStatusPage />
       </>
     ),
+  },
+  // Add this route as the last route to catch unmatched paths
+  {
+    path: "*",
+    element: <NotFoundPage />, // Render the NotFoundPage component for unmatched routes
   },
 ]);
 
