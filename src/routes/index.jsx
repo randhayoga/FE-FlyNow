@@ -16,10 +16,12 @@ import RegisterPage, {
 } from "@/pages/RegisterPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SearchFlightPage from "@/pages/SearchFlightPage";
+import DetailDestinasiFavoritPage from "@/pages/DetailDestinasiFavoritPage";
 
 import Protected from "@/components/Protected";
 import HistoryPage from "@/pages/HistoryPage";
 import ProfilePage, { loader as ProfilePageLoader } from "@/pages/ProfilePage";
+import NotFoundPage from "@/pages/NotFoundPage";
 
 const router = createBrowserRouter([
   {
@@ -105,11 +107,25 @@ const router = createBrowserRouter([
   {
     path: "/flight/payment/status",
     element: (
-      <>
+      <Protected>
         <Navbar />
         <PaymentStatusPage />
+      </Protected>
+    ),
+  },
+  {
+    path: "/destinasi-favorit/:id",
+    element: (
+      <>
+        <Navbar />
+        <DetailDestinasiFavoritPage />
       </>
     ),
+  },
+  // Add this route as the last route to catch unmatched paths
+  {
+    path: "*",
+    element: <NotFoundPage />, // Render the NotFoundPage component for unmatched routes
   },
 ]);
 

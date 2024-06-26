@@ -157,7 +157,7 @@ const SearchFlightForm = () => {
           >
             {isVertical ? (
               <div className="flex items-center gap-2">
-                <span>Tukar Bandara</span>
+                <span>Switch Airport</span>
                 <HiOutlineSwitchVertical className="w-5 h-5" />
               </div>
             ) : (
