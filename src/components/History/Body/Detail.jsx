@@ -543,7 +543,7 @@ function Detail({ currentHistory, modal, setModal }) {
           </>
         )}
         {currentHistory.returnFlightId !== null && (
-          <div className="flex justify-between font-bold w-full my-3 items-center">
+          <div className="flex justify-between font-bold w-full mt-3 items-center">
             <div className="">Total</div>
             <div className="text-color-primary text-lg">
               IDR{" "}
@@ -555,7 +555,7 @@ function Detail({ currentHistory, modal, setModal }) {
           <Button
             size="lg"
             variant="primary"
-            className="w-full"
+            className="w-full mt-4"
             onClick={() => printTicket(currentHistory)}
           >
             Cetak Tiket
@@ -565,7 +565,7 @@ function Detail({ currentHistory, modal, setModal }) {
             <Button
               size="lg"
               variant="primary"
-              className="w-full"
+              className="w-full mt-4"
               onClick={() => navigate(`../flight/payment/${currentHistory.id}`)}
             >
               Lanjutkan pembayaran
