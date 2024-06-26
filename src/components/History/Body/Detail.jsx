@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -27,6 +27,12 @@ function Detail({ currentHistory, modal, setModal }) {
   const departureChildrensPrice =
     currentHistory.numChildren * currentHistory.flight.departure.price;
   const departurePrice = departureAdultsPrice + departureChildrensPrice;
+  const [activeCollapsible, setActiveCollapsible] = useState(1);
+  const toggleCollapsible = (id) => {
+    if (id !== activeCollapsible) {
+      setActiveCollapsible((state) => id);
+    }
+  };
 
   const printTicket = async (booking) => {
     var props = {
@@ -217,7 +223,12 @@ function Detail({ currentHistory, modal, setModal }) {
           </span>
         </div>
       </div>
-      <Collapsible className="mt-4 border-2 px-4 py-2 rounded-md">
+      <Collapsible
+        id={1}
+        open={activeCollapsible === 1 ? true : false}
+        onClick={() => toggleCollapsible(1)}
+        className="mt-4 border-2 px-4 py-2 rounded-md"
+      >
         <CollapsibleTrigger className=" w-full">
           <div className="flex justify-between items-center">
             <div className="font-semibold text-base text-color-primary">
@@ -344,7 +355,14 @@ function Detail({ currentHistory, modal, setModal }) {
         </CollapsibleContent>
       </Collapsible>
       {currentHistory.returnFlightId !== null && (
-        <Collapsible className="mt-4 border-2 px-4 py-2 rounded-md">
+        <Collapsible
+          id={2}
+          open={activeCollapsible === 2 ? true : false}
+          onClick={() => {
+            toggleCollapsible(2);
+          }}
+          className="mt-4 border-2 px-4 py-2 rounded-md"
+        >
           <CollapsibleTrigger className=" w-full">
             <div className="flex justify-between items-center">
               <div className="font-semibold text-base text-color-primary">
@@ -506,19 +524,17 @@ function Detail({ currentHistory, modal, setModal }) {
           >
             Cetak Tiket
           </Button>
-        ) : currentHistory.payment?.paymentStatus === "expired" ? (
-          <Button disabled size="lg" variant="success" className="w-full">
-            Cetak Tiket
-          </Button>
         ) : (
-          <Button
-            size="lg"
-            variant="primary"
-            className="w-full"
-            onClick={() => navigate(`../flight/payment/${currentHistory.id}`)}
-          >
-            Lanjutkan pembayaran
-          </Button>
+          currentHistory.payment?.paymentStatus === "pending" && (
+            <Button
+              size="lg"
+              variant="primary"
+              className="w-full"
+              onClick={() => navigate(`../flight/payment/${currentHistory.id}`)}
+            >
+              Lanjutkan pembayaran
+            </Button>
+          )
         )}
       </div>
     </div>
