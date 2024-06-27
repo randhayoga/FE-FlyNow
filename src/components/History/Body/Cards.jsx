@@ -115,7 +115,7 @@ function Cards({ histories, currentHistory, setCurrentHistory, setModal }) {
               </div>
               <div className="details border-t-2 pt-3 text-xs lg:text-base flex items-center justify-between">
                 <div className="booking-code">
-                  <p className="font-semibold">Kode pemesanan:</p>
+                  <p className="font-semibold">Kode Pemesanan:</p>
                   <p>{history.bookingCode}</p>
                 </div>
                 <div className="filght-class">

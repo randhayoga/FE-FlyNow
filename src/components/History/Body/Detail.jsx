@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -27,6 +27,12 @@ function Detail({ currentHistory, modal, setModal }) {
   const departureChildrensPrice =
     currentHistory.numChildren * currentHistory.flight.departure.price;
   const departurePrice = departureAdultsPrice + departureChildrensPrice;
+  const [activeCollapsible, setActiveCollapsible] = useState(1);
+  const toggleCollapsible = (id) => {
+    if (id !== activeCollapsible) {
+      setActiveCollapsible((state) => id);
+    }
+  };
 
   const printTicket = async (booking) => {
     var props = {
@@ -78,14 +84,13 @@ function Detail({ currentHistory, modal, setModal }) {
             ? `Return Flight ID: ${booking.flight.return.id} (${booking.flight.return.flightClass} class - ${booking.flight.return.airline.airlineName})`
             : ""
         }`,
-
         headerBorder: false,
         tableBodyBorder: false,
         header: [
           {
             title: "#",
             style: {
-              width: 10,
+              width: 5,
             },
           },
           {
@@ -97,19 +102,33 @@ function Detail({ currentHistory, modal, setModal }) {
           {
             title: "Nationality",
             style: {
-              width: 30,
+              width: 25,
             },
           },
           {
-            title: "Document Number",
-            style: {
-              width: 40,
-            },
+            title: "Doc Number",
           },
           {
             title: "Type",
+            style: {
+              width: 16,
+            },
           },
-          { title: "Price" },
+          {
+            title: `${
+              booking.returnFlightId === null ? "Price" : "Departure Price"
+            }`,
+            style: {
+              width: 26,
+            },
+          },
+          {
+            title: `${booking.returnFlightId === null ? "" : "Return Price"}`,
+            style: {
+              width: 25,
+            },
+          },
+          { title: "Total" },
         ],
         table: Array.from(booking.details.departure, (item, index) => [
           index + 1,
@@ -118,17 +137,37 @@ function Detail({ currentHistory, modal, setModal }) {
           item.passenger.docNumber,
           item.passenger.passengerType,
           item.passenger.passengerType == "baby"
-            ? 0
-            : booking.flight.departure.price.toLocaleString("id-ID"),
+            ? "IDR 0"
+            : `IDR ${booking.flight.departure.price.toLocaleString("id-ID")}`,
+          booking.flight.return !== null
+            ? `IDR ${booking.flight.return.price.toLocaleString("id-ID")}`
+            : ``,
+          booking.flight.return !== null
+            ? item.passenger.passengerType == "baby"
+              ? "IDR 0"
+              : `IDR ${(
+                  booking.flight.departure.price + booking.flight.return.price
+                ).toLocaleString("id-ID")}`
+            : item.passenger.passengerType == "baby"
+            ? "IDR 0"
+            : `IDR ${booking.flight.departure.price.toLocaleString("id-ID")}`,
         ]),
         additionalRows: [
           {
             col1: `${booking.numAdults} ${
               booking.numAdults > 1 ? "Adults" : "Adult"
             }`,
-            col2: `${(
-              booking.flight.departure.price * booking.numAdults
-            ).toLocaleString("id-ID")}`,
+            col2: `IDR ${
+              booking.returnFlightId !== null
+                ? (
+                    (booking.flight.departure.price +
+                      booking.flight.return.price) *
+                    booking.numAdults
+                  ).toLocaleString("id-ID")
+                : (
+                    booking.flight.departure.price * booking.numAdults
+                  ).toLocaleString("id-ID")
+            }`,
 
             style: {
               fontSize: 10,
@@ -138,9 +177,17 @@ function Detail({ currentHistory, modal, setModal }) {
             col1: `${booking.numChildren} ${
               booking.numChildren > 1 ? "Childrens" : "Children"
             }`,
-            col2: `${(
-              booking.flight.departure.price * booking.numChildren
-            ).toLocaleString("id-ID")}`,
+            col2: `IDR ${
+              booking.returnFlightId !== null
+                ? (
+                    (booking.flight.departure.price +
+                      booking.flight.return.price) *
+                    booking.numChildren
+                  ).toLocaleString("id-ID")
+                : (
+                    booking.flight.departure.price * booking.numChildren
+                  ).toLocaleString("id-ID")
+            }`,
 
             style: {
               fontSize: 10,
@@ -150,14 +197,16 @@ function Detail({ currentHistory, modal, setModal }) {
             col1: `${booking.numBabies} ${
               booking.numBabies > 1 ? "Babies" : "Baby"
             }`,
-            col2: `0`,
+            col2: `IDR 0`,
             style: {
               fontSize: 10,
             },
           },
           {
             col1: "Total:",
-            col2: `${booking.payment.paymentAmount.toLocaleString("id-ID")}`,
+            col2: `IDR ${booking.payment.paymentAmount.toLocaleString(
+              "id-ID"
+            )}`,
 
             style: {
               fontSize: 14, //optional, default 12
@@ -186,7 +235,7 @@ function Detail({ currentHistory, modal, setModal }) {
       id="detail"
       className={`${
         modal === true ? `fixed z-50` : `hidden -z-50`
-      } currentHistory top-0 duration-300 transition-all ease-in overflow-auto h-screen lg:h-auto left-0 lg:static lg:w-auto w-screen lg:col-span-1 p-6 bg-white shadow-xl lg:shadow-none lg:z-auto`}
+      } currentHistory top-0 duration-300 transition-all ease-in overflow-auto h-screen lg:h-auto left-0 lg:static lg:w-auto w-screen lg:col-span-1 px-6 bg-white shadow-xl lg:shadow-none lg:z-auto`}
     >
       <GoArrowLeft
         className="lg:hidden static mb-6 cursor-pointer text-3xl"
@@ -194,8 +243,8 @@ function Detail({ currentHistory, modal, setModal }) {
           setModal(false);
         }}
       />
-      <div className="flex justify-between">
-        <div className="font-bold text-2xl">Detail</div>
+      <div className="flex justify-between mb-3">
+        <div className="font-bold text-2xl">Detail Pesanan</div>
         <PaymentBadge
           variant={
             currentHistory.payment?.paymentStatus == "paid"
@@ -211,17 +260,23 @@ function Detail({ currentHistory, modal, setModal }) {
       </div>
       <div className="booking-code text-base flex">
         <div className="label">
-          Kode pemesanan:{" "}
-          <span className="code font-semibold text-color-primary">
-            {currentHistory.bookingCode}
-          </span>
+          <p className="text-lg font-bold">
+            Kode Pemesanan:{" "}
+            <span className="text-color-primary">
+              {currentHistory.bookingCode}
+            </span>
+          </p>
         </div>
       </div>
-      <Collapsible className="mt-4 border-2 px-4 py-2 rounded-md">
+      <Collapsible
+        defaultOpen={true}
+        className="mt-4 border-2 px-4 py-2 rounded-md"
+      >
         <CollapsibleTrigger className=" w-full">
           <div className="flex justify-between items-center">
             <div className="font-semibold text-base text-color-primary">
-              Penerbangan {currentHistory.returnFlightId !== null ? "Awal" : ""}
+              Penerbangan{" "}
+              {currentHistory.returnFlightId !== null ? "Pergi" : ""}
             </div>
             <CgArrowsV className="text-lg text-gray-400" />
           </div>
@@ -478,47 +533,46 @@ function Detail({ currentHistory, modal, setModal }) {
         {currentHistory.returnFlightId !== null && (
           <>
             <div className="flex justify-between w-full">
-              <div className="">Penerbangan awal: </div>
+              <div className="">Total Penerbangan Pergi</div>
               <div className="">
                 IDR {departurePrice.toLocaleString("id-ID")}
               </div>
             </div>
             <div className="flex justify-between w-full">
-              <div className="">Penerbangan pulang: </div>
+              <div className="">Total Penerbangan Pulang</div>
               <div className="">IDR {returnPrice.toLocaleString("id-ID")}</div>
             </div>
           </>
         )}
-
-        <div className="flex justify-between font-bold w-full my-3 items-center">
-          <div className="">Total</div>
-          <div className="text-color-primary text-lg">
-            IDR {currentHistory.payment?.paymentAmount.toLocaleString("id-ID")}
+        {currentHistory.returnFlightId !== null && (
+          <div className="flex justify-between font-bold w-full mt-3 items-center">
+            <div className="">Total</div>
+            <div className="text-color-primary text-lg">
+              IDR{" "}
+              {currentHistory.payment?.paymentAmount.toLocaleString("id-ID")}
+            </div>
           </div>
-        </div>
-
+        )}
         {currentHistory.payment?.paymentStatus === "paid" ? (
           <Button
             size="lg"
             variant="primary"
-            className="w-full"
+            className="w-full mt-4"
             onClick={() => printTicket(currentHistory)}
           >
             Cetak Tiket
           </Button>
-        ) : currentHistory.payment?.paymentStatus === "expired" ? (
-          <Button disabled size="lg" variant="success" className="w-full">
-            Cetak Tiket
-          </Button>
         ) : (
-          <Button
-            size="lg"
-            variant="primary"
-            className="w-full"
-            onClick={() => navigate(`../flight/payment/${currentHistory.id}`)}
-          >
-            Lanjutkan pembayaran
-          </Button>
+          currentHistory.payment?.paymentStatus === "pending" && (
+            <Button
+              size="lg"
+              variant="primary"
+              className="w-full mt-4"
+              onClick={() => navigate(`../flight/payment/${currentHistory.id}`)}
+            >
+              Lanjutkan pembayaran
+            </Button>
+          )
         )}
       </div>
     </div>
