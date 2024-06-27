@@ -46,6 +46,24 @@ const BreadcrumbPaymentStatus = ({ status }) => {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
+      ) : status == 407 ? (
+        <Breadcrumb className="mb-4 my-6">
+          <BreadcrumbList className="text-xl cursor-default">
+            <BreadcrumbItem>
+              <BreadcrumbPage className="font-bold">
+                Isi Data Diri
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage className="font-bold">Bayar</BreadcrumbPage>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage className="font-bold">Expired</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
       ) : (
         <p>Invalid Status Code</p>
       )}
