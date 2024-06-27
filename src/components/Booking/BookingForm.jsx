@@ -121,12 +121,12 @@ const BookingForm = ({
   const onSubmit = async (data) => {
     // Validate if selected seats are fewer to number of passengers
     if (selectedSeats.length < passengers.length) {
-      toast.error('Please select seats for all passengers');
+      toast.error('Silakan pilih kursi sesuai jumlah penumpang');
       return;
     }
 
     if (selectedReturnSeats.length < passengers.length) {
-      toast.error('Please select return seats for all passengers');
+      toast.error('Silakan pilih kursi penerbangan pulang sesuai jumlah penumpang');
       return;
     }
 
