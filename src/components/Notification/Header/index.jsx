@@ -33,8 +33,8 @@ function Header({
           (filter === "booking" && "Notifikasi Pesanan") ||
           (filter === "payment" && "Notifikasi Pembayaran")}
       </h1>
-      <div className="head flex items-center gap-3 mt-4">
-        <div className="page-text bg-color-primary rounded-xl p-3 grow">
+      <div className="head flex flex-col md:flex-row items-center gap-3 mt-4">
+        <div className="page-text bg-color-primary rounded-xl p-3 grow w-full md:w-auto order-1 md:order-none">
           <div className="page-text-content flex items-center gap-4">
             <a href="/">
               <ArrowLeft className="text-white text-xl" />
@@ -42,28 +42,31 @@ function Header({
             <div className="text-white text-lg">Beranda</div>
           </div>
         </div>
-        <Filter
-          loading={loading}
-          setLoading={setLoading}
-          filter={filter}
-          setFilter={setFilter}
-        />
-        <div className="search-bar flex items-center gap-2 relative">
-          <input
-            type="text"
-            placeholder="Cari notifikasi..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="input border border-color-primary p-2 rounded-full pl-4 pr-10 w-full text-sm"
-            disabled={loading}
+        <div className="flex items-center gap-3 order-3 md:order-none w-full md:w-auto">
+          <Filter
+            loading={loading}
+            setLoading={setLoading}
+            filter={filter}
+            setFilter={setFilter}
+            className="order-2 md:order-none"
           />
-          <button
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-transparent border-none text-color-primary text-lg"
-            disabled={loading}
-            onClick={() => handleSearch()}
-          >
-            <FaSearch />
-          </button>
+          <div className="search-bar flex items-center gap-2 relative w-full md:w-auto">
+            <input
+              type="text"
+              placeholder="Cari notifikasi..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="input border border-color-primary p-2 rounded-full pl-4 pr-10 w-full text-sm"
+              disabled={loading}
+            />
+            <button
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-transparent border-none text-color-primary text-lg"
+              disabled={loading}
+              onClick={() => handleSearch()}
+            >
+              <FaSearch />
+            </button>
+          </div>
         </div>
       </div>
     </>
