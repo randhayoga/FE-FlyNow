@@ -58,8 +58,10 @@ const NotificationCard = ({ notification, filter }) => {
             }`}
           />
           <span className="text-lg font-medium">
-            {notification.type.charAt(0).toUpperCase() +
-              notification.type.slice(1)}
+            {(notification.type === "promo" && "Promosi") ||
+              (notification.type === "flight" && "Penerbangan") ||
+              (notification.type === "booking" && "Pesanan") ||
+              (notification.type === "payment" && "Pembayaran")}
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -74,14 +76,14 @@ const NotificationCard = ({ notification, filter }) => {
           {notification.message}
         </div>
         <div className="flex items-center gap-5">
-          {!isRead && (
-            <button
-              className="text-lg text-gray-500 hover:text-green-700"
-              onClick={() => handleMarkAsRead(notification.id)}
-            >
-              <FaCheck />
-            </button>
-          )}
+          <button
+            className="text-lg text-gray-500 hover:text-green-700"
+            style={{ opacity: notification.isRead ? 0 : 1 }}
+            onClick={() => handleMarkAsRead(notification.id)}
+            disabled={notification.isRead}
+          >
+            <FaCheck />
+          </button>
 
           <button
             className="text-lg text-gray-500 hover:text-red-600"

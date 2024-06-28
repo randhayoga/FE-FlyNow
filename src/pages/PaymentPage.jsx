@@ -2,6 +2,7 @@ import { React, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getPaymentByBookingId } from "../../redux/actions/payment";
+import { getIsUnread } from "../../redux/actions/notification";
 
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,6 +32,14 @@ const PaymentPage = () => {
       snapEmbed(payment?.snapToken, "snap-container");
     }
   }, [payment, snapEmbed]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(getIsUnread());
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [dispatch]);
 
   const numAdults = payment?.booking?.numAdults;
   const numChildren = payment?.booking?.numChildren;

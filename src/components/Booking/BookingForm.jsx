@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getSeatsByFlightId, getSeatsByReturnFlightId } from "../../../redux/actions/flight";
+import {
+  getSeatsByFlightId,
+  getSeatsByReturnFlightId,
+} from "../../../redux/actions/flight";
 import { createBooking } from "../../../redux/actions/booking";
+import { getIsUnread } from "../../../redux/actions/notification";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
@@ -117,24 +121,25 @@ const BookingForm = ({
     });
   };
 
-  
   const onSubmit = async (data) => {
     // Validate if selected seats are fewer to number of passengers
     if (selectedSeats.length < passengers.length) {
-      toast.error('Silakan pilih kursi sesuai jumlah penumpang');
+      toast.error("Silakan pilih kursi sesuai jumlah penumpang");
       return;
     }
 
     if (selectedReturnSeats.length < passengers.length) {
-      toast.error('Silakan pilih kursi penerbangan pulang sesuai jumlah penumpang');
+      toast.error(
+        "Silakan pilih kursi penerbangan pulang sesuai jumlah penumpang"
+      );
       return;
     }
 
-    const passengerPayloads = passengersFormat(data.passengers)
-    const seatPayloads  = {
+    const passengerPayloads = passengersFormat(data.passengers);
+    const seatPayloads = {
       departureSeats: selectedSeats,
       returnSeats: selectedReturnSeats,
-    }
+    };
 
     const payload = {
       departureFlightId: flightId,
@@ -144,9 +149,10 @@ const BookingForm = ({
       numBabies: passengers.filter((p) => p.type === "Baby").length,
       passengerPayloads,
       seatPayloads,
-    }
+    };
 
-    dispatch(createBooking(payload, setIsSubmitting, setIsSubmitted))
+    await dispatch(createBooking(payload, setIsSubmitting, setIsSubmitted));
+    await dispatch(getIsUnread());
   };
 
   const formatDate = (date) => {
@@ -619,7 +625,9 @@ const BookingForm = ({
             selectedSeats={selectedReturnSeats}
             setSelectedSeats={setSelectedReturnSeats}
           />
-        ) : ""}
+        ) : (
+          ""
+        )}
 
         <Button
           className="w-full py-6 rounded-xl bg-color-primary text-base hover:bg-hover-primary text-white"
