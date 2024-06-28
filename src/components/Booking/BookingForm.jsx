@@ -127,12 +127,11 @@ const BookingForm = ({
       toast.error("Silakan pilih kursi sesuai jumlah penumpang");
       return;
     }
-
-    if (selectedReturnSeats.length < passengers.length) {
-      toast.error(
-        "Silakan pilih kursi penerbangan pulang sesuai jumlah penumpang"
-      );
-      return;
+    if (returnFlightId) {
+      if (selectedReturnSeats.length < passengers.length) {
+        toast.error('Silakan pilih kursi penerbangan pulang sesuai jumlah penumpang');
+        return;
+      }
     }
 
     const passengerPayloads = passengersFormat(data.passengers);

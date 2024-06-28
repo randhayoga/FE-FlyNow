@@ -22,22 +22,29 @@ function NotificationPage() {
   );
 
   return (
-    <div className="container overflow-x-hidden">
-      <Header
-        loading={loading}
-        setLoading={setLoading}
-        filter={filter}
-        setFilter={setFilter}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-      />
-      <Body
-        loading={loading}
-        setLoading={setLoading}
-        notifications={notifications}
-        filter={filter}
-      />
-    </div>
+    <>
+      <div className="shadow-md pb-5">
+        <div className="container">
+          <Header
+            loading={loading}
+            setLoading={setLoading}
+            filter={filter}
+            setFilter={setFilter}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
+        </div>
+      </div>
+
+      <div className="container overflow-x-hidden">
+        <Body
+          loading={loading}
+          setLoading={setLoading}
+          notifications={notifications}
+          filter={filter}
+        />
+      </div>
+    </>
   );
 }
 
