@@ -65,7 +65,7 @@ const ResetPasswordComponent = () => {
 
     if (data) {
       toast.success("Reset Password Berhasil!", {
-        description: "Silahkan Login kembali",
+        description: "Silakan Login kembali",
       });
 
       // next handle this delay with loading page

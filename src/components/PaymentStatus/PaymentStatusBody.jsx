@@ -34,7 +34,7 @@ const PaymentStatusBody = ({ status }) => {
         <>
           <img src={expired} alt="expired" className="pb-4 w-72" />
           <p className="text-color-primary ">Waktu Pembayaran Habis!</p>
-          <p>Silahkan Lakukan Pemesanan Ulang</p>
+          <p>Silakan Lakukan Pemesanan Ulang</p>
           <Button className="rounded-xl bg-color-primary hover:bg-hover-primary w-80 mt-7">
             <Link to="/">Kembali ke Beranda</Link>
           </Button>
