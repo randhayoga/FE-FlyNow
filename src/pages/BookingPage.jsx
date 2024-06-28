@@ -8,6 +8,7 @@ import {
   getFlightDetail,
   getReturnFlightDetail,
 } from "../../redux/actions/flight";
+import { getIsUnread } from "../../redux/actions/notification";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -140,6 +141,7 @@ const BookingPage = () => {
       await dispatch(
         createPayment(bookings.booking.id, parseInt(combinedTotalPrice))
       );
+      await dispatch(getIsUnread());
       navigate(`/flight/payment/${bookings.booking.id}`);
     } catch (error) {
       console.error("Payment creation failed:", error);

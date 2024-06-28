@@ -10,9 +10,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { logout, profile } from "../../../redux/actions/auth";
+import { getIsUnread } from "../../../redux/actions/notification";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { is } from "date-fns/locale";
 
 const NavbarComponent = () => {
   const navigate = useNavigate();
@@ -22,7 +24,12 @@ const NavbarComponent = () => {
 
   useEffect(() => {
     dispatch(profile(null, null, null));
+    if (token) {
+      dispatch(getIsUnread());
+    }
   }, [dispatch, token]);
+
+  const { isUnread } = useSelector((state) => state.notifications);
 
   const handleLogin = () => {
     navigate("/login"); // Navigasi ke halaman login saat tombol "Masuk" diklik
@@ -31,6 +38,11 @@ const NavbarComponent = () => {
   const handleHistory = () => {
     navigate("/history");
   };
+
+  const handleNotification = () => {
+    navigate("/notification");
+  };
+
   return (
     <div className="border-b-2 shadow-md">
       <nav className="container bg-white">
@@ -62,7 +74,15 @@ const NavbarComponent = () => {
                     />
                   </svg>
                 </button>
-                <img src={bellRing} alt="Notifications" className="w-5 " />
+                <button
+                  onClick={handleNotification}
+                  className="relative bg-none border-none p-0 cursor-pointer"
+                >
+                  <img src={bellRing} alt="Notifications" className="w-5" />
+                  {isUnread && (
+                    <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                  )}
+                </button>
                 {/* <DropdownMenu>
                   <DropdownMenuTrigger> */}
 
