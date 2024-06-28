@@ -46,7 +46,7 @@ const FavDestination = () => {
                 <div className="relative">
                   <div className="absolute top-0 right-0 flex items-center justify-end pe-2 rounded-s-xl px-5 py-1 bg-color-primary">
                     <p className="font-normal text-[11px] text-white">
-                      {item.discount.toUpperCase()}
+                      {item.discount}
                     </p>
                   </div>
                   <img
