@@ -34,16 +34,20 @@ const SeatPicker = ({
     [rightColumns]
   );
 
-  const handleSeatClick = (seatCode) => {
-    setSelectedSeats((prevSelectedSeats) => {
-      if (prevSelectedSeats.includes(seatCode)) {
-        return prevSelectedSeats.filter((seat) => seat !== seatCode);
-      } else if (prevSelectedSeats.length < maxSeats) {
-        return [...prevSelectedSeats, seatCode];
+  const handleSeatClick = (seatCode) => {  
+    // Check if seat is already selected
+    if (selectedSeats.includes(seatCode)) {
+      // Deselect the seat
+      setSelectedSeats(selectedSeats.filter((id) => id !== seatCode));
+    } else {
+      if (selectedSeats.length >= maxSeats) {
+        // Replace the earliest selected seat with the new seat
+        setSelectedSeats([...selectedSeats.slice(1), seatCode]);
       } else {
-        return prevSelectedSeats;
+        // Select the new seat
+        setSelectedSeats([...selectedSeats, seatCode]);
       }
-    });
+    }
   };
 
   const renderSeatText = (seat) =>

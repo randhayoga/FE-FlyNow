@@ -44,7 +44,7 @@ const FavDestination = () => {
             >
               <CardHeader className="p-2 pb-0">
                 <div className="relative">
-                  <div className="absolute top-0 right-0 flex items-center justify-end pe-2 rounded-s-xl w-2/5 h-6 bg-color-primary">
+                  <div className="absolute top-0 right-0 flex items-center justify-end pe-2 rounded-s-xl px-5 py-1 bg-color-primary">
                     <p className="font-normal text-[11px] text-white">
                       {item.discount.toUpperCase()}
                     </p>

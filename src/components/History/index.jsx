@@ -24,12 +24,18 @@ function HistoryPage() {
   }, [dispatch]);
 
   return (
-    <div className="container overflow-x-hidden">
-      <Header setLoading={setLoading} />
-      <div className="content mt-5 sm:mx-3 md:mx-3">
-        {loading === true ? <Loading /> : <Body histories={histories} />}
+    <>
+      <div className="shadow-md pb-5">
+        <div className="container">
+          <Header setLoading={setLoading} />
+        </div>
       </div>
-    </div>
+      <div className="container overflow-x-hidden">
+        <div className="content mt-6 sm:mx-3 md:mx-3">
+          {loading === true ? <Loading /> : <Body histories={histories} />}
+        </div>
+      </div>
+    </>
   );
 }
 

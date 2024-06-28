@@ -53,7 +53,7 @@ const SelectedFlightCard = ({
                   new Date(selectedDepartureFlight.departureTime)) /
                   (1000 * 60 * 60)
               )}
-              h{" "}
+              j{" "}
               {Math.floor(
                 (new Date(selectedDepartureFlight.arrivalTime) -
                   new Date(selectedDepartureFlight.departureTime)) /
@@ -62,7 +62,7 @@ const SelectedFlightCard = ({
               m
             </p>
             <div className="border-t-2 w-full border-gray-300"></div>
-            <p>Direct</p>
+            <p>Langsung</p>
           </div>
           <div className="text-md flex flex-col items-center">
             <p className="font-bold">

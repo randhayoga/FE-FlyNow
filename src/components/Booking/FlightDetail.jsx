@@ -47,7 +47,12 @@ const FlightDetail = ({ flight, adult, children, baby, isLoading }) => {
             </div>
             <div className="flex-grow  ">
               <p>
-                {flight?.airline?.airlineName} - {flight?.flightClass}
+                {flight?.airline?.airlineName} -{" "}
+                {flight.flightClass &&
+                  flight?.flightClass
+                    .split("_")
+                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(" ")}
               </p>
               <p className="mb-4">{flight?.flightCode}</p>
               <p>Informasi:</p>

@@ -235,7 +235,7 @@ function Detail({ currentHistory, modal, setModal }) {
       id="detail"
       className={`${
         modal === true ? `fixed z-50` : `hidden -z-50`
-      } currentHistory top-0 duration-300 transition-all ease-in overflow-auto h-screen lg:h-auto left-0 lg:static lg:w-auto w-screen lg:col-span-1 p-6 bg-white shadow-xl lg:shadow-none lg:z-auto`}
+      } currentHistory top-0 duration-300 transition-all ease-in overflow-auto h-screen lg:h-auto left-0 lg:static lg:w-auto w-screen lg:col-span-1 px-6 bg-white shadow-xl lg:shadow-none lg:z-auto`}
     >
       <GoArrowLeft
         className="lg:hidden static mb-6 cursor-pointer text-3xl"
@@ -243,8 +243,8 @@ function Detail({ currentHistory, modal, setModal }) {
           setModal(false);
         }}
       />
-      <div className="flex justify-between">
-        <div className="font-bold text-2xl">Detail</div>
+      <div className="flex justify-between mb-3">
+        <div className="font-bold text-2xl">Detail Pesanan</div>
         <PaymentBadge
           variant={
             currentHistory.payment?.paymentStatus == "paid"
@@ -260,10 +260,12 @@ function Detail({ currentHistory, modal, setModal }) {
       </div>
       <div className="booking-code text-base flex">
         <div className="label">
-          Kode pemesanan:{" "}
-          <span className="code font-semibold text-color-primary">
-            {currentHistory.bookingCode}
-          </span>
+          <p className="text-lg font-bold">
+            Kode Pemesanan:{" "}
+            <span className="text-color-primary">
+              {currentHistory.bookingCode}
+            </span>
+          </p>
         </div>
       </div>
       <Collapsible
@@ -531,13 +533,13 @@ function Detail({ currentHistory, modal, setModal }) {
         {currentHistory.returnFlightId !== null && (
           <>
             <div className="flex justify-between w-full">
-              <div className="">Total penerbangan pergi: </div>
+              <div className="">Total Penerbangan Pergi</div>
               <div className="">
                 IDR {departurePrice.toLocaleString("id-ID")}
               </div>
             </div>
             <div className="flex justify-between w-full">
-              <div className="">Total penerbangan pulang: </div>
+              <div className="">Total Penerbangan Pulang</div>
               <div className="">IDR {returnPrice.toLocaleString("id-ID")}</div>
             </div>
           </>
