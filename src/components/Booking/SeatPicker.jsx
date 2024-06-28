@@ -34,7 +34,7 @@ const SeatPicker = ({
     [rightColumns]
   );
 
-  const handleSeatClick = (seatCode) => {  
+  const handleSeatClick = (seatCode) => {
     // Check if seat is already selected
     if (selectedSeats.includes(seatCode)) {
       // Deselect the seat
@@ -50,12 +50,7 @@ const SeatPicker = ({
     }
   };
 
-  const renderSeatText = (seat) =>
-    seat.seatAvailable
-      ? selectedSeats.includes(seat.seatCode)
-        ? seat.seatCode
-        : ""
-      : "X";
+  const renderSeatText = (seat) => (seat.seatAvailable ? seat.seatCode : "X");
 
   const renderSeat = (seat) => (
     <Button
