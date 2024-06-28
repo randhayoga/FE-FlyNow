@@ -311,11 +311,11 @@ function Detail({ currentHistory, modal, setModal }) {
                 - Terminal {currentHistory.flight.departure.terminal}
               </div>
             </div>
-            <div className="py-2 flex items-center gap-4 border-t-2">
-              <div className="flight-logo w-1/4 text-2xl text-yellow-500">
+            <div className="py-2 flex items-center border-t-2">
+              <div className="flight-logo text-2xl text-yellow-500">
                 <img
                   src={currentHistory.flight.departure.airline.image}
-                  className="w-full"
+                  className="w-6 me-3 my-auto"
                   alt="airline-image"
                   srcset=""
                 />
@@ -443,11 +443,11 @@ function Detail({ currentHistory, modal, setModal }) {
                   - Terminal {currentHistory.flight.return.terminal}
                 </div>
               </div>
-              <div className="py-2 flex items-center gap-4 border-t-2">
-                <div className="flight-logo w-1/4 text-2xl text-yellow-500">
+              <div className="py-2 flex items-center border-t-2">
+                <div className="flight-logo text-2xl text-yellow-500">
                   <img
                     src={currentHistory.flight.return.airline.image}
-                    className="w-full"
+                    className="w-6 me-3 my-auto"
                     alt="airline-image"
                     srcset=""
                   />
