@@ -142,7 +142,7 @@ export const editProfile =
 
     let data = new FormData();
     data.append("name", name);
-    data.append("phoneNumber", phoneNumber);
+    data.append("phoneNumber", phoneNumber.replace("+62 ", "0"));
     if (image) {
       data.append("image", image);
     }

@@ -53,6 +53,16 @@ const UbahProfile = () => {
     }
   };
 
+  const transformPhoneNumber = (phoneNumber) => {
+    if (!phoneNumber) {
+      return "";
+    } else if (phoneNumber.startsWith("+62 ")) {
+      return phoneNumber;
+    } else {
+      return "+62 " + phoneNumber.substring(1);
+    }
+  };
+
   useEffect(() => {
     setIsChanged(
       name !== user.name ||
@@ -69,7 +79,7 @@ const UbahProfile = () => {
     if (user) {
       setEmail(user.email);
       setName(user.name);
-      setphoneNumber(user.phoneNumber);
+      setphoneNumber(transformPhoneNumber(user.phoneNumber));
       setImage(user.image);
     }
   }, [user]);
@@ -153,6 +163,7 @@ const UbahProfile = () => {
                     type="text"
                     name="phoneNumber"
                     id="phoneNumber"
+                    placeholder="+62 ."
                     value={phoneNumber}
                     onChange={noTelpChangeHandler}
                     className="relative  border-slate-200 rounded-xl focus:ring-color-primary-500 focus:border-color-primary-500 block w-full p-2"
