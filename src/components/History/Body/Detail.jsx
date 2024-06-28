@@ -312,8 +312,13 @@ function Detail({ currentHistory, modal, setModal }) {
               </div>
             </div>
             <div className="py-2 flex items-center gap-4 border-t-2">
-              <div className="flight-logo text-2xl text-yellow-500">
-                <GiCommercialAirplane />
+              <div className="flight-logo w-1/4 text-2xl text-yellow-500">
+                <img
+                  src={currentHistory.flight.departure.airline.image}
+                  className="w-full"
+                  alt="airline-image"
+                  srcset=""
+                />
               </div>
               <div className="flex flex-col">
                 <div className="flight font-semibold pb-4">
@@ -321,7 +326,7 @@ function Detail({ currentHistory, modal, setModal }) {
                     {currentHistory.flight.departure.airline.airlineName}
                   </div>
                   <div className="">
-                    {currentHistory.flight.departure.airline.airlineCode}
+                    {currentHistory.flight.departure.flightCode}
                   </div>
                 </div>
                 <div className="passengers">
@@ -439,8 +444,13 @@ function Detail({ currentHistory, modal, setModal }) {
                 </div>
               </div>
               <div className="py-2 flex items-center gap-4 border-t-2">
-                <div className="flight-logo text-2xl text-yellow-500">
-                  <GiCommercialAirplane />
+                <div className="flight-logo w-1/4 text-2xl text-yellow-500">
+                  <img
+                    src={currentHistory.flight.return.airline.image}
+                    className="w-full"
+                    alt="airline-image"
+                    srcset=""
+                  />
                 </div>
                 <div className="flex flex-col">
                   <div className="flight font-semibold pb-4">
@@ -448,7 +458,7 @@ function Detail({ currentHistory, modal, setModal }) {
                       {currentHistory.flight.return.airline.airlineName}
                     </div>
                     <div className="">
-                      {currentHistory.flight.return.airline.airlineCode}
+                      {currentHistory.flight.return.flightCode}
                     </div>
                   </div>
                   <div className="passengers">
