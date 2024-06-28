@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
 import success from "@/assets/images/gambar_history_kosong.png";
+import expired from "@/assets/images/expired.png";
 import pending from "@/assets/images/pending.png";
 
 const PaymentStatusBody = ({ status }) => {
@@ -27,6 +28,15 @@ const PaymentStatusBody = ({ status }) => {
           <p>Segera Lanjutkan Transaksi Pembayaran</p>
           <Button className="rounded-xl bg-color-primary hover:bg-hover-primary w-80 mt-7">
             <Link to="/history">Lanjutkan Pembayaran</Link>
+          </Button>
+        </>
+      ) : status == 407 ? (
+        <>
+          <img src={expired} alt="expired" className="pb-4 w-72" />
+          <p className="text-color-primary ">Waktu Pembayaran Habis!</p>
+          <p>Silahkan Lakukan Pemesanan Ulang</p>
+          <Button className="rounded-xl bg-color-primary hover:bg-hover-primary w-80 mt-7">
+            <Link to="/">Kembali ke Beranda</Link>
           </Button>
         </>
       ) : (

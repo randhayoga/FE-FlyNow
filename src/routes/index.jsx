@@ -21,6 +21,7 @@ import DetailDestinasiFavoritPage from "@/pages/DetailDestinasiFavoritPage";
 import Protected from "@/components/Protected";
 import HistoryPage from "@/pages/HistoryPage";
 import ProfilePage, { loader as ProfilePageLoader } from "@/pages/ProfilePage";
+import NotificationPage from "@/pages/NotificationPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 
 const router = createBrowserRouter([
@@ -120,6 +121,15 @@ const router = createBrowserRouter([
         <Navbar />
         <DetailDestinasiFavoritPage />
       </>
+    ),
+  },
+  {
+    path: "/notification",
+    element: (
+      <Protected>
+        <Navbar />
+        <NotificationPage />
+      </Protected>
     ),
   },
   // Add this route as the last route to catch unmatched paths

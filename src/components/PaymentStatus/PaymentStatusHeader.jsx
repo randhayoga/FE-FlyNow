@@ -16,7 +16,13 @@ const PaymentSuccessHeader = ({ status }) => {
       ) : status == 201 ? (
         <div className="flex flex-col sm:flex-row items-center">
           <div className="w-full flex justify-center items-center rounded-xl py-3 font-semibold text-base bg-alert-danger text-white">
-            Transaksi Pembayaran Pending
+            Transaksi Pembayaran Anda Pending
+          </div>
+        </div>
+      ) : status == 407 ? (
+        <div className="flex flex-col sm:flex-row items-center">
+          <div className="w-full flex justify-center items-center rounded-xl py-3 font-semibold text-base bg-alert-danger text-white">
+            Transaksi Pembayaran Anda Expired
           </div>
         </div>
       ) : (
