@@ -20,6 +20,7 @@ import SearchFlightPage from "@/pages/SearchFlightPage";
 import Protected from "@/components/Protected";
 import HistoryPage from "@/pages/HistoryPage";
 import ProfilePage, { loader as ProfilePageLoader } from "@/pages/ProfilePage";
+import NotificationPage from "@/pages/NotificationPage";
 
 const router = createBrowserRouter([
   {
@@ -109,6 +110,15 @@ const router = createBrowserRouter([
         <Navbar />
         <PaymentStatusPage />
       </>
+    ),
+  },
+  {
+    path: "/notification",
+    element: (
+      <Protected>
+        <Navbar />
+        <NotificationPage />
+      </Protected>
     ),
   },
 ]);

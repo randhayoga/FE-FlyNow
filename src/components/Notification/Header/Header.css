@@ -1,0 +1,13 @@
+.search-bar {
+  position: relative;
+  width: 100%; /* Adjust based on your layout */
+}
+
+.search-bar input {
+  padding-right: 2.5rem; /* Adjust padding to prevent text overlap */
+  width: 50%; /* Ensure input fills the container */
+}
+
+.search-bar button {
+  right: 0.5rem; /* Adjust based on your design */
+}
