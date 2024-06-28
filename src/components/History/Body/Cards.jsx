@@ -50,13 +50,14 @@ function Cards({ histories, currentHistory, setCurrentHistory, setModal }) {
           const durationText = `${durationInHours} Jam ${durationInMinutes} Menit`;
 
           return (
-            <div
+            <a
               className={`card p-4 border-2 rounded-md hover:border-color-primary cursor-pointer ${
                 currentHistory?.id === history.id
                   ? "lg:border-color-primary"
                   : ""
               }`}
               key={index}
+              href="#detail"
               onClick={() => {
                 setCurrentHistory(histories[index]);
                 setModal(true);
@@ -67,7 +68,7 @@ function Cards({ histories, currentHistory, setCurrentHistory, setModal }) {
                   variant={
                     history.payment?.paymentStatus == "paid"
                       ? "success"
-                      : history.payment?.paymentStatus == "unpaid"
+                      : history.payment?.paymentStatus == "expired"
                       ? "destructive"
                       : "secondary"
                   }
@@ -114,7 +115,7 @@ function Cards({ histories, currentHistory, setCurrentHistory, setModal }) {
               </div>
               <div className="details border-t-2 pt-3 text-xs lg:text-base flex items-center justify-between">
                 <div className="booking-code">
-                  <p className="font-semibold">Kode pemesanan:</p>
+                  <p className="font-semibold">Kode Pemesanan:</p>
                   <p>{history.bookingCode}</p>
                 </div>
                 <div className="filght-class">
@@ -130,7 +131,7 @@ function Cards({ histories, currentHistory, setCurrentHistory, setModal }) {
                   </p>
                 </div>
               </div>
-            </div>
+            </a>
           );
         })}
       </div>

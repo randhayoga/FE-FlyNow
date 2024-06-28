@@ -44,6 +44,7 @@ import countries from "@/lib/countries";
 
 import formSchema from "./FormSchema";
 import SeatPicker from "./SeatPicker";
+import { toast } from "sonner";
 
 const BookingForm = ({
   passengers,
@@ -118,6 +119,17 @@ const BookingForm = ({
 
   
   const onSubmit = async (data) => {
+    // Validate if selected seats are fewer to number of passengers
+    if (selectedSeats.length < passengers.length) {
+      toast.error('Silakan pilih kursi sesuai jumlah penumpang');
+      return;
+    }
+
+    if (selectedReturnSeats.length < passengers.length) {
+      toast.error('Silakan pilih kursi penerbangan pulang sesuai jumlah penumpang');
+      return;
+    }
+
     const passengerPayloads = passengersFormat(data.passengers)
     const seatPayloads  = {
       departureSeats: selectedSeats,

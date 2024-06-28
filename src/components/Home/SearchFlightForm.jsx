@@ -153,11 +153,11 @@ const SearchFlightForm = () => {
           <Button
             onClick={handleSwapAirports}
             type="button"
-            className="lg:-mt-4 w-full lg:w-fit self-center rounded-full"
+            className="lg:-mt-4 w-full lg:w-fit self-center rounded-full bg-color-primary hover:bg-hover-primary"
           >
             {isVertical ? (
               <div className="flex items-center gap-2">
-                <span>Tukar Bandara</span>
+                <span>Switch Airport</span>
                 <HiOutlineSwitchVertical className="w-5 h-5" />
               </div>
             ) : (
@@ -207,6 +207,7 @@ const SearchFlightForm = () => {
                     </p>
                   )}
                   <Switch
+                    className="data-[state=checked]:bg-color-primary"
                     checked={isReturnEnabled}
                     onCheckedChange={handleSwitchRoundTripToggle}
                   />

@@ -119,19 +119,19 @@ function Filter({ histories, setLoading, setFilter }) {
             <DropdownMenuSubContent>
               <DropdownMenuItem onClick={() => paymentStatusFiltering("paid")}>
                 <FaRegCircleCheck className="me-2" />
-                <span>Selesai</span>
+                <span>Paid</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => paymentStatusFiltering("pending")}
               >
                 <FaRegClock className="me-2" />
-                <span>Menunggu pembayaran</span>
+                <span>Pending</span>
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => paymentStatusFiltering("unpaid")}
+                onClick={() => paymentStatusFiltering("expired")}
               >
                 <GiCancel className="me-2" />
-                <span>Dibatalkan</span>
+                <span>Expired</span>
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuPortal>

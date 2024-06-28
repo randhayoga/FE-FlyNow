@@ -5,9 +5,10 @@ import { Button } from '@/components/ui/button'
 const PassengerInput = ({ label, value, min, onChange }) => {
   return (
     <div className="flex items-center gap-2">
-      <FormLabel>{label}</FormLabel>
+      <FormLabel className="w-full">{label}</FormLabel>
       <Button
         type="button"
+        className="bg-color-primary"
         onClick={() => onChange(value - 1)}
         disabled={value === min}
       >
@@ -22,6 +23,7 @@ const PassengerInput = ({ label, value, min, onChange }) => {
       />
       <Button
         type="button"
+        className="bg-color-primary"
         onClick={() => onChange(value + 1)}
       >
         +
