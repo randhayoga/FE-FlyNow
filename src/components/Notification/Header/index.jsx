@@ -25,7 +25,7 @@ function Header({
 
   return (
     <>
-      <h1 className="font-semibold text-xl mt-10">
+      <h1 className="text-xl font-bold my-6">
         {(filter === "all" && "Notifikasi") ||
           (filter === "unread" && "Notifikasi Belum Dibaca") ||
           (filter === "promo" && "Notifikasi Promosi") ||
@@ -34,7 +34,7 @@ function Header({
           (filter === "payment" && "Notifikasi Pembayaran")}
       </h1>
       <div className="head flex items-center gap-3 mt-4">
-        <div className="page-text bg-color-primary rounded-lg p-3 grow">
+        <div className="page-text bg-color-primary rounded-xl p-3 grow">
           <div className="page-text-content flex items-center gap-4">
             <a href="/">
               <ArrowLeft className="text-white text-xl" />
